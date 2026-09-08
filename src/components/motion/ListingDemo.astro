@@ -1,0 +1,325 @@
+---
+import Flag from 'lucide-astro/Flag';
+import RotateCcw from 'lucide-astro/RotateCcw';
+
+// Signature moment 4, the listing demo. This is the product: a broker who
+// watches it once understands the session better than a paragraph could.
+//
+// The AI-written listing types in with a CSS steps() clip reveal, the four
+// flagged phrases take their underline one at a time, and the badge settles in.
+// Then a toggle crossfades to the rewrite, with each flagged phrase morphing
+// into its replacement. All of the text is in the DOM at load, so the flagged
+// copy is crawlable and a screen reader gets the whole thing immediately.
+const flagged = [
+  {
+    id: 'a',
+    before: 'Perfect for a young family',
+    after: 'Three bedrooms and a fenced yard',
+    why: 'Describes who should live there, not what the property has. Familial status and age are protected.',
+  },
+  {
+    id: 'b',
+    before: 'a safe, quiet neighborhood',
+    after: 'a low-traffic street',
+    why: '"Safe" carries a long history as a proxy in housing advertising. Describe the street, not the people on it.',
+  },
+  {
+    id: 'c',
+    before: 'steps from St. John’s and the parish school',
+    after: 'half a mile from Old Town',
+    why: 'Naming a house of worship as a selling point signals a preferred religion, even when nobody intended it.',
+  },
+  {
+    id: 'd',
+    before: 'not one for anyone with mobility issues',
+    after: 'stairs to all three levels, no ground-floor bedroom',
+    why: 'States who the home is unsuitable for. Disability is protected. The facts are fine, the conclusion is not.',
+  },
+];
+---
+
+<div class="demo" data-listing-demo>
+  <div class="chrome">
+    <p class="src">Written by a general-purpose AI tool, 11 seconds, unedited</p>
+    <div class="controls">
+      <button type="button" class="ctl" data-replay>
+        <RotateCcw size={16} stroke-width={1.75} aria-hidden="true" />
+        See it again
+      </button>
+      <button type="button" class="ctl is-primary" data-toggle aria-pressed="false">
+        Show the rewrite
+      </button>
+    </div>
+  </div>
+
+  <div class="paper">
+    <p class="listing" data-copy>
+      <span class="type">
+        Charming 3 bed, 2 bath in the heart of Loveland.
+        <span class="f" data-f="a"><span class="w" data-w="a">{flagged[0].before}</span></span>, this
+        home sits in <span class="f" data-f="b"><span class="w" data-w="b">{flagged[1].before}</span></span>,
+        <span class="f" data-f="c"><span class="w" data-w="c">{flagged[2].before}</span></span>.
+        Updated kitchen, mature trees, and a two-car garage. Definitely
+        <span class="f" data-f="d"><span class="w" data-w="d">{flagged[3].before}</span></span>.
+      </span>
+    </p>
+
+    <p class="badge" data-badge>
+      <Flag size={16} stroke-width={2} aria-hidden="true" />
+      <span data-badge-text>4 phrases a complaint could cite</span>
+    </p>
+  </div>
+
+  <ol class="why" data-why>
+    {flagged.map((f) => (
+      <li data-why-item={f.id}>
+        <span class="marker" aria-hidden="true"></span>
+        <p><strong>{f.before}.</strong> {f.why}</p>
+      </li>
+    ))}
+  </ol>
+
+  <p class="disclaimer">
+    The workshop teaches a review workflow your office can run on every listing. It is not legal
+    advice, and it is not a compliance guarantee. Your broker and your attorney remain the people
+    who decide what goes out.
+  </p>
+</div>
+
+<style>
+  .demo {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+  }
+  :global(.on-dark) .demo { background: color-mix(in oklab, #fff 7%, transparent); border-color: var(--rule-dark); }
+
+  .chrome {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem clamp(1rem, 0.85rem + 0.8vw, 1.5rem);
+    border-bottom: 1px solid var(--rule);
+    background: var(--color-cloud);
+  }
+  :global(.on-dark) .chrome { background: color-mix(in oklab, #fff 5%, transparent); border-bottom-color: var(--rule-dark); }
+  .src {
+    margin: 0;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+  }
+  :global(.on-dark) .src { color: var(--color-teal-light); }
+  .controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .ctl {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--color-navy);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--dur-fast), border-color var(--dur-fast);
+  }
+  .ctl:hover { border-color: var(--color-teal); }
+  .ctl.is-primary { background: var(--color-teal-deep); border-color: var(--color-teal-deep); color: #fff; }
+  .ctl.is-primary:hover { background: var(--color-ink); border-color: var(--color-ink); }
+
+  .paper { padding: clamp(1.25rem, 1rem + 1.2vw, 2rem); }
+  .listing {
+    margin: 0;
+    font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+    line-height: 1.65;
+    color: var(--color-navy);
+    max-width: 46rem;
+  }
+  :global(.on-dark) .listing { color: var(--color-cloud); }
+
+  /* The flagged phrase and its underline. */
+  .f {
+    position: relative;
+    display: inline;
+    background-image: linear-gradient(var(--color-teal), var(--color-teal));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 2px;
+    padding-bottom: 2px;
+  }
+  .w { display: inline-block; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 1.5rem 0 0;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    background: var(--color-mist);
+    color: var(--color-teal-deep);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  :global(.on-dark) .badge { background: color-mix(in oklab, var(--color-teal-light) 18%, transparent); color: var(--color-teal-light); }
+
+  .why {
+    list-style: none;
+    margin: 0;
+    padding: clamp(1.25rem, 1rem + 1.2vw, 2rem);
+    padding-top: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .why li { display: flex; gap: 0.75rem; align-items: flex-start; opacity: 0; }
+  .marker { width: 3px; align-self: stretch; border-radius: 2px; background: var(--color-teal); flex: none; }
+  .why p { margin: 0; font-size: 0.875rem; color: var(--color-slate); }
+  .why strong { color: var(--color-navy); font-weight: 600; }
+  :global(.on-dark) .why p { color: color-mix(in oklab, var(--color-cloud) 78%, var(--color-teal-pale)); }
+  :global(.on-dark) .why strong { color: #fff; }
+
+  .disclaimer {
+    margin: 0;
+    padding: clamp(1rem, 0.85rem + 0.8vw, 1.5rem);
+    border-top: 1px solid var(--rule);
+    background: var(--color-cloud);
+    font-size: 0.8125rem;
+    color: var(--color-slate);
+    max-width: none;
+  }
+  :global(.on-dark) .disclaimer { background: color-mix(in oklab, #fff 5%, transparent); border-top-color: var(--rule-dark); color: color-mix(in oklab, var(--color-cloud) 76%, var(--color-teal-pale)); }
+
+  /* ---- The performance. Runs once on view, and again on request. -------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .demo[data-playing] .type {
+      animation: type-in 1.15s steps(44, end) both;
+      clip-path: inset(0 100% 0 0);
+    }
+    .demo[data-playing] .f { animation: underline 420ms var(--ease-out-quart) both; }
+    .demo[data-playing] .f[data-f='a'] { animation-delay: 1.30s; }
+    .demo[data-playing] .f[data-f='b'] { animation-delay: 1.45s; }
+    .demo[data-playing] .f[data-f='c'] { animation-delay: 1.60s; }
+    .demo[data-playing] .f[data-f='d'] { animation-delay: 1.75s; }
+    .demo[data-playing] .w { animation: lift 420ms var(--ease-out-quart) both; }
+    .demo[data-playing] .w[data-w='a'] { animation-delay: 1.30s; }
+    .demo[data-playing] .w[data-w='b'] { animation-delay: 1.45s; }
+    .demo[data-playing] .w[data-w='c'] { animation-delay: 1.60s; }
+    .demo[data-playing] .w[data-w='d'] { animation-delay: 1.75s; }
+    .demo[data-playing] .badge { animation: badge-in 420ms var(--ease-out-expo) 2.0s both; }
+    .demo[data-playing] .why li { animation: why-in 380ms var(--ease-out-quart) both; }
+    .demo[data-playing] .why li:nth-child(1) { animation-delay: 2.15s; }
+    .demo[data-playing] .why li:nth-child(2) { animation-delay: 2.27s; }
+    .demo[data-playing] .why li:nth-child(3) { animation-delay: 2.39s; }
+    .demo[data-playing] .why li:nth-child(4) { animation-delay: 2.51s; }
+  }
+
+  /* The end state is the default for reduced motion and for no-JS. */
+  .demo:not([data-playing]) .f { background-size: 100% 2px; }
+  .demo:not([data-playing]) .badge { opacity: 1; transform: none; }
+  .demo:not([data-playing]) .why li { opacity: 1; }
+
+  @keyframes type-in { to { clip-path: inset(0 0 0 0); } }
+  @keyframes underline { from { background-size: 0% 2px; } to { background-size: 100% 2px; } }
+  @keyframes lift {
+    0% { transform: none; }
+    45% { transform: translateY(-4px); }
+    100% { transform: none; }
+  }
+  @keyframes badge-in { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
+  @keyframes why-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; } }
+
+  /* ---- The rewrite ----------------------------------------------------- */
+  .demo[data-rewritten] .f {
+    background-image: linear-gradient(var(--color-teal-light), var(--color-teal-light));
+    background-size: 100% 2px;
+  }
+  .demo[data-rewritten] .badge { background: color-mix(in oklab, var(--color-teal) 18%, transparent); }
+  .demo[data-rewritten] .why li { opacity: 0.45; }
+</style>
+
+<script>
+  const wire = () => {
+    const root = document.querySelector<HTMLElement>('[data-listing-demo]');
+    if (!root) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const words = Array.from(root.querySelectorAll<HTMLElement>('[data-w]'));
+    const badgeText = root.querySelector<HTMLElement>('[data-badge-text]');
+    const toggle = root.querySelector<HTMLButtonElement>('[data-toggle]');
+    const replay = root.querySelector<HTMLButtonElement>('[data-replay]');
+
+    // Keep both versions so the toggle can swap them back and forth.
+    const originals = new Map<string, string>();
+    words.forEach((w) => originals.set(w.dataset.w!, w.textContent ?? ''));
+    const rewrites: Record<string, string> = {
+      a: 'Three bedrooms and a fenced yard',
+      b: 'a low-traffic street',
+      c: 'half a mile from Old Town',
+      d: 'stairs to all three levels, no ground-floor bedroom',
+    };
+
+    const play = () => {
+      if (reduced) return;
+      root.removeAttribute('data-playing');
+      // Force a reflow so the animation restarts cleanly.
+      void root.offsetWidth;
+      root.setAttribute('data-playing', '');
+    };
+
+    if (!reduced) {
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          io.disconnect();
+          play();
+        },
+        { threshold: 0.35 }
+      );
+      io.observe(root);
+    }
+    replay?.addEventListener('click', play);
+
+    const swap = (toRewrite: boolean) => {
+      words.forEach((w) => {
+        const k = w.dataset.w!;
+        w.textContent = toRewrite ? rewrites[k] : originals.get(k)!;
+      });
+      root.toggleAttribute('data-rewritten', toRewrite);
+      root.removeAttribute('data-playing');
+      if (badgeText) {
+        badgeText.textContent = toRewrite
+          ? 'Same house, described by its features'
+          : '4 phrases a complaint could cite';
+      }
+      toggle?.setAttribute('aria-pressed', String(toRewrite));
+      if (toggle) toggle.textContent = toRewrite ? 'Show the original' : 'Show the rewrite';
+    };
+
+    toggle?.addEventListener('click', () => {
+      const next = toggle.getAttribute('aria-pressed') !== 'true';
+      // Each phrase morphs into its replacement where the browser supports it.
+      const start = (document as any).startViewTransition?.bind(document);
+      if (start && !reduced) {
+        words.forEach((w) => (w.style.viewTransitionName = `phrase-${w.dataset.w}`));
+        start(() => swap(next)).finished.finally(() => {
+          words.forEach((w) => (w.style.viewTransitionName = ''));
+        });
+      } else {
+        swap(next);
+      }
+    });
+  };
+  wire();
+  document.addEventListener('astro:page-load', wire);
+</script>

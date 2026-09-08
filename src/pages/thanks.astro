@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import ContactBlock from '../components/ContactBlock.astro';
+import { tiers } from '../data/offers';
+---
+
+<Base
+  title="Thank you"
+  description="Your message reached Idea Collaborative. We reply within one business day."
+  path="/thanks"
+  noindex
+  darkHero
+>
+  <header class="hero on-dark">
+    <div class="shell">
+      <svg class="tick" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+        <circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3" />
+        <path class="stroke" d="M14 24.5 L21 31.5 L34 17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1" />
+      </svg>
+      <h1 class="display-lg">That <em>arrived</em>.</h1>
+      <p class="sub">
+        One person reads these and you will get a real answer, usually the same day and always
+        within one business day. If it is urgent, call.
+      </p>
+      <ContactBlock dark class="cb" />
+    </div>
+  </header>
+
+  <Section surface="white" chapter="" label="While you wait">
+    <h2 class="display-lg">Worth a look in the <em>meantime</em>.</h2>
+    <ul class="links">
+      {tiers.map((t) => (
+        <li><a href={`/workshops/${t.slug}`} class="prose-link">{t.title}</a></li>
+      ))}
+      <li><a href="/consulting" class="prose-link">Consulting rates and engagement shapes</a></li>
+      <li><a href="/blog" class="prose-link">Recent writing on where the hours go</a></li>
+    </ul>
+  </Section>
+</Base>
+
+<style>
+  .hero { background: var(--color-ink); padding-block: clamp(7rem, 5rem + 10vw, 10rem) clamp(3rem, 2.5rem + 3vw, 4.5rem); }
+  .tick { width: 56px; height: 56px; color: var(--color-teal-light); margin-bottom: 1.5rem; }
+  .stroke { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 420ms var(--ease-out-quart) 120ms forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) { .stroke { stroke-dashoffset: 0; animation: none; } }
+  h1 { margin: 0; color: #fff; }
+  .sub { margin: 1.25rem 0 2rem; font-size: 1.0625rem; max-width: 38rem; }
+  .cb { margin-top: 1.5rem; }
+  .links { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+</style>

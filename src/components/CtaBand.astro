@@ -1,0 +1,92 @@
+---
+import ContactBlock from './ContactBlock.astro';
+import LivingGradient from './motion/LivingGradient.astro';
+import ContactForm from './ContactForm.astro';
+import ArrowRight from 'lucide-astro/ArrowRight';
+import { cta } from '../data/offers';
+
+// One CTA, one contact path. Guide section 8.
+export interface Props {
+  chapter?: string;
+  label?: string;
+  headline: string;
+  sub?: string;
+  action?: { label: string; href: string };
+  /** Show the short form instead of a single button. */
+  form?: boolean;
+  formName?: string;
+  id?: string;
+}
+const {
+  chapter,
+  label = 'Next step',
+  headline,
+  sub = 'Tell us what your week looks like. We will tell you honestly whether this helps, and what it would cost.',
+  action = cta.primary,
+  form = true,
+  formName = 'contact',
+  id = 'next-step',
+} = Astro.props;
+---
+
+<section class="band on-dark" id={id}>
+  <LivingGradient strength={0.36} />
+  <div class="shell inner">
+    <div class="copy">
+      {(chapter || label) && (
+        <p class="chapter is-dark">
+          {chapter && <span>{chapter}</span>}
+          {chapter && label && <span aria-hidden="true">/</span>}
+          {label && <span>{label}</span>}
+        </p>
+      )}
+      <h2 class="display-lg" set:html={headline} />
+      <p class="sub">{sub}</p>
+
+      {!form && (
+        <a href={action.href} class="btn btn-primary">
+          {action.label}
+          <ArrowRight size={18} class="arrow" aria-hidden="true" />
+        </a>
+      )}
+
+      <ContactBlock dark class="contact" />
+    </div>
+
+    {form && (
+      <div class="form-panel">
+        <ContactForm name={formName} compact submitLabel={action.label} />
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--color-ink);
+    padding-block: clamp(3.5rem, 2.5rem + 4.5vw, 6rem);
+  }
+  .inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: clamp(2.5rem, 1.5rem + 5vw, 4rem);
+    align-items: start;
+  }
+  @media (min-width: 1024px) {
+    .inner { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); }
+  }
+  h2 { margin: 0; color: #fff; }
+  h2 :global(em) { color: var(--color-teal-light); }
+  .sub { margin: 1.25rem 0 2rem; font-size: 1.0625rem; max-width: 36rem; }
+  .contact { margin-top: 2rem; }
+  .form-panel {
+    background: color-mix(in oklab, #fff 6%, transparent);
+    border: 1px solid var(--rule-dark);
+    border-radius: 8px;
+    padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  }
+</style>

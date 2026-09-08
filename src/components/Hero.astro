@@ -1,0 +1,90 @@
+---
+import Photo from './Photo.astro';
+import LivingGradient from './motion/LivingGradient.astro';
+
+export interface Props {
+  chapter?: string;
+  label?: string;
+  /** Rendered as HTML so one word can carry the <em>. Exactly one per headline. */
+  headline: string;
+  sub?: string;
+  photo?: boolean;
+  variant?: 1 | 2 | 3;
+  compact?: boolean;
+  class?: string;
+}
+const {
+  chapter,
+  label,
+  headline,
+  sub,
+  photo = false,
+  variant = 1,
+  compact = false,
+  class: cls = '',
+} = Astro.props;
+---
+
+<header class:list={['hero', 'on-dark', compact && 'compact', cls]}>
+  {photo ? <Photo variant={variant} fadeFrom={30} /> : <div class="plain" aria-hidden="true"></div>}
+  <LivingGradient strength={photo ? 0.3 : 0.42} />
+
+  <div class="shell inner">
+    <div class="copy">
+      {(chapter || label) && (
+        <p class="chapter is-dark enter" style="--i:0">
+          {chapter && <span>{chapter}</span>}
+          {chapter && label && <span aria-hidden="true">/</span>}
+          {label && <span>{label}</span>}
+        </p>
+      )}
+      <h1 class:list={[compact ? 'display-lg' : 'display-xl', 'enter']} style="--i:1" set:html={headline} />
+      {sub && <p class="sub enter" style="--i:2" set:html={sub} />}
+      <div class="actions enter" style="--i:3"><slot name="actions" /></div>
+      <slot />
+    </div>
+    <div class="aside"><slot name="aside" /></div>
+  </div>
+</header>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    background: var(--color-ink);
+    padding-block: clamp(7rem, 5rem + 12vw, 11rem) clamp(3.5rem, 2.5rem + 5vw, 6rem);
+    overflow: hidden;
+  }
+  .hero.compact {
+    padding-block: clamp(6.5rem, 5rem + 8vw, 9rem) clamp(2.5rem, 2rem + 3vw, 4rem);
+  }
+  .plain { position: absolute; inset: 0; background: linear-gradient(135deg, #1c3e54 0%, #2c6671 55%, #3c8e8e 100%); }
+  .inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: clamp(2rem, 1rem + 5vw, 4rem);
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .inner:has(.aside > *) { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
+  }
+  .copy { max-width: 46rem; }
+  h1 { margin: 0; color: #fff; }
+  h1 :global(em) { color: var(--color-teal-light); }
+  .sub {
+    margin: 1.5rem 0 0;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    color: color-mix(in oklab, var(--color-cloud) 86%, var(--color-teal-pale));
+    max-width: 38rem;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+    margin-top: clamp(1.75rem, 1.25rem + 1.6vw, 2.5rem);
+  }
+  .actions:empty { display: none; }
+  .aside:empty { display: none; }
+  .chapter { margin-bottom: 1.5rem; }
+</style>

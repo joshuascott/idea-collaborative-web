@@ -1,0 +1,247 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Process from '../../components/Process.astro';
+import BookingEmbed from '../../components/BookingEmbed.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import StickyCta from '../../components/StickyCta.astro';
+import Users from 'lucide-astro/Users';
+import Clock from 'lucide-astro/Clock';
+import MapPin from 'lucide-astro/MapPin';
+import ArrowRight from 'lucide-astro/ArrowRight';
+import { tiers } from '../../data/offers';
+import { breadcrumbs, service } from '../../data/schema';
+
+export function getStaticPaths() {
+  return tiers.map((tier) => ({ params: { slug: tier.slug }, props: { tier } }));
+}
+
+const { tier } = Astro.props;
+const others = tiers.filter((t) => t.slug !== tier.slug);
+const path = `/workshops/${tier.slug}`;
+const ogImage = `/og-${tier.slug}.jpg`;
+
+// Titles are capped at 60 characters, so each page uses its short title plus a
+// distinguishing phrase rather than the full workshop name.
+const seoTitles: Record<string, string> = {
+  'ai-advantage': 'AI Advantage workshop: 90 minutes, three tools you keep',
+  'implementation-bootcamp': 'AI Implementation Bootcamp: build your first workflows',
+  'leadership-intensive': 'AI Leadership Intensive: a roadmap and how to measure it',
+};
+const seoDescriptions: Record<string, string> = {
+  'ai-advantage':
+    'A 90-minute AI workshop for Northern Colorado owners. $129 a seat, $2,200 private. Three tools you can use this week and a written 30-day plan.',
+  'implementation-bootcamp':
+    'A 4-hour hands-on AI workshop for teams ready to build. $349 a seat, $5,850 private. Working workflows on your own processes and a 90-day plan.',
+  'leadership-intensive':
+    'A full-day AI session for leadership. $749 a seat, $11,250 private. Where AI fits, what it costs, and the measures that tell you it worked.',
+};
+
+// No public dates are scheduled yet, so these pages emit Service rather than
+// Event schema. When Josh schedules one, add it here and switch to Event.
+const publicDate: string | null = null;
+---
+
+<Base
+  title={seoTitles[tier.slug]}
+  description={seoDescriptions[tier.slug]}
+  path={path}
+  ogImage={ogImage}
+  darkHero
+  schemas={[
+    breadcrumbs([
+      { name: 'Workshops', path: '/workshops' },
+      { name: tier.shortTitle, path },
+    ]),
+    service({
+      name: tier.title,
+      description: `${tier.forWhom} ${tier.leaveWith}`,
+      path,
+      price: tier.privatePrice.replace(/[$,]/g, ''),
+    }),
+  ]}
+>
+  <Hero
+    chapter={`0${tier.level}`}
+    label={`Level ${tier.level}`}
+    headline={tier.title.replace(
+      /^(AI )(Advantage|Implementation|Leadership)/,
+      '$1<em>$2</em>'
+    )}
+    sub={tier.blurb}
+    compact
+  >
+    <a href="#book" class="btn btn-primary" slot="actions">
+      Book Your Workshop
+      <ArrowRight size={18} class="arrow" aria-hidden="true" />
+    </a>
+    <a href="/workshops" class="btn btn-ghost-dark" slot="actions">Compare all three</a>
+  </Hero>
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs
+      trail={[
+        { name: 'Workshops', path: '/workshops' },
+        { name: tier.shortTitle, path },
+      ]}
+    />
+  </Section>
+
+  <Section surface="white" chapter="02" label="The shape of it">
+    <div class="split">
+      <div>
+        <h2 class="display-lg">Who it is <em>for</em>, and what you leave with.</h2>
+        <p class="who">{tier.forWhom}</p>
+        <p class="leave"><strong>You leave with:</strong> {tier.leaveWith}</p>
+        <p class="body">
+          Nothing here is theory for its own sake. Every part of the session is aimed at something
+          you can run the following week, and the last block is always spent writing down what
+          happens next and who owns it.
+        </p>
+      </div>
+
+      <aside class="facts">
+        <dl>
+          <div>
+            <dt><Clock size={18} stroke-width={1.75} aria-hidden="true" /> Length</dt>
+            <dd>{tier.duration}</dd>
+          </div>
+          <div>
+            <dt><Users size={18} stroke-width={1.75} aria-hidden="true" /> Room size</dt>
+            <dd>{tier.capacity}</dd>
+          </div>
+          <div>
+            <dt><MapPin size={18} stroke-width={1.75} aria-hidden="true" /> Where</dt>
+            <dd>Your office, or a venue in Loveland or Fort Collins</dd>
+          </div>
+        </dl>
+        <div class="price-pair">
+          <div>
+            <p class="k">Public seat</p>
+            <p class="v">{tier.publicPrice}</p>
+          </div>
+          <div>
+            <p class="k">Private session</p>
+            <p class="v">{tier.privatePrice}</p>
+          </div>
+        </div>
+        <p class="dates">
+          {publicDate
+            ? `Next public session: ${publicDate}`
+            : 'Private sessions scheduled on request. Public dates are announced to the briefing list first.'}
+        </p>
+      </aside>
+    </div>
+  </Section>
+
+  <Section surface="cloud" chapter="03" label="Agenda">
+    <h2 class="display-lg">What <em>happens</em>, block by block.</h2>
+    <ol class="agenda reveal-stagger">
+      {tier.agenda.map((a, i) => (
+        <li style={`--i:${i}`}>
+          <span class="time">{a.time}</span>
+          <div>
+            <h3 class="display-md">{a.heading}</h3>
+            <p>{a.detail}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <Process chapter="04" surface="white" heading="How the work <em>continues</em>." />
+
+  <Section surface="cloud" chapter="05" label="Book it" id="booking">
+    <div class="book-grid">
+      <div>
+        <h2 class="display-lg">Book the <em>{tier.shortTitle}</em>.</h2>
+        <p class="body">
+          Tell us the date you have in mind and roughly who will be in the room. If a different
+          level fits your team better we will say so before you pay for this one.
+        </p>
+        <p class="body">
+          Not sure yet? The
+          <a href="/ai-readiness-assessment" class="prose-link">free readiness assessment</a>
+          is a short form and a written reply, no call required.
+        </p>
+      </div>
+      <BookingEmbed
+        heading="Book this workshop"
+        blurb={`${tier.duration}, private at your office or a public seat when the next date is set.`}
+      />
+    </div>
+  </Section>
+
+  <Section surface="white" chapter="06" label="The other levels">
+    <h2 class="display-lg">If this is not the <em>right</em> one.</h2>
+    <ul class="others">
+      {others.map((o) => (
+        <li class="card">
+          <a href={`/workshops/${o.slug}`}>
+            <span class="lvl">Level {o.level}</span>
+            <h3 class="display-md">{o.title}</h3>
+            <p>{o.forWhom}</p>
+            <span class="cue">See this workshop <ArrowRight size={16} aria-hidden="true" /></span>
+          </a>
+        </li>
+      ))}
+      <li class="card">
+        <a href="/consulting">
+          <span class="lvl">Ongoing</span>
+          <h3 class="display-md">Consulting and implementation</h3>
+          <p>For when the workshop is not enough and you want somebody in the work with you.</p>
+          <span class="cue">See the rates <ArrowRight size={16} aria-hidden="true" /></span>
+        </a>
+      </li>
+    </ul>
+  </Section>
+
+  <CtaBand chapter="07" headline="Let's get a <em>date</em> on the calendar." />
+  <StickyCta label="Book Your Workshop" href="#booking" watch="#booking" />
+</Base>
+
+<style>
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .split { display: grid; gap: clamp(2rem, 1.5rem + 3vw, 3.5rem); align-items: start; }
+  @media (min-width: 900px) { .split { grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); } }
+  .split h2 { margin: 0 0 1.25rem; }
+  .who { font-size: 1.125rem; color: var(--color-navy); }
+  .leave { color: var(--color-slate); }
+  .leave strong { color: var(--color-navy); }
+  .body { color: var(--color-slate); }
+
+  .facts { border: 1px solid var(--rule); border-radius: 8px; padding: 1.5rem; background: #fff; }
+  .facts dl { margin: 0; display: grid; gap: 1rem; }
+  .facts dt {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--color-slate);
+  }
+  .facts dt :global(svg) { color: var(--color-teal-deep); }
+  .facts dd { margin: 0.3rem 0 0; font-size: 0.9375rem; color: var(--color-navy); }
+  .price-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0 1rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); }
+  .k { margin: 0; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-slate); }
+  .v { margin: 0.2rem 0 0; font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; color: var(--color-navy); font-variant-numeric: tabular-nums; }
+  .dates { margin: 0; font-size: 0.8125rem; color: var(--color-slate); }
+
+  .agenda { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+  .agenda > li { display: grid; gap: 0.5rem 2rem; padding-block: clamp(1.25rem, 1rem + 1vw, 1.75rem); border-bottom: 1px solid var(--rule); }
+  @media (min-width: 700px) { .agenda > li { grid-template-columns: 6rem minmax(0, 1fr); } }
+  .time { font-family: var(--font-display); font-size: 1.25rem; color: var(--color-teal-deep); font-variant-numeric: tabular-nums; }
+  .agenda h3 { margin: 0 0 0.4rem; color: var(--color-navy); }
+  .agenda p { margin: 0; color: var(--color-slate); font-size: 0.9375rem; }
+
+  .book-grid { display: grid; gap: clamp(2rem, 1.5rem + 3vw, 3rem); align-items: start; }
+  @media (min-width: 900px) { .book-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); } }
+  .book-grid h2 { margin: 0 0 1.25rem; }
+
+  .others { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+  @media (min-width: 768px) { .others { grid-template-columns: repeat(3, 1fr); } }
+  .others a { display: flex; flex-direction: column; height: 100%; padding: 1.5rem; text-decoration: none; }
+  .lvl { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-teal-deep); }
+  .others h3 { margin: 0.5rem 0 0.5rem; color: var(--color-navy); font-size: 1.125rem; }
+  .others p { margin: 0 0 1rem; font-size: 0.9375rem; color: var(--color-slate); }
+  .cue { margin-top: auto; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.875rem; font-weight: 600; color: var(--color-teal-deep); }
+</style>

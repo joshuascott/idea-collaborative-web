@@ -1,0 +1,14 @@
+---
+// Privacy-first analytics, cookieless, so the site needs no cookie banner.
+// Nothing loads until the domain is set, which keeps preview deploys clean.
+// Set PUBLIC_PLAUSIBLE_DOMAIN in the Netlify environment to switch it on.
+const domain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
+---
+{domain && (
+  <script
+    is:inline
+    defer
+    data-domain={domain}
+    src="https://plausible.io/js/script.outbound-links.tagged-events.js"
+  ></script>
+)}

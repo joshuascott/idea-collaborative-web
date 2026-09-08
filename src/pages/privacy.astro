@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactBlock from '../components/ContactBlock.astro';
+import { breadcrumbs } from '../data/schema';
+import { contact } from '../data/contact';
+
+const updated = new Date('2026-09-08');
+---
+
+<Base
+  title="Privacy at Idea Collaborative"
+  description="What this site collects, what happens to anything you send through a form, and who else sees it. Short version: very little, and nobody."
+  path="/privacy"
+  darkHero
+  schemas={[breadcrumbs([{ name: 'Privacy', path: '/privacy' }])]}
+>
+  <header class="hero on-dark">
+    <div class="shell">
+      <p class="chapter is-dark"><span>Privacy</span></p>
+      <h1 class="display-lg">What this site <em>collects</em>.</h1>
+      <p class="sub">
+        Short version: very little, and nobody else sees it. The longer version is below, in plain
+        words rather than the usual paragraphs.
+      </p>
+    </div>
+  </header>
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs trail={[{ name: 'Privacy', path: '/privacy' }]} />
+  </Section>
+
+  <Section surface="white">
+    <div class="doc">
+      <h2 class="display-md">Forms</h2>
+      <p>
+        When you send a form on this site, the fields you filled in are delivered by email to
+        {contact.email} and stored by our form provider so the message is not lost in transit. That
+        is the whole purpose. We use it to reply to you.
+      </p>
+      <p>
+        We do not sell it, rent it, or share it with anyone. There is no marketing list, no
+        automated sequence, and no partner who receives your details. If you ask us to delete
+        everything we hold about you, we will, and we will confirm when it is done.
+      </p>
+
+      <h2 class="display-md">Analytics</h2>
+      <p>
+        If analytics is running on this site it is a privacy-first, cookieless product that records
+        aggregate page views and referrers. It does not set cookies, does not track you across other
+        websites, and does not build a profile of you. That is why there is no cookie banner: there
+        are no cookies to consent to.
+      </p>
+
+      <h2 class="display-md">Booking</h2>
+      <p>
+        The booking panel, once it is switched on, loads from a third-party scheduling provider and
+        only when you scroll to it. If you book a time, the details you enter go to that provider
+        and to us. Their privacy policy governs what they hold.
+      </p>
+
+      <h2 class="display-md">What we do not do</h2>
+      <ul class="checks">
+        <li>No advertising pixels, no retargeting, no social trackers</li>
+        <li>No selling or sharing of anything you send us</li>
+        <li>No email sequences you did not ask for</li>
+        <li>No account required to read anything here</li>
+      </ul>
+
+      <h2 class="display-md">Children</h2>
+      <p>
+        This is a business-to-business site and is not directed at children. We do not knowingly
+        collect information from anyone under 13.
+      </p>
+
+      <h2 class="display-md">Asking us anything about this</h2>
+      <p>Email or call. A person answers.</p>
+      <ContactBlock class="cb" />
+
+      <p class="fine">
+        Last updated {updated.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}.
+        If this policy changes in a way that affects anything you already sent us, we will tell you
+        directly rather than quietly editing this page.
+      </p>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .hero { background: var(--color-ink); padding-block: clamp(6.5rem, 5rem + 8vw, 9rem) clamp(2.5rem, 2rem + 3vw, 3.5rem); }
+  h1 { margin: 0; color: #fff; }
+  .sub { margin: 1.25rem 0 0; font-size: 1.0625rem; max-width: 38rem; }
+  .chapter { margin-bottom: 1.5rem; }
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .doc { max-width: 42rem; }
+  .doc h2 { margin: 2.25rem 0 0.6rem; color: var(--color-navy); }
+  .doc h2:first-child { margin-top: 0; }
+  .doc p { color: var(--color-slate); }
+  .checks li { color: var(--color-navy); }
+  .cb { margin: 1rem 0 2rem; }
+  .fine { font-size: 0.8125rem; }
+</style>

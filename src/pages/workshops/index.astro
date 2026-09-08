@@ -1,0 +1,202 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import TierCards from '../../components/TierCards.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Check from 'lucide-astro/Check';
+import Minus from 'lucide-astro/Minus';
+import { tiers, consultingRates, consultingNote } from '../../data/offers';
+import { breadcrumbs, service } from '../../data/schema';
+
+const rows = [
+  { label: 'Length', values: tiers.map((t) => t.duration) },
+  { label: 'Public seat', values: tiers.map((t) => t.publicPrice) },
+  { label: 'Private session', values: tiers.map((t) => t.privatePrice) },
+  { label: 'Room size', values: tiers.map((t) => t.capacity) },
+  { label: 'Hands on keyboards', values: [false, true, true] },
+  { label: 'Built on your own processes', values: [false, true, true] },
+  { label: 'Written 30-day action plan', values: [true, true, true] },
+  { label: 'Prompt library you keep', values: [true, true, true] },
+  { label: '90-day plan', values: [false, true, true] },
+  { label: 'Roadmap with measures', values: [false, false, true] },
+  { label: 'Follow-up session included', values: [false, false, true] },
+];
+
+const faqs = [
+  {
+    q: 'Do you come to us?',
+    a: 'Yes, and that is the usual arrangement. Private sessions run at your office anywhere in Loveland, Fort Collins, Windsor, Greeley, or Longmont at no travel charge. Further out we will quote travel separately before you commit. Public seats run at a venue in Loveland or Fort Collins.',
+  },
+  {
+    q: 'What tools do we need before the workshop?',
+    a: 'Nothing bought in advance. Bring laptops and whatever accounts you already have. Part of the session is working out which paid tools are worth it for your business and which free ones are enough, and for some businesses the honest answer is that the free tier covers it for now.',
+  },
+  {
+    q: 'Is this a software pitch?',
+    a: 'No. We do not resell software, we take no referral commissions from any vendor, and we have no product to sell you afterwards. If a tool you already pay for does the job, we will say so and you will save the subscription.',
+  },
+  {
+    q: 'Do you offer continuing education credit?',
+    a: 'Not yet. Accreditation for real estate and insurance CE is something we are looking at for 2027, and we would rather say no now than imply it is coming. If CE credit is the reason you would book, tell us, because it affects how we prioritize it.',
+  },
+  {
+    q: 'What if half my team is skeptical?',
+    a: 'Good. Skeptical rooms produce better sessions than enthusiastic ones, because the objections come out where they can be answered. The people who worry this is hype are usually the ones who spot the workflows that actually matter.',
+  },
+  {
+    q: 'What happens if it does not work for us?',
+    a: 'If you get to the end of a private session and your team cannot name a workflow worth running, tell us before you pay the invoice and we will not send it. That has not happened yet, and we would rather carry the risk than argue about it afterwards.',
+  },
+];
+---
+
+<Base
+  title="AI workshops for Northern Colorado businesses: three levels"
+  description="Three AI workshops for small and mid-sized businesses. Public seats from $129, private sessions from $2,200. Prices, agendas, and outcomes on the page."
+  path="/workshops"
+  darkHero
+  schemas={[
+    breadcrumbs([{ name: 'Workshops', path: '/workshops' }]),
+    service({
+      name: 'AI workshops for small and mid-sized businesses',
+      description:
+        'Three levels of hands-on AI workshop for Northern Colorado businesses, delivered in person.',
+      path: '/workshops',
+      price: '129',
+    }),
+  ]}
+>
+  <Hero
+    chapter="01"
+    label="Workshops"
+    headline="Three workshops. Pick where your business <em>actually</em> is."
+    sub="Not where you would like it to be, and not where a vendor says it should be. The levels differ by how much building your team does in the room."
+    compact
+  >
+    <a href="#compare" class="btn btn-primary" slot="actions">Compare the three</a>
+    <a href="/contact" class="btn btn-ghost-dark" slot="actions">Ask which one fits</a>
+  </Hero>
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs trail={[{ name: 'Workshops', path: '/workshops' }]} />
+  </Section>
+
+  <Section chapter="02" label="The three levels" surface="white" id="levels">
+    <h2 class="display-lg">Level 1 is a <em>meeting</em>. Level 3 is a decision.</h2>
+    <p class="lede">
+      The difference is not how much AI you get. It is how much of the building your team does in
+      the room, and who needs to be there for it to be worth the day.
+    </p>
+    <TierCards detailed />
+  </Section>
+
+  <Section chapter="03" label="Side by side" surface="cloud" id="compare">
+    <h2 class="display-lg">What is <em>different</em> between them.</h2>
+    <p class="lede">
+      The prices are on this page because you should be able to work out what this costs without
+      calling anyone. Most businesses start at Level 1 or Level 2.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <caption class="sr-only">
+          Comparison of the three workshop levels by length, price, room size, and what is included
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">
+              <span class="sr-only">Feature</span>
+            </th>
+            {tiers.map((t) => (
+              <th scope="col">
+                <span class="lvl">Level {t.level}</span>
+                <a href={`/workshops/${t.slug}`}>{t.shortTitle}</a>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <th scope="row">{r.label}</th>
+              {r.values.map((v) => (
+                <td>
+                  {typeof v === 'boolean' ? (
+                    v ? (
+                      <><Check size={18} stroke-width={2} class="yes" aria-hidden="true" /><span class="sr-only">Included</span></>
+                    ) : (
+                      <><Minus size={18} stroke-width={2} class="no" aria-hidden="true" /><span class="sr-only">Not included</span></>
+                    )
+                  ) : (
+                    v
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="consult">
+      <h3 class="display-md">And when a workshop is not the right shape</h3>
+      <p>
+        Some businesses need somebody in the work with them rather than a session. That is
+        <a href="/consulting" class="prose-link">consulting and implementation</a>, billed by the hour.
+      </p>
+      <ul class="rates">
+        {consultingRates.map((r) => (
+          <li><strong>{r.rate}</strong><span>{r.label}</span></li>
+        ))}
+      </ul>
+      <p class="fine">{consultingNote}</p>
+    </div>
+  </Section>
+
+  <Section chapter="04" label="Questions" surface="white">
+    <FaqAccordion faqs={faqs} heading="Before you book" />
+  </Section>
+
+  <CtaBand
+    chapter="05"
+    headline="Tell us the week you want <em>back</em>."
+    sub="Describe what is eating your time. We will tell you which level fits, or that none of them do."
+  />
+</Base>
+
+<style>
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .lede { font-size: 1.125rem; color: var(--color-slate); margin: 1rem 0 2.5rem; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; background: #fff; }
+  table { width: 100%; min-width: 44rem; border-collapse: collapse; font-size: 0.9375rem; }
+  th, td { padding: 0.85rem 1rem; text-align: left; vertical-align: top; }
+  thead th { border-bottom: 1px solid var(--rule); }
+  .lvl {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-teal-deep);
+  }
+  thead a { color: var(--color-navy); font-weight: 600; text-decoration: none; }
+  thead a:hover { color: var(--color-teal-deep); }
+  tbody tr + tr { border-top: 1px solid var(--rule); }
+  tbody th { font-weight: 500; color: var(--color-navy); width: 15rem; }
+  tbody td { color: var(--color-slate); }
+  :global(.yes) { color: var(--color-teal); }
+  :global(.no) { color: color-mix(in oklab, var(--color-slate) 45%, transparent); }
+
+  .consult { margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); }
+  .consult h3 { margin: 0 0 0.5rem; color: var(--color-navy); }
+  .consult p { color: var(--color-slate); margin: 0 0 1rem; }
+  .rates { list-style: none; margin: 0 0 0.75rem; padding: 0; display: grid; gap: 0.5rem; }
+  .rates li { display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; align-items: baseline; }
+  .rates strong { font-family: var(--font-display); font-weight: 500; font-size: 1.125rem; color: var(--color-navy); }
+  .rates span { font-size: 0.9375rem; color: var(--color-slate); }
+  .fine { font-size: 0.8125rem; }
+</style>

@@ -1,0 +1,61 @@
+---
+import Globe from 'lucide-astro/Globe';
+import Mail from 'lucide-astro/Mail';
+import Phone from 'lucide-astro/Phone';
+import MapPin from 'lucide-astro/MapPin';
+import { contact } from '../data/contact';
+
+// Order never changes: web, email, phone, city. Guide section 8.
+export interface Props {
+  dark?: boolean;
+  icons?: boolean;
+  class?: string;
+}
+const { dark = false, icons = true, class: cls = '' } = Astro.props;
+const size = 18;
+---
+
+<address class:list={['contact-block', cls]} data-dark={dark ? 'true' : 'false'}>
+  <a href={contact.webHref}>
+    {icons && <Globe size={size} aria-hidden="true" />}
+    {contact.web}
+  </a>
+  <a href={`mailto:${contact.email}`}>
+    {icons && <Mail size={size} aria-hidden="true" />}
+    {contact.email}
+  </a>
+  <a href={contact.phoneHref}>
+    {icons && <Phone size={size} aria-hidden="true" />}
+    {contact.phone}
+  </a>
+  <span>
+    {icons && <MapPin size={size} aria-hidden="true" />}
+    {contact.city}
+  </span>
+</address>
+
+<style>
+  .contact-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-style: normal;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  .contact-block a,
+  .contact-block span {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--color-slate);
+    text-decoration: none;
+    min-height: 1.75rem;
+  }
+  .contact-block a:hover { color: var(--color-teal-deep); }
+  .contact-block :global(svg) { color: var(--color-teal-deep); flex: none; }
+  .contact-block[data-dark='true'] a,
+  .contact-block[data-dark='true'] span { color: var(--color-teal-pale); }
+  .contact-block[data-dark='true'] a:hover { color: #fff; }
+  .contact-block[data-dark='true'] :global(svg) { color: var(--color-teal-light); }
+</style>

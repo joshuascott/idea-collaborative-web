@@ -1,0 +1,302 @@
+---
+import ArrowRight from 'lucide-astro/ArrowRight';
+import { tiers } from '../../data/offers';
+
+// Signature moment 6, the hours back calculator. "Practical AI that pays for
+// itself" is a payback claim, so this is the payback arithmetic in the
+// visitor's own numbers, with their hand on the slider.
+//
+// The count-up is a 20-line rAF tween rather than the Motion library. It does
+// the same job here for a fraction of the budget, which keeps the whole motion
+// layer well under the 40KB ceiling in PLAN.md 4b.
+export interface Props {
+  compact?: boolean;
+  id?: string;
+}
+const { compact = false, id = 'calculator' } = Astro.props;
+
+const tierData = tiers.map((t) => ({
+  level: t.level,
+  slug: t.slug,
+  title: t.title,
+  privatePrice: t.privatePrice,
+  publicPrice: t.publicPrice,
+}));
+---
+
+<div class:list={['calc', compact && 'is-compact']} id={id} data-calc data-tiers={JSON.stringify(tierData)}>
+  <div class="intro">
+    <h2 class:list={[compact ? 'display-md' : 'display-lg']}>
+      What would you do with the <em>hours</em>?
+    </h2>
+    <p>
+      Move the sliders to your own numbers. This is arithmetic, not a projection, and the
+      assumption behind it is written underneath so you can argue with it.
+    </p>
+  </div>
+
+  <div class="grid">
+    <div class="controls">
+      <div class="field">
+        <label for={`${id}-team`}>
+          People on the team
+          <output data-out="team">12</output>
+        </label>
+        <input id={`${id}-team`} type="range" min="1" max="100" value="12" step="1" data-in="team" />
+      </div>
+
+      <div class="field">
+        <label for={`${id}-hours`}>
+          Hours each, per week, on repetitive work
+          <output data-out="hours">6</output>
+        </label>
+        <input id={`${id}-hours`} type="range" min="1" max="20" value="6" step="1" data-in="hours" />
+      </div>
+
+      <div class="field rate">
+        <label for={`${id}-rate`}>Loaded cost per hour</label>
+        <div class="rate-input">
+          <span aria-hidden="true">$</span>
+          <input id={`${id}-rate`} type="number" min="10" max="500" step="5" value="45" data-in="rate" inputmode="numeric" />
+        </div>
+      </div>
+    </div>
+
+    <div class="result">
+      <p class="label">Hours back per month</p>
+      <p class="numeral" data-out="hoursBack" aria-live="polite">156</p>
+      <p class="worth">
+        Worth about <strong data-out="value">$7,020</strong> a month at that rate.
+      </p>
+
+      <div class="fit">
+        <p class="label">Here is what it costs</p>
+        <p class="fit-line">
+          <a data-out="fitHref" href="/workshops/implementation-bootcamp" class="prose-link"
+            ><span data-out="fitTitle">AI Implementation Bootcamp</span></a
+          >, <span data-out="fitPrice">$5,850</span> as a private session for your team.
+        </p>
+        <a href="/ai-readiness-assessment" class="btn btn-primary">
+          Get Your Free AI Readiness Assessment
+          <ArrowRight size={18} class="arrow" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <p class="assumption">
+    Assumes you recover half the time currently spent on repetitive work, and that a month is 4.3
+    weeks. Most teams we have worked with land between a third and two thirds. If you think half is
+    generous for your business, drag the hours slider down and see what the honest number looks
+    like.
+  </p>
+</div>
+
+<style>
+  .calc {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    padding: clamp(1.35rem, 1.1rem + 1.4vw, 2.25rem);
+    margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  }
+  :global(.on-dark) .calc { background: color-mix(in oklab, #fff 6%, transparent); border-color: var(--rule-dark); }
+  .intro { max-width: 46rem; }
+  .intro h2 { margin: 0; }
+  .intro em { color: var(--color-teal-deep); }
+  :global(.on-dark) .intro em { color: var(--color-teal-light); }
+  .intro p { margin: 0.75rem 0 0; font-size: 0.9375rem; color: var(--color-slate); }
+  :global(.on-dark) .intro p { color: color-mix(in oklab, var(--color-cloud) 80%, var(--color-teal-pale)); }
+
+  .grid {
+    display: grid;
+    gap: clamp(1.75rem, 1.25rem + 2vw, 3rem);
+    margin-top: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+    align-items: start;
+  }
+  @media (min-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); } }
+
+  .controls { display: grid; gap: 1.5rem; }
+  .field label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+    margin-bottom: 0.5rem;
+  }
+  :global(.on-dark) .field label { color: var(--color-teal-light); }
+  output {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--color-navy);
+    font-variant-numeric: tabular-nums;
+  }
+  :global(.on-dark) output { color: #fff; }
+
+  input[type='range'] {
+    width: 100%;
+    height: 44px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+  input[type='range']::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--color-mist);
+  }
+  input[type='range']::-moz-range-track { height: 4px; border-radius: 999px; background: var(--color-mist); }
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px; height: 24px;
+    margin-top: -10px;
+    border-radius: 999px;
+    background: var(--color-teal);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 6px rgb(28 62 84 / 0.3);
+  }
+  input[type='range']::-moz-range-thumb {
+    width: 24px; height: 24px;
+    border-radius: 999px;
+    background: var(--color-teal);
+    border: 3px solid #fff;
+  }
+
+  .rate-input { display: flex; align-items: center; gap: 0.35rem; }
+  .rate-input span { font-size: 1.125rem; color: var(--color-slate); }
+  .rate-input input {
+    width: 7rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-navy);
+    background: #fff;
+  }
+
+  .result {
+    border-left: 3px solid var(--color-teal);
+    padding-left: clamp(1rem, 0.75rem + 1vw, 1.5rem);
+  }
+  .label {
+    margin: 0;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+  }
+  :global(.on-dark) .label { color: var(--color-teal-light); }
+  .numeral {
+    margin: 0.35rem 0 0;
+    /* Slate at the low end, Deep Teal as it grows. Set from script. */
+    color: var(--num-color, var(--color-slate));
+    transition: color 400ms var(--ease-out-quart);
+  }
+  .worth { margin: 0.5rem 0 0; font-size: 0.9375rem; color: var(--color-slate); }
+  .worth strong { color: var(--color-navy); font-variant-numeric: tabular-nums; }
+  :global(.on-dark) .worth strong { color: #fff; }
+
+  .fit { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); }
+  :global(.on-dark) .fit { border-top-color: var(--rule-dark); }
+  .fit-line { margin: 0.5rem 0 1.25rem; font-size: 0.9375rem; color: var(--color-slate); }
+
+  .assumption {
+    margin: clamp(1.75rem, 1.25rem + 2vw, 2.5rem) 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.8125rem;
+    color: var(--color-slate);
+    max-width: 70ch;
+  }
+  :global(.on-dark) .assumption { border-top-color: var(--rule-dark); }
+</style>
+
+<script>
+  type Tier = { level: number; slug: string; title: string; privatePrice: string; publicPrice: string };
+
+  const wire = () => {
+    document.querySelectorAll<HTMLElement>('[data-calc]').forEach((root) => {
+      const tiers: Tier[] = JSON.parse(root.dataset.tiers || '[]');
+      const get = (k: string) => root.querySelector<HTMLInputElement>(`[data-in="${k}"]`);
+      const out = (k: string) => root.querySelector<HTMLElement>(`[data-out="${k}"]`);
+      const team = get('team'), hours = get('hours'), rate = get('rate');
+      if (!team || !hours || !rate) return;
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const fmt = new Intl.NumberFormat('en-US');
+      const money = new Intl.NumberFormat('en-US', {
+        style: 'currency', currency: 'USD', maximumFractionDigits: 0,
+      });
+
+      // One tween per animated figure. Fluid, never bouncy.
+      const tween = (node: HTMLElement, to: number, render: (v: number) => string) => {
+        const from = Number(node.dataset.v ?? to);
+        if (reduced || from === to) {
+          node.dataset.v = String(to);
+          node.textContent = render(to);
+          return;
+        }
+        const t0 = performance.now();
+        const dur = 420;
+        const step = (now: number) => {
+          const p = Math.min(1, (now - t0) / dur);
+          const e = 1 - Math.pow(1 - p, 4); // ease out quart
+          const v = from + (to - from) * e;
+          node.textContent = render(v);
+          if (p < 1) requestAnimationFrame(step);
+          else node.dataset.v = String(to);
+        };
+        requestAnimationFrame(step);
+      };
+
+      const update = () => {
+        const t = Number(team.value);
+        const h = Number(hours.value);
+        const r = Math.max(0, Number(rate.value) || 0);
+
+        out('team')!.textContent = String(t);
+        out('hours')!.textContent = String(h);
+
+        // Half the repetitive time, 4.3 weeks in a month. Stated on the page.
+        const hoursBack = Math.round(t * h * 4.3 * 0.5);
+        const value = hoursBack * r;
+
+        const hb = out('hoursBack')!;
+        tween(hb, hoursBack, (v) => fmt.format(Math.round(v)));
+        tween(out('value')!, value, (v) => money.format(Math.round(v)));
+
+        // Slate to Deep Teal as the number grows.
+        const mix = Math.min(1, hoursBack / 600);
+        hb.style.setProperty(
+          '--num-color',
+          `color-mix(in oklab, var(--color-teal-deep) ${Math.round(mix * 100)}%, var(--color-slate))`
+        );
+
+        const fit = t < 10 ? tiers[0] : t <= 40 ? tiers[1] : tiers[2];
+        out('fitTitle')!.textContent = fit.title;
+        out('fitPrice')!.textContent = fit.privatePrice;
+        (out('fitHref') as HTMLAnchorElement).href = `/workshops/${fit.slug}`;
+      };
+
+      [team, hours, rate].forEach((el) => {
+        el.addEventListener('input', update);
+        el.addEventListener('change', update);
+      });
+      update();
+    });
+  };
+  wire();
+  document.addEventListener('astro:page-load', wire);
+</script>

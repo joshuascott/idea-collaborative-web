@@ -1,0 +1,239 @@
+---
+import Base from './Base.astro';
+import Section from '../components/Section.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { mark } from '../data/mark';
+import { article, breadcrumbs } from '../data/schema';
+import { founder } from '../data/contact';
+import { cta } from '../data/offers';
+
+export interface Props {
+  post: {
+    id: string;
+    data: {
+      title: string;
+      seoTitle?: string;
+      description: string;
+      date: Date;
+      updated?: Date;
+      tags: string[];
+      ogImage?: string;
+      cta: 'assessment' | 'breakfast';
+    };
+  };
+  minutes: number;
+}
+
+const { post, minutes } = Astro.props;
+const { data } = post;
+const path = `/blog/${post.id}`;
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+const close =
+  data.cta === 'breakfast'
+    ? {
+        headline: 'Come to the next <em>briefing</em> breakfast.',
+        sub: 'An hour, a room of Northern Colorado owners, and no pitch. Join the list and we will tell you when the next one is set.',
+        action: cta.breakfast,
+      }
+    : {
+        headline: 'Find out where your <em>hours</em> are going.',
+        sub: 'A short form and a written assessment back within two business days. No call required and nothing to buy.',
+        action: cta.assessment,
+      };
+---
+
+<Base
+  title={data.seoTitle ?? data.title}
+  description={data.description}
+  path={path}
+  type="article"
+  ogImage={data.ogImage}
+  publishedTime={data.date.toISOString()}
+  modifiedTime={(data.updated ?? data.date).toISOString()}
+  darkHero
+  schemas={[
+    breadcrumbs([
+      { name: 'Blog', path: '/blog' },
+      { name: data.title, path },
+    ]),
+    article({
+      title: data.title,
+      description: data.description,
+      path,
+      date: data.date,
+      updated: data.updated,
+      image: data.ogImage,
+    }),
+  ]}
+>
+  <!-- Scroll progress as the loop from the mark filling, navy then teal. -->
+  <div class="progress" aria-hidden="true">
+    <svg viewBox="0 0 1024 1024" focusable="false">
+      <path
+        class="p-track"
+        d={mark.navy}
+        pathLength="1"
+        stroke="currentColor"
+        stroke-width={mark.strokeWidth}
+        stroke-linecap="round"
+        fill="none"
+      />
+      <path
+        class="p-navy"
+        d={mark.navy}
+        pathLength="1"
+        stroke="#1C3E54"
+        stroke-width={mark.strokeWidth}
+        stroke-linecap="round"
+        fill="none"
+      />
+      <path
+        class="p-teal"
+        d={mark.teal}
+        pathLength="1"
+        stroke="#3C8E8E"
+        stroke-width={mark.strokeWidth}
+        stroke-linecap="round"
+        fill="none"
+      />
+    </svg>
+  </div>
+
+  <header class="post-hero on-dark">
+    <div class="shell">
+      <p class="chapter is-dark">
+        <span>Writing</span>
+        {data.tags[0] && <span aria-hidden="true">/</span>}
+        {data.tags[0] && <span>{data.tags[0]}</span>}
+      </p>
+      <h1 class="display-lg">{data.title}</h1>
+      <p class="meta">
+        <span>{founder.name}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime={data.date.toISOString()}>{fmt(data.date)}</time>
+        <span aria-hidden="true">·</span>
+        <span>{minutes} min read</span>
+      </p>
+    </div>
+  </header>
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs
+      trail={[
+        { name: 'Blog', path: '/blog' },
+        { name: data.title, path },
+      ]}
+    />
+  </Section>
+
+  <Section surface="white">
+    <article class="rich">
+      <slot />
+    </article>
+
+    {data.updated && (
+      <p class="updated">Updated {fmt(data.updated)}.</p>
+    )}
+
+    <div class="tags">
+      {data.tags.map((t) => <span class="tag">{t}</span>)}
+    </div>
+
+    <p class="back"><a href="/blog" class="prose-link">All posts</a></p>
+  </Section>
+
+  <CtaBand chapter="" label="Next step" headline={close.headline} sub={close.sub} action={close.action} form={false} />
+</Base>
+
+<style>
+  .progress {
+    position: fixed;
+    top: 0.85rem;
+    right: 1rem;
+    z-index: 60;
+    width: 34px;
+    pointer-events: none;
+    color: color-mix(in oklab, var(--color-navy) 14%, transparent);
+  }
+  @media (max-width: 1023px) { .progress { display: none; } }
+  .progress svg { width: 100%; height: auto; overflow: visible; }
+  .p-navy, .p-teal { stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .p-navy {
+        animation: fill linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0% 50%;
+      }
+      .p-teal {
+        animation: fill linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 50% 100%;
+      }
+    }
+  }
+  @keyframes fill { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+  .post-hero {
+    background: var(--color-ink);
+    padding-block: clamp(6.5rem, 5rem + 8vw, 9rem) clamp(2.5rem, 2rem + 3vw, 3.5rem);
+  }
+  .post-hero h1 { margin: 0; color: #fff; max-width: 22ch; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0 0;
+    font-size: 0.875rem;
+    color: var(--color-teal-pale);
+  }
+  .chapter { margin-bottom: 1.5rem; }
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+
+  .rich { max-width: 42rem; }
+  .rich :global(p) { color: var(--color-slate); margin-block: 1.15rem; font-size: 1.0625rem; line-height: 1.7; }
+  .rich :global(h2) {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: clamp(1.5rem, 1.32rem + 0.82vw, 2rem);
+    color: var(--color-navy);
+    margin: 2.5rem 0 0.75rem;
+  }
+  .rich :global(h3) { font-size: 1.125rem; color: var(--color-navy); margin: 2rem 0 0.5rem; }
+  .rich :global(ul), .rich :global(ol) { color: var(--color-slate); padding-left: 1.25rem; margin-block: 1.15rem; }
+  .rich :global(li) { margin-block: 0.4rem; font-size: 1.0625rem; line-height: 1.7; }
+  .rich :global(strong) { color: var(--color-navy); font-weight: 600; }
+  .rich :global(blockquote) {
+    margin: 2rem 0;
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--color-teal);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--color-navy);
+  }
+  .rich :global(blockquote p) { color: inherit; font-size: inherit; }
+  .rich :global(hr) { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+  .rich :global(code) {
+    background: var(--color-mist);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .updated { margin-top: 2rem; font-size: 0.8125rem; color: var(--color-slate); }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+  .tag {
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: var(--color-mist);
+    color: var(--color-teal-deep);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .back { margin-top: 2rem; font-size: 0.9375rem; }
+</style>

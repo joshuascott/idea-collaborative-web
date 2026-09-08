@@ -1,0 +1,187 @@
+---
+import ArrowRight from 'lucide-astro/ArrowRight';
+import { tiers } from '../data/offers';
+
+export interface Props {
+  /** Show the full outcome copy as well as the prices. */
+  detailed?: boolean;
+  class?: string;
+}
+const { detailed = false, class: cls = '' } = Astro.props;
+---
+
+<div class:list={['tier-grid', 'reveal-stagger', cls]}>
+  {tiers.map((t, i) => (
+    <article
+      class:list={['card', 'tier', t.recommended && 'is-recommended']}
+      style={`--i:${i}`}
+      data-tilt={t.recommended ? 'true' : undefined}
+    >
+      <div class="tier-inner">
+<p class:list={['flag', !t.recommended && 'is-ghost']} aria-hidden={!t.recommended}>
+          Most teams start here
+        </p>
+        <p class="level">Level {t.level}</p>
+        <h3 class="display-md">{t.title}</h3>
+        <p class="duration">{t.duration}</p>
+
+        <dl class="prices">
+          <div>
+            <dt>Public seat</dt>
+            <dd>{t.publicPrice}</dd>
+          </div>
+          <div>
+            <dt>Private session</dt>
+            <dd>{t.privatePrice}</dd>
+          </div>
+        </dl>
+
+        <p class="who"><strong>Who it is for.</strong> {t.forWhom}</p>
+        <p class="leave"><strong>What you leave with.</strong> {t.leaveWith}</p>
+        {detailed && <p class="blurb">{t.blurb}</p>}
+
+        <a href={`/workshops/${t.slug}`} class="btn btn-primary">
+          See this workshop
+          <ArrowRight size={18} class="arrow" aria-hidden="true" />
+        </a>
+      </div>
+      <span class="sheen" aria-hidden="true"></span>
+    </article>
+  ))}
+</div>
+
+<style>
+  .tier-grid {
+    display: grid;
+    gap: 1.25rem;
+    container-type: inline-size;
+  }
+  /* Container query, not viewport: the cards behave the same in any column. */
+  @container (min-width: 46rem) {
+    .tier-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 900px) {
+    .tier-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  .tier {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform-style: preserve-3d;
+  }
+  /* The sheen is painted after the content in the DOM, so it needs to be
+     pushed behind it. Otherwise it sits over the text and a contrast checker
+     cannot resolve the background. */
+  .tier-inner { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; padding: clamp(1.35rem, 1.1rem + 0.9vw, 1.85rem); }
+  .is-recommended { border-color: var(--color-teal); }
+
+  /* Always in flow so all three cards align, hidden on the two that are not
+     the recommended tier. */
+  .flag.is-ghost { visibility: hidden; }
+  .flag {
+    align-self: flex-start;
+    margin: 0 0 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: var(--color-mist);
+    color: var(--color-teal-deep);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .level {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-teal-deep);
+  }
+  h3 { margin: 0.5rem 0 0.35rem; color: var(--color-navy); font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem); }
+  .duration { margin: 0; font-size: 0.875rem; color: var(--color-slate); }
+
+  .prices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+    padding: 0.9rem 0;
+    border-block: 1px solid var(--rule);
+  }
+  .prices dt {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+  }
+  .prices dd {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .who, .leave, .blurb { margin: 0 0 0.75rem; font-size: 0.9375rem; color: var(--color-slate); }
+  .who strong, .leave strong { color: var(--color-navy); font-weight: 600; }
+  .tier .btn { margin-top: auto; align-self: flex-start; }
+
+  /* Specular highlight follows the pointer on the recommended tier only. */
+  .sheen {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--dur-slow) var(--ease-out-quart);
+    background: radial-gradient(
+      14rem 14rem at var(--mx, 50%) var(--my, 0%),
+      color-mix(in oklab, var(--color-teal-light) 26%, transparent),
+      transparent 70%
+    );
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .is-recommended:hover .sheen { opacity: 1; }
+  }
+</style>
+
+<script>
+  const wire = () => {
+    const cards = document.querySelectorAll<HTMLElement>('[data-tilt]');
+    if (!cards.length) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!window.matchMedia('(hover: hover)').matches) return;
+
+    cards.forEach((card) => {
+      let raf = 0, tx = 0, ty = 0, cx = 0, cy = 0;
+      const loop = () => {
+        cx += (tx - cx) * 0.12;
+        cy += (ty - cy) * 0.12;
+        card.style.transform = `perspective(900px) rotateX(${(-cy * 3).toFixed(2)}deg) rotateY(${(cx * 3).toFixed(2)}deg) translateY(-4px)`;
+        if (Math.abs(tx - cx) > 0.002 || Math.abs(ty - cy) > 0.002) raf = requestAnimationFrame(loop);
+        else raf = 0;
+      };
+      const start = () => { if (!raf) raf = requestAnimationFrame(loop); };
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        tx = px * 2 - 1; ty = py * 2 - 1;
+        card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+        start();
+      });
+      card.addEventListener('pointerleave', () => {
+        tx = 0; ty = 0; start();
+        setTimeout(() => { if (!raf) card.style.transform = ''; }, 300);
+      });
+    });
+  };
+  wire();
+  document.addEventListener('astro:page-load', wire);
+</script>

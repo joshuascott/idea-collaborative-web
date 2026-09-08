@@ -1,0 +1,51 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Seo from '../components/Seo.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  path: string;
+  ogImage?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  schemas?: unknown[];
+  publishedTime?: string;
+  modifiedTime?: string;
+  /** Hero is dark, so the nav starts transparent over it. */
+  darkHero?: boolean;
+}
+
+const { darkHero = false, ...seo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0F2836" />
+    <!-- The H1 is Newsreader and the sub is Inter, so both paint above the fold. -->
+    <link rel="preload" href="/fonts/newsreader-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="alternate" type="application/rss+xml" title="Idea Collaborative blog" href="/rss.xml" />
+    <Seo {...seo} />
+    <ClientRouter />
+    <Analytics />
+  </head>
+  <body>
+    <a href="#main" class="sr-only skip-link">Skip to content</a>
+    <Nav overDark={darkHero} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,74 @@
+---
+import Plus from 'lucide-astro/Plus';
+import { faqPage } from '../data/schema';
+
+// Native <details>, so it works with no JavaScript. Height is animated where
+// interpolate-size is supported and is instant everywhere else.
+export interface Props {
+  faqs: { q: string; a: string }[];
+  heading?: string;
+  /** Emit FAQPage JSON-LD. Only one block per page. */
+  schema?: boolean;
+}
+const { faqs, heading = 'Questions we get asked', schema = true } = Astro.props;
+---
+
+<div class="faq">
+  <h2 class="display-lg">{heading}</h2>
+  <div class="list">
+    {faqs.map((f) => (
+      <details name="faq">
+        <summary>
+          <span>{f.q}</span>
+          <Plus size={20} stroke-width={1.75} aria-hidden="true" />
+        </summary>
+        <div class="answer"><p>{f.a}</p></div>
+      </details>
+    ))}
+  </div>
+</div>
+
+{schema && <script type="application/ld+json" set:html={JSON.stringify(faqPage(faqs))} />}
+
+<style>
+  .faq h2 { margin: 0 0 clamp(1.5rem, 1rem + 2vw, 2.5rem); }
+  .list { border-top: 1px solid var(--rule); }
+  :global(.on-dark) .list { border-top-color: var(--rule-dark); }
+  details { border-bottom: 1px solid var(--rule); }
+  :global(.on-dark) details { border-bottom-color: var(--rule-dark); }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1.15rem;
+    min-height: 3.25rem;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
+    font-size: 1.0625rem;
+    color: var(--color-navy);
+  }
+  :global(.on-dark) summary { color: #fff; }
+  summary::-webkit-details-marker { display: none; }
+  summary :global(svg) { flex: none; color: var(--color-teal-deep); transition: transform var(--dur-slow) var(--ease-out-quart); }
+  :global(.on-dark) summary :global(svg) { color: var(--color-teal-light); }
+  details[open] summary :global(svg) { transform: rotate(45deg); }
+
+  .answer { overflow: hidden; }
+  .answer p { margin: 0 0 1.25rem; color: var(--color-slate); font-size: 0.9375rem; max-width: 60ch; }
+  :global(.on-dark) .answer p { color: color-mix(in oklab, var(--color-cloud) 78%, var(--color-teal-pale)); }
+
+  @supports (interpolate-size: allow-keywords) {
+    @media (prefers-reduced-motion: no-preference) {
+      details { interpolate-size: allow-keywords; }
+      details::details-content {
+        block-size: 0;
+        overflow: hidden;
+        transition: block-size var(--dur-slow) var(--ease-out-quart), content-visibility var(--dur-slow) allow-discrete;
+      }
+      details[open]::details-content { block-size: auto; }
+    }
+  }
+</style>

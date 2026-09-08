@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import { tiers } from '../data/offers';
+---
+
+<Base
+  title="Page not found"
+  description="That page does not exist. Here is where everything else lives."
+  path="/404"
+  noindex
+  darkHero
+>
+  <header class="hero on-dark">
+    <div class="shell">
+      <p class="chapter is-dark"><span>404</span><span aria-hidden="true">/</span><span>Not found</span></p>
+      <h1 class="display-lg">That page is not <em>here</em>.</h1>
+      <p class="sub">
+        It may have moved when the site was rebuilt. Everything that exists is one of these.
+      </p>
+      <a href="/" class="btn btn-primary">Back to the start</a>
+    </div>
+  </header>
+
+  <Section surface="white">
+    <h2 class="display-md">Everywhere else</h2>
+    <ul class="links">
+      <li><a href="/workshops" class="prose-link">All three workshops</a></li>
+      {tiers.map((t) => (
+        <li><a href={`/workshops/${t.slug}`} class="prose-link">{t.title}</a></li>
+      ))}
+      <li><a href="/consulting" class="prose-link">Consulting and implementation</a></li>
+      <li><a href="/realtors" class="prose-link">For real estate brokerages</a></li>
+      <li><a href="/ai-readiness-assessment" class="prose-link">Free AI readiness assessment</a></li>
+      <li><a href="/ai-briefing-breakfast" class="prose-link">AI Briefing Breakfast</a></li>
+      <li><a href="/about" class="prose-link">About</a></li>
+      <li><a href="/blog" class="prose-link">Blog</a></li>
+      <li><a href="/contact" class="prose-link">Contact</a></li>
+    </ul>
+  </Section>
+</Base>
+
+<style>
+  .hero { background: var(--color-ink); padding-block: clamp(7rem, 5rem + 10vw, 10rem) clamp(3rem, 2.5rem + 3vw, 4.5rem); }
+  h1 { margin: 0; color: #fff; }
+  .sub { margin: 1.25rem 0 2rem; font-size: 1.0625rem; max-width: 38rem; }
+  .chapter { margin-bottom: 1.5rem; }
+  .links { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+</style>

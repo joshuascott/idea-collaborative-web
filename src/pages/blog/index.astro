@@ -1,0 +1,91 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Section from '../../components/Section.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import ArrowRight from 'lucide-astro/ArrowRight';
+import { getCollection } from 'astro:content';
+import { breadcrumbs } from '../../data/schema';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const [lead, ...rest] = posts;
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+---
+
+<Base
+  title="Writing on practical AI for Northern Colorado businesses"
+  description="Short, specific posts on where AI actually saves time in a small business, what it costs, and when it is the wrong answer. No hype, no hand-waving."
+  path="/blog"
+  darkHero
+  schemas={[breadcrumbs([{ name: 'Blog', path: '/blog' }])]}
+>
+  <Hero
+    chapter="01"
+    label="Writing"
+    headline="One lesson, one example, one <em>takeaway</em>."
+    sub="Notes from the work. Every post is something you can act on without hiring anyone, which is the point."
+    compact
+  />
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs trail={[{ name: 'Blog', path: '/blog' }]} />
+  </Section>
+
+  {lead && (
+    <Section surface="white" chapter="02" label="Most recent">
+      <a class="lead" href={`/blog/${lead.id}`}>
+        <div>
+          <time datetime={lead.data.date.toISOString()}>{fmt(lead.data.date)}</time>
+          <h2 class="display-lg">{lead.data.title}</h2>
+          <p>{lead.data.description}</p>
+          <span class="cue">Read this <ArrowRight size={16} aria-hidden="true" /></span>
+        </div>
+      </a>
+    </Section>
+  )}
+
+  {rest.length > 0 && (
+    <Section surface="cloud" chapter="03" label="Everything else">
+      <ul class="grid reveal-stagger">
+        {rest.map((p, i) => (
+          <li class="card" style={`--i:${i}`}>
+            <a href={`/blog/${p.id}`}>
+              <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+              <h3 class="display-md">{p.data.title}</h3>
+              <p>{p.data.description}</p>
+              <span class="tags">{p.data.tags.map((t) => <span>{t}</span>)}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+  <CtaBand
+    chapter="04"
+    headline="Or skip the reading and just <em>ask</em>."
+    sub="Describe the part of your week that keeps costing you time. We will tell you whether any of this applies to it."
+  />
+</Base>
+
+<style>
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .lead { display: block; text-decoration: none; border-left: 3px solid var(--color-teal); padding-left: clamp(1.25rem, 1rem + 2vw, 2.5rem); }
+  .lead time, .grid time { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-teal-deep); }
+  .lead h2 { margin: 0.75rem 0 1rem; color: var(--color-navy); max-width: 20ch; }
+  .lead p { margin: 0 0 1.25rem; font-size: 1.0625rem; color: var(--color-slate); max-width: 46rem; }
+  .cue { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.9375rem; font-weight: 600; color: var(--color-teal-deep); }
+
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+  @media (min-width: 700px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .grid a { display: flex; flex-direction: column; height: 100%; padding: 1.5rem; text-decoration: none; }
+  .grid h3 { margin: 0.6rem 0 0.6rem; color: var(--color-navy); font-size: 1.1875rem; }
+  .grid p { margin: 0 0 1.25rem; font-size: 0.9375rem; color: var(--color-slate); }
+  .tags { margin-top: auto; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tags span { padding: 0.2rem 0.5rem; border-radius: 999px; background: var(--color-mist); color: var(--color-teal-deep); font-size: 0.6875rem; font-weight: 600; }
+</style>

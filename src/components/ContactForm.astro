@@ -1,0 +1,163 @@
+---
+import ArrowRight from 'lucide-astro/ArrowRight';
+
+// Netlify Forms. Static markup with data-netlify, so there is no backend and no
+// client JS required for it to work. Delivery goes to hello@ideacollaborative.com,
+// configured in the Netlify dashboard (see LAUNCH.md).
+export interface Props {
+  name?: string;
+  compact?: boolean;
+  submitLabel?: string;
+  /** Extra fields beyond name, email, and message. */
+  fields?: { name: string; label: string; type?: string; required?: boolean; placeholder?: string; options?: string[]; rows?: number }[];
+  intro?: string;
+  class?: string;
+}
+const {
+  name = 'contact',
+  compact = false,
+  submitLabel = 'Start a conversation',
+  fields = [],
+  intro,
+  class: cls = '',
+} = Astro.props;
+---
+
+<form
+  class:list={['form', compact && 'compact', cls]}
+  name={name}
+  method="POST"
+  action="/thanks"
+  data-netlify="true"
+  netlify-honeypot="company-website"
+  data-form
+>
+  <input type="hidden" name="form-name" value={name} />
+  {intro && <p class="intro">{intro}</p>}
+
+  <p class="hp" aria-hidden="true">
+    <label>Leave this empty <input name="company-website" tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  <div class="row two">
+    <div class="field">
+      <label for={`${name}-name`}>Your name</label>
+      <input id={`${name}-name`} name="name" type="text" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for={`${name}-business`}>Business</label>
+      <input id={`${name}-business`} name="business" type="text" autocomplete="organization" required />
+    </div>
+  </div>
+
+  <div class="row two">
+    <div class="field">
+      <label for={`${name}-email`}>Email</label>
+      <input id={`${name}-email`} name="email" type="email" autocomplete="email" required />
+    </div>
+    <div class="field">
+      <label for={`${name}-phone`}>Phone <span class="opt">optional</span></label>
+      <input id={`${name}-phone`} name="phone" type="tel" autocomplete="tel" />
+    </div>
+  </div>
+
+  {fields.map((f) => (
+    <div class="field">
+      <label for={`${name}-${f.name}`}>
+        {f.label}
+        {!f.required && <span class="opt">optional</span>}
+      </label>
+      {f.options ? (
+        <select id={`${name}-${f.name}`} name={f.name} required={f.required}>
+          <option value="">Choose one</option>
+          {f.options.map((o) => <option value={o}>{o}</option>)}
+        </select>
+      ) : f.type === 'textarea' ? (
+        <textarea id={`${name}-${f.name}`} name={f.name} rows={f.rows ?? 3} required={f.required} placeholder={f.placeholder}></textarea>
+      ) : (
+        <input id={`${name}-${f.name}`} name={f.name} type={f.type ?? 'text'} required={f.required} placeholder={f.placeholder} />
+      )}
+    </div>
+  ))}
+
+  <div class="field">
+    <label for={`${name}-message`}>What is taking the most time right now?</label>
+    <textarea
+      id={`${name}-message`}
+      name="message"
+      rows={compact ? 3 : 5}
+      required
+      placeholder="A sentence or two is plenty."></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    <span class="label">{submitLabel}</span>
+    <ArrowRight size={18} class="arrow" aria-hidden="true" />
+    <span class="spinner" aria-hidden="true"></span>
+  </button>
+  <p class="fine">We reply within one business day. No list, no sequence, no sharing your details.</p>
+</form>
+
+<style>
+  .form { display: grid; gap: 1rem; }
+  .intro { margin: 0 0 0.25rem; font-size: 0.9375rem; }
+  .hp { position: absolute; left: -9999px; }
+
+  .row.two { display: grid; gap: 1rem; }
+  @media (min-width: 480px) { .row.two { grid-template-columns: 1fr 1fr; } }
+
+  .field { display: grid; gap: 0.35rem; }
+  label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+  :global(.on-dark) label { color: var(--color-teal-light); }
+  .opt { font-weight: 400; letter-spacing: 0; text-transform: none; }
+
+  input, select, textarea {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--color-navy);
+    font: inherit;
+    font-size: 1rem;
+  }
+  textarea { min-height: 5rem; resize: vertical; }
+  input:focus, select:focus, textarea:focus { border-color: var(--color-teal); }
+  :global(.on-dark) input,
+  :global(.on-dark) select,
+  :global(.on-dark) textarea {
+    background: color-mix(in oklab, #fff 10%, transparent);
+    border-color: var(--rule-dark);
+    color: #fff;
+  }
+  :global(.on-dark) ::placeholder { color: color-mix(in oklab, var(--color-teal-pale) 70%, transparent); }
+
+  button { justify-self: start; margin-top: 0.25rem; position: relative; }
+  .spinner { display: none; width: 16px; height: 16px; border-radius: 999px; border: 2px solid color-mix(in oklab, #fff 45%, transparent); border-top-color: #fff; }
+  .form[data-sending] .spinner { display: block; animation: spin 700ms linear infinite; }
+  .form[data-sending] .arrow { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .fine { margin: 0; font-size: 0.8125rem; color: var(--color-slate); }
+  :global(.on-dark) .fine { color: color-mix(in oklab, var(--color-teal-pale) 88%, transparent); }
+</style>
+
+<script>
+  const wire = () => {
+    document.querySelectorAll<HTMLFormElement>('[data-form]').forEach((f) => {
+      f.addEventListener('submit', () => f.setAttribute('data-sending', ''));
+    });
+  };
+  wire();
+  document.addEventListener('astro:page-load', wire);
+</script>

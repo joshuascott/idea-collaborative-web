@@ -1,0 +1,57 @@
+---
+// Better than icons: a number carries the brand, an icon just decorates.
+// PLAN.md section 4. These three are drawn from guide section 8 and nowhere else.
+export interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+
+const stats = [
+  { value: '25+', unit: 'years', line: 'In enterprise technology and solutions architecture' },
+  { value: '25+', unit: 'industries', line: 'Digital products delivered, from finance to logistics' },
+  { value: '30', unit: 'days', line: 'Every workshop ends with a written action plan' },
+];
+---
+
+<dl class:list={['stats', 'reveal-stagger', cls]}>
+  {stats.map((s, i) => (
+    <div class="stat" style={`--i:${i}`}>
+      <dt>
+        <span class="numeral">{s.value}</span>
+        <span class="unit">{s.unit}</span>
+      </dt>
+      <dd>{s.line}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .stats {
+    display: grid;
+    gap: 2rem;
+    margin: clamp(3rem, 2rem + 4vw, 4.5rem) 0 0;
+    padding-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+    border-top: 1px solid var(--rule);
+  }
+  :global(.on-dark) .stats { border-top-color: var(--rule-dark); }
+  @media (min-width: 640px) { .stats { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; } }
+
+  dt { display: flex; align-items: baseline; gap: 0.5rem; }
+  .numeral { color: var(--color-navy); }
+  :global(.on-dark) .numeral { color: #fff; }
+  .unit {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-teal-deep);
+  }
+  :global(.on-dark) .unit { color: var(--color-teal-light); }
+  dd {
+    margin: 0.75rem 0 0;
+    font-size: 0.9375rem;
+    color: var(--color-slate);
+    max-width: 26ch;
+  }
+  :global(.on-dark) dd { color: color-mix(in oklab, var(--color-cloud) 78%, var(--color-teal-pale)); }
+</style>

@@ -1,0 +1,194 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import BeforeAfter from '../components/motion/BeforeAfter.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Workflow from 'lucide-astro/Workflow';
+import Timer from 'lucide-astro/Timer';
+import TrendingUp from 'lucide-astro/TrendingUp';
+import { consultingRates, consultingNote } from '../data/offers';
+import { breadcrumbs, service } from '../data/schema';
+
+const shapes = [
+  {
+    Icon: Timer,
+    name: 'Post-workshop implementation',
+    line: 'Your team left the workshop with a plan and then the quarter happened. We come back and build the two workflows that mattered, with the person who will own them.',
+    typical: 'Usually 8 to 20 hours across a month',
+  },
+  {
+    Icon: Workflow,
+    name: 'Process automation build',
+    line: 'One process, start to finish. We map it, cut the steps that should not exist, build what is left, and hand over documentation your team can actually maintain.',
+    typical: 'Usually 20 to 60 hours across six to ten weeks',
+  },
+  {
+    Icon: TrendingUp,
+    name: 'Fractional AI advisory',
+    line: 'A standing half-day a month with your leadership. You bring the decisions, we bring the read on what is real, what it costs, and what to leave alone this quarter.',
+    typical: 'Monthly, cancel with 30 days notice',
+  },
+];
+---
+
+<Base
+  title="AI consulting for small businesses in Northern Colorado"
+  description="Hands-on AI implementation for Northern Colorado businesses. $175 to $225 an hour standard, $250 to $300 executive, $125 to $150 for nonprofits."
+  path="/consulting"
+  darkHero
+  schemas={[
+    breadcrumbs([{ name: 'Consulting', path: '/consulting' }]),
+    service({
+      name: 'AI consulting and implementation',
+      description:
+        'Hands-on AI implementation, process automation, and fractional advisory for small and mid-sized Northern Colorado businesses.',
+      path: '/consulting',
+    }),
+  ]}
+>
+  <Hero
+    chapter="01"
+    label="Consulting"
+    headline="When the workshop is <em>not</em> enough."
+    sub="Some problems do not fit in a room and a day. When you need somebody in the work with you, this is what that costs and how it runs."
+    compact
+  >
+    <a href="/contact" class="btn btn-primary" slot="actions">Start a conversation</a>
+    <a href="#rates" class="btn btn-ghost-dark" slot="actions">See the rates</a>
+  </Hero>
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs trail={[{ name: 'Consulting', path: '/consulting' }]} />
+  </Section>
+
+  <Section chapter="02" label="Engagement shapes" surface="white">
+    <h2 class="display-lg">Three shapes this usually <em>takes</em>.</h2>
+    <p class="lede">
+      We do not sell retainers you cannot get out of, and we do not staff a bench that needs
+      feeding. If a piece of work should take 12 hours, it is quoted at 12 hours.
+    </p>
+    <ul class="shapes reveal-stagger">
+      {shapes.map((s, i) => (
+        <li class="card" style={`--i:${i}`}>
+          <div class="pad">
+            <span class="icon-well"><s.Icon size={22} stroke-width={1.75} aria-hidden="true" /></span>
+            <h3 class="display-md">{s.name}</h3>
+            <p>{s.line}</p>
+            <p class="typical">{s.typical}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <BeforeAfter chapter="03" surface="cloud" />
+
+  <Section chapter="04" label="Rates" surface="white" id="rates">
+    <h2 class="display-lg">Here is what it <em>costs</em>.</h2>
+    <p class="lede">
+      Published, because you should be able to budget this before you talk to anyone. Estimates are
+      given as a range with the assumptions written down, and we tell you when we are about to go
+      past one.
+    </p>
+
+    <ul class="rates">
+      {consultingRates.map((r) => (
+        <li>
+          <p class="rate">{r.rate}</p>
+          <h3>{r.label}</h3>
+          <p class="detail">{r.detail}</p>
+        </li>
+      ))}
+    </ul>
+    <p class="note">{consultingNote} Remote work is billed in the same increments with no minimum.</p>
+
+    <div class="terms">
+      <h3 class="display-md">What you can hold us to</h3>
+      <ul class="checks">
+        <li>A written estimate with its assumptions before any work starts</li>
+        <li>A call before we cross an estimate, not an invoice after it</li>
+        <li>Documentation your team can maintain without us</li>
+        <li>An honest answer when the right recommendation is to stop</li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section chapter="05" label="When to skip this" surface="cloud">
+    <div class="honest">
+      <h2 class="display-lg">When we will tell you <em>not</em> to.</h2>
+      <ul class="reasons">
+        <li>
+          <h3>Your data is somewhere nobody can get to it</h3>
+          <p>
+            If the information a workflow needs lives in one person's head or in a filing cabinet,
+            the first project is not an AI project. We will say so and point you at the cheaper fix.
+          </p>
+        </li>
+        <li>
+          <h3>The process changes every month</h3>
+          <p>
+            Automating something still in flux means rebuilding it in eight weeks. Wait until it
+            settles, then it takes a fraction of the time.
+          </p>
+        </li>
+        <li>
+          <h3>Nobody on your team wants to own it</h3>
+          <p>
+            Workflows without an owner stop working within a quarter, quietly, and usually nobody
+            notices until a customer does. If we cannot name the owner, we do not build it.
+          </p>
+        </li>
+        <li>
+          <h3>The savings do not cover the work</h3>
+          <p>
+            If a build costs $4,000 and saves 90 minutes a month, we will tell you the arithmetic
+            rather than let you find out later.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </Section>
+
+  <CtaBand
+    chapter="06"
+    headline="Describe the process that keeps <em>breaking</em>."
+    sub="Tell us what it is and roughly how often it costs you. We will tell you whether this is worth doing and what it would take."
+  />
+</Base>
+
+<style>
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .lede { font-size: 1.125rem; color: var(--color-slate); margin: 1rem 0 2.5rem; max-width: 44rem; }
+
+  .shapes { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+  @media (min-width: 860px) { .shapes { grid-template-columns: repeat(3, 1fr); } }
+  .pad { padding: 1.5rem; height: 100%; display: flex; flex-direction: column; }
+  .shapes h3 { margin: 1rem 0 0.5rem; color: var(--color-navy); }
+  .shapes p { margin: 0; font-size: 0.9375rem; color: var(--color-slate); }
+  .typical {
+    margin-top: auto !important;
+    padding-top: 1rem;
+    font-size: 0.8125rem !important;
+    color: var(--color-teal-deep) !important;
+    font-weight: 500;
+  }
+
+  .rates { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.75rem; border-top: 1px solid var(--rule); padding-top: 1.75rem; }
+  @media (min-width: 860px) { .rates { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; } }
+  .rate { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 1.3rem + 0.9vw, 2rem); font-weight: 500; color: var(--color-navy); font-variant-numeric: tabular-nums; }
+  .rates h3 { margin: 0.35rem 0 0.5rem; font-size: 1rem; color: var(--color-teal-deep); }
+  .detail { margin: 0; font-size: 0.9375rem; color: var(--color-slate); }
+  .note { margin: 1.75rem 0 0; font-size: 0.9375rem; color: var(--color-slate); }
+
+  .terms { margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); padding: clamp(1.35rem, 1.1rem + 1vw, 1.85rem); background: var(--color-mist); border-radius: 8px; }
+  .terms h3 { margin: 0 0 0.75rem; color: var(--color-navy); }
+  .terms .checks li { color: var(--color-navy); font-size: 0.9375rem; }
+
+  .honest h2 { margin: 0 0 2rem; }
+  .reasons { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.75rem; }
+  @media (min-width: 768px) { .reasons { grid-template-columns: repeat(2, 1fr); gap: 2rem 3rem; } }
+  .reasons h3 { margin: 0 0 0.4rem; font-size: 1.0625rem; color: var(--color-navy); }
+  .reasons p { margin: 0; font-size: 0.9375rem; color: var(--color-slate); }
+</style>

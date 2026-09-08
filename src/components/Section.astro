@@ -1,0 +1,57 @@
+---
+export interface Props {
+  /** Chapter number, e.g. "01". Long pages carry a spine. */
+  chapter?: string;
+  label?: string;
+  surface?: 'white' | 'cloud' | 'mist' | 'navy' | 'ink';
+  id?: string;
+  class?: string;
+  /** Removes the default vertical rhythm when a child controls its own. */
+  flush?: boolean;
+}
+const {
+  chapter,
+  label,
+  surface = 'white',
+  id,
+  class: cls = '',
+  flush = false,
+} = Astro.props;
+
+const dark = surface === 'navy' || surface === 'ink';
+const bg = {
+  white: '#fff',
+  cloud: 'var(--color-cloud)',
+  mist: 'var(--color-mist)',
+  navy: 'var(--color-navy)',
+  ink: 'var(--color-ink)',
+}[surface];
+---
+
+<section
+  id={id}
+  class:list={['surface', dark && 'on-dark', flush && 'flush', cls]}
+  style={`--surface:${bg}`}
+>
+  <div class="shell">
+    {(chapter || label) && (
+      <p class="chapter">
+        {chapter && <span class="num">{chapter}</span>}
+        {chapter && label && <span aria-hidden="true">/</span>}
+        {label && <span>{label}</span>}
+      </p>
+    )}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .surface {
+    background: var(--surface);
+    padding-block: clamp(3.5rem, 2.4rem + 4.6vw, 6.5rem);
+    position: relative;
+  }
+  .surface.flush { padding-block: 0; }
+  .chapter { margin: 0 0 clamp(1.5rem, 1rem + 2vw, 2.75rem); max-width: none; }
+  .num { font-variant-numeric: tabular-nums; }
+</style>

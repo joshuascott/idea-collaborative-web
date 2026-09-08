@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { breadcrumbs, service } from '../data/schema';
+
+// TODO for Josh: when a date and venue are set, replace `nextEvent` with the
+// details and swap the Service schema for Event schema.
+const nextEvent: { date: string; venue: string } | null = null;
+
+const covered = [
+  'What the current tools actually do well, shown rather than described',
+  'The three workflows that come up in almost every business this size',
+  'What it costs to run them, including the parts nobody quotes you for',
+  'Where AI is the wrong answer, with examples',
+  'Questions, for as long as people have them',
+];
+---
+
+<Base
+  title="AI Briefing Breakfast for Northern Colorado owners"
+  description="An hour, a room of local owners, and no pitch. Join the list and we will tell you when the next AI Briefing Breakfast is scheduled."
+  path="/ai-briefing-breakfast"
+  darkHero
+  schemas={[
+    breadcrumbs([{ name: 'AI Briefing Breakfast', path: '/ai-briefing-breakfast' }]),
+    service({
+      name: 'AI Briefing Breakfast',
+      description:
+        'A free hour-long briefing for Northern Colorado business owners on where AI is worth using and where it is not.',
+      path: '/ai-briefing-breakfast',
+      price: '0',
+    }),
+  ]}
+>
+  <Hero
+    chapter="01"
+    label="Briefing breakfast"
+    headline="An hour, some <em>coffee</em>, and no pitch."
+    sub="A room of Northern Colorado owners working out what is real. Free, and deliberately small enough that everyone gets a question answered."
+    compact
+  >
+    <a href="#list" class="btn btn-primary" slot="actions">Join the list</a>
+  </Hero>
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs trail={[{ name: 'AI Briefing Breakfast', path: '/ai-briefing-breakfast' }]} />
+  </Section>
+
+  <Section chapter="02" label="The next one" surface="white">
+    <div class="two">
+      <div>
+        {nextEvent ? (
+          <>
+            <h2 class="display-lg">Next: <em>{nextEvent.date}</em>.</h2>
+            <p class="lede">{nextEvent.venue}</p>
+          </>
+        ) : (
+          <>
+            <h2 class="display-lg">No date is <em>set</em> yet.</h2>
+            <p class="lede">
+              The next one is being scheduled. Join the list and you will hear about it before it
+              goes anywhere else, along with public workshop dates.
+            </p>
+          </>
+        )}
+
+        <h3 class="display-md">What gets covered</h3>
+        <ul class="checks">
+          {covered.map((c) => <li>{c}</li>)}
+        </ul>
+
+        <h3 class="display-md">What does not</h3>
+        <p>
+          There is no slide about the future of work, no discussion of whether the robots are coming
+          for your job, and nothing to sign at the end. If you want to book something afterwards you
+          know where to find us.
+        </p>
+      </div>
+
+      <div class="form-panel" id="list">
+        <h2 class="display-md">Tell us you are interested</h2>
+        <ContactForm
+          name="breakfast"
+          compact
+          submitLabel="Save me a seat"
+          intro="We will email you once when a date is set. That is the whole use of this list."
+          fields={[
+            { name: 'town', label: 'Which town suits you', required: true, options: ['Loveland', 'Fort Collins', 'Windsor', 'Greeley', 'Longmont', 'Any of them'] },
+          ]}
+        />
+      </div>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .two { display: grid; gap: clamp(2.5rem, 2rem + 3vw, 4rem); align-items: start; }
+  @media (min-width: 940px) { .two { grid-template-columns: minmax(0, 1fr) minmax(0, 24rem); } }
+  .two h2 { margin: 0 0 1rem; }
+  .two h3 { margin: 2rem 0 0.75rem; color: var(--color-navy); }
+  .two p { color: var(--color-slate); }
+  .lede { font-size: 1.125rem; }
+  .checks li { color: var(--color-navy); }
+  .form-panel { border: 1px solid var(--rule); border-radius: 8px; padding: clamp(1.25rem, 1rem + 1vw, 1.75rem); background: var(--color-cloud); }
+  .form-panel h2 { margin: 0 0 1rem; color: var(--color-navy); }
+</style>

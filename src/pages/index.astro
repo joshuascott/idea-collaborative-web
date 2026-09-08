@@ -1,0 +1,234 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import MarkScene from '../components/motion/MarkScene.astro';
+import BeforeAfter from '../components/motion/BeforeAfter.astro';
+import Process from '../components/Process.astro';
+import HoursCalculator from '../components/motion/HoursCalculator.astro';
+import TierCards from '../components/TierCards.astro';
+import ProofPoints from '../components/ProofPoints.astro';
+import CtaBand from '../components/CtaBand.astro';
+import ArrowRight from 'lucide-astro/ArrowRight';
+import { brand } from '../data/contact';
+import { cta } from '../data/offers';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const audiences = [
+  {
+    who: 'Owners and operators of 5 to 100 person businesses',
+    line: 'You run the place. You do not have a week to spend finding out which tools are real.',
+  },
+  {
+    who: 'Managing brokers and real estate teams',
+    line: 'Your agents already use AI. Somebody needs to be checking the output.',
+    href: '/realtors',
+    cue: 'See the brokerage session',
+  },
+  {
+    who: 'Professional services firms',
+    line: 'Billable hours go into drafting, summarizing, and chasing paperwork. Some of that comes back.',
+  },
+  {
+    who: 'Nonprofits',
+    line: 'Small teams, wide mandates, and a discounted rate because that math matters here.',
+  },
+];
+
+const decisions = [
+  {
+    n: '01',
+    title: 'Practical',
+    line: 'Every session ends with something you use Monday. Not a deck, not a maturity model.',
+  },
+  {
+    n: '02',
+    title: 'Local',
+    line: 'A neighbor, not a vendor. We work in the room, in Loveland, Fort Collins, and Windsor.',
+  },
+  {
+    n: '03',
+    title: 'Proven',
+    line: '25 years of building software across 25 industries, stated plainly and without a case study you cannot check.',
+  },
+  {
+    n: '04',
+    title: 'Honest',
+    line: 'We will tell you when AI is not the answer. That happens more often than the market admits.',
+  },
+];
+---
+
+<Base
+  title="Practical AI workshops and consulting in Northern Colorado"
+  description="Idea Collaborative helps Northern Colorado businesses put AI to work in weeks, not years. Workshops and implementation from Loveland. Prices published."
+  path="/"
+  darkHero
+>
+  <Hero
+    chapter="01"
+    label="Northern Colorado"
+    headline="Practical AI that <em>pays</em> for itself."
+    sub={brand.oneLiner}
+    photo
+    variant={1}
+  >
+    <ul class="checks hero-checks" slot="aside">
+      <li>Save 5 to 10 hours per week, starting the week after the workshop</li>
+      <li>Build the workflows on your own processes, not a sample dataset</li>
+      <li>Leave with a written 30-day action plan and a prompt library you own</li>
+      <li>Published prices, so you know what this costs before you call</li>
+    </ul>
+
+    <a href={cta.primary.href} class="btn btn-primary" slot="actions">
+      {cta.primary.label}
+      <ArrowRight size={18} class="arrow" aria-hidden="true" />
+    </a>
+    <a href={cta.pricing.href} class="btn btn-ghost-dark" slot="actions">{cta.pricing.label}</a>
+  </Hero>
+
+  <MarkScene />
+
+  <Section chapter="03" label="Who we work with" surface="cloud">
+    <h2 class="display-lg">People <em>building</em> something real, with no time to become technical.</h2>
+    <ul class="rows reveal-stagger">
+      {audiences.map((a, i) => (
+        <li style={`--i:${i}`}>
+          <h3>{a.who}</h3>
+          <p>{a.line}</p>
+          {a.href && <a href={a.href} class="prose-link">{a.cue}</a>}
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <BeforeAfter />
+
+  <Section chapter="04" label="What we decided on purpose" surface="ink">
+    <h2 class="display-lg">Four things we <em>decided</em> on purpose.</h2>
+    <ol class="decisions reveal-stagger">
+      {decisions.map((d, i) => (
+        <li style={`--i:${i}`}>
+          <span class="n">{d.n}</span>
+          <h3 class="display-md">{d.title}</h3>
+          <p>{d.line}</p>
+        </li>
+      ))}
+    </ol>
+    <ProofPoints />
+  </Section>
+
+  <Process />
+
+  <Section surface="white">
+    <blockquote class="pull">
+      <p class="display-lg">
+        AI will not fix a broken process. It will make a broken process <em>faster</em>.
+      </p>
+    </blockquote>
+  </Section>
+
+  <Section chapter="05" label="Pricing" surface="cloud" id="pricing">
+    <h2 class="display-lg">We <em>publish</em> our prices. Most AI consultants won't.</h2>
+    <p class="lede">
+      Three levels, public seats and private sessions, with the numbers on the page. If one of them
+      does not fit your business we will say so.
+    </p>
+    <TierCards />
+    <p class="more">
+      <a href="/workshops" class="prose-link">Compare all three levels in detail</a>, or read about
+      <a href="/consulting" class="prose-link">consulting and implementation</a> when the workshop is
+      not enough.
+    </p>
+    <HoursCalculator compact />
+  </Section>
+
+  {posts.length > 0 && (
+    <Section chapter="06" label="Writing" surface="white">
+      <div class="head">
+        <h2 class="display-lg">Recent <em>writing</em>.</h2>
+        <a href="/blog" class="prose-link">All posts</a>
+      </div>
+      <ul class="posts reveal-stagger">
+        {posts.map((p, i) => (
+          <li class="card" style={`--i:${i}`}>
+            <a href={`/blog/${p.id}`}>
+              <time datetime={p.data.date.toISOString()}>
+                {p.data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              </time>
+              <h3 class="display-md">{p.data.title}</h3>
+              <p>{p.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+  <CtaBand chapter="07" label="Next step" headline="Let's find your <em>first</em> workflow." />
+  <!-- The old site navigated by anchor. A fragment never reaches the server, so
+       a 301 cannot catch it. This sends the four old anchors to their routes. -->
+  <script is:inline>
+    (function () {
+      var map = {
+        '#workshops': '/workshops',
+        '#about': '/about',
+        '#process': '/#how-we-work',
+        '#contact': '/contact',
+        '#pricing': '/workshops',
+      };
+      var to = map[location.hash];
+      if (to && to !== location.pathname + location.hash) location.replace(to);
+    })();
+  </script>
+</Base>
+
+<style>
+  .hero-checks { font-size: 1rem; }
+  .hero-checks li { color: color-mix(in oklab, var(--color-cloud) 88%, var(--color-teal-pale)); }
+
+  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+  .rows > li {
+    padding-block: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    gap: 0.35rem 2.5rem;
+  }
+  @media (min-width: 768px) { .rows > li { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); align-items: baseline; } }
+  .rows h3 { margin: 0; font-size: 1.0625rem; font-weight: 600; }
+  .rows p { margin: 0; color: var(--color-slate); }
+  .rows a { justify-self: start; font-size: 0.9375rem; }
+  @media (min-width: 768px) { .rows a { grid-column: 2; } }
+
+  .decisions { list-style: none; margin: 0; padding: 0; display: grid; gap: 2rem; }
+  @media (min-width: 640px) { .decisions { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 3rem; } }
+  .decisions .n {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    color: var(--color-teal-light);
+    font-variant-numeric: tabular-nums;
+  }
+  .decisions h3 { margin: 0.35rem 0 0.5rem; color: #fff; }
+  .decisions p { margin: 0; }
+
+  .pull { margin: 0; padding: 0; border-left: 3px solid var(--color-teal); padding-left: clamp(1.25rem, 1rem + 2vw, 2.5rem); }
+  .pull p { margin: 0; max-width: 22ch; }
+  .pull em { color: var(--color-teal-deep); }
+
+  .lede { font-size: 1.125rem; color: var(--color-slate); margin: 1rem 0 2.5rem; }
+  .more { margin-top: 2rem; font-size: 0.9375rem; color: var(--color-slate); }
+
+  .head { display: flex; flex-wrap: wrap; gap: 1rem; align-items: baseline; justify-content: space-between; margin-bottom: 2.5rem; }
+  .head h2 { margin: 0; }
+  .posts { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+  @media (min-width: 768px) { .posts { grid-template-columns: repeat(3, 1fr); } }
+  .posts a { display: block; padding: 1.5rem; text-decoration: none; height: 100%; }
+  .posts time { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-teal-deep); }
+  .posts h3 { margin: 0.6rem 0 0.5rem; color: var(--color-navy); font-size: 1.25rem; }
+  .posts p { margin: 0; font-size: 0.9375rem; color: var(--color-slate); }
+</style>

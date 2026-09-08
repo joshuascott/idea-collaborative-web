@@ -1,0 +1,13 @@
+{
+  "name": "Idea Collaborative",
+  "short_name": "ideacollab",
+  "description": "Practical AI that pays for itself. Workshops and implementation for Northern Colorado businesses.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0F2836",
+  "theme_color": "#0F2836",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

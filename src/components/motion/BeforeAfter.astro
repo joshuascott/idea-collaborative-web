@@ -1,0 +1,234 @@
+---
+import Section from '../Section.astro';
+
+// Signature moment 3. A draggable divider over a real artifact: the same Monday
+// morning list, before and after two workflows are in place. "We will show you
+// how" is the brand's verb, and a slider is the shortest route to feeling the
+// difference with your own hand.
+//
+// The control is a real <input type="range">, so it is keyboard operable and
+// announced correctly. Pointer and touch drag come free with it.
+export interface Props {
+  chapter?: string;
+  surface?: 'white' | 'cloud' | 'mist';
+}
+const { chapter = '03', surface = 'white' } = Astro.props;
+
+const items = [
+  { text: 'Pull last week\u2019s numbers out of the POS export', kept: false, by: 'runs 6am' },
+  { text: 'Reformat them for the Monday email', kept: false, by: 'runs 6am' },
+  { text: 'Write the Monday email', kept: false, by: 'drafted' },
+  { text: 'Summarize 14 voicemails from the weekend', kept: false, by: 'summarized' },
+  { text: 'Draft replies to the 6 that need one', kept: false, by: 'drafted' },
+  { text: 'Chase the two invoices that bounced', kept: false, by: 'sent Friday' },
+  { text: 'Write the job post for the open role', kept: false, by: 'drafted' },
+  { text: 'Screen 31 applications from last week', kept: false, by: '6 shortlisted' },
+  { text: 'Draft the safety briefing for Thursday', kept: false, by: 'drafted' },
+  { text: 'Update the pricing sheet with the new supplier costs', kept: false, by: 'runs 6am' },
+  { text: 'Answer the three quote requests from the website', kept: true },
+  { text: 'Decide whether to take the Fairgrounds job', kept: true },
+];
+const keptCount = items.filter((i) => i.kept).length;
+---
+
+<Section chapter={chapter} label="Before and after" surface={surface}>
+  <div class="head">
+    <h2 class="display-lg">The same Monday, <em>twice</em>.</h2>
+    <p class="lede">
+      One list before we started, one after two workflows were running. Drag the divider. What
+      survives on the right is the work that actually needed a person.
+    </p>
+  </div>
+
+  <figure class="ba" data-ba style="--pos:50%">
+    <div class="panes">
+      <div class="pane before" aria-hidden="true">
+        <p class="tag">Before</p>
+        <p class="stamp">Monday, 7:40am. {items.length} things.</p>
+        <ol>
+          {items.map((i) => (
+            <li>
+              <span class="txt">{i.text}</span>
+              {!i.kept && <span class="by ghost">{i.by}</span>}
+            </li>
+          ))}
+        </ol>
+        <p class="note">
+          Every one of these is yours, and four of them have to happen before anything else can.
+        </p>
+      </div>
+
+      <div class="pane after" aria-hidden="true">
+        <p class="tag is-teal">After</p>
+        <p class="stamp">Monday, 7:40am. {keptCount} things.</p>
+        <ol>
+          {items.map((i) => (
+            <li class={i.kept ? 'kept' : 'gone'}>
+              <span class="txt">{i.text}</span>
+              {!i.kept && <span class="by">{i.by}</span>}
+            </li>
+          ))}
+        </ol>
+        <p class="note">
+          Ten of them ran before you sat down. You still read, approve, and send. The two that are
+          left are the two that needed you.
+        </p>
+      </div>
+
+      <div class="divider" aria-hidden="true">
+        <span class="handle">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6Z" fill="currentColor" />
+            <path d="M17.4 16.2 21 21l-5.4-1.6Z" fill="currentColor" />
+            <path d="M9 12h6M9 9.4h6M9 14.6h3.6" stroke="#fff" stroke-width="1.4" stroke-linecap="round" />
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <label class="control">
+      <span class="sr-only">Reveal the list after the workflows are in place</span>
+      <input type="range" min="0" max="100" value="50" step="1" data-ba-input />
+    </label>
+
+    <figcaption class="sr-only">
+      A Monday task list of 12 items. After two workflows were put in place, 10 of them run before
+      the owner sits down and 2 still need a person.
+    </figcaption>
+  </figure>
+</Section>
+
+<style>
+  .head { max-width: 44rem; margin-bottom: clamp(2rem, 1.5rem + 2vw, 3rem); }
+  .head h2 { margin: 0; }
+  .head em { color: var(--color-teal-deep); }
+  .lede { font-size: 1.125rem; color: var(--color-slate); margin: 1rem 0 0; }
+
+  /* The panel is held to a measure the two lists actually fill, so the divider
+     always crosses live text instead of sliding through white space. */
+  .ba { margin: 0; position: relative; max-width: 48rem; }
+  .panes {
+    position: relative;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    min-height: 30rem;
+  }
+  @media (min-width: 640px) { .panes { min-height: 27rem; } }
+
+  .pane {
+    padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+    font-size: 0.9375rem;
+  }
+  .after {
+    position: absolute;
+    inset: 0;
+    background: var(--color-mist);
+    clip-path: inset(0 0 0 var(--pos));
+  }
+  .tag {
+    margin: 0 0 0.35rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+  }
+  .tag.is-teal { color: var(--color-teal-deep); }
+  .stamp {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    color: var(--color-navy);
+  }
+  .pane ol { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.4rem; }
+  .pane li { color: var(--color-slate); }
+  .after li { color: var(--color-navy); }
+  .after li.gone { color: color-mix(in oklab, var(--color-slate) 55%, transparent); }
+  .after li.gone .txt { text-decoration: line-through; text-decoration-thickness: 1px; }
+  .after li.kept { font-weight: 600; }
+  .ghost { visibility: hidden; }
+  .by {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-teal) 16%, transparent);
+    color: var(--color-teal-deep);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: 1px;
+  }
+  .note {
+    margin: 1.25rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in oklab, var(--color-navy) 14%, transparent);
+    font-size: 0.875rem;
+    color: var(--color-slate);
+    max-width: 40ch;
+  }
+
+  .divider {
+    position: absolute;
+    inset-block: 0;
+    left: var(--pos);
+    width: 2px;
+    background: var(--color-teal);
+    transform: translateX(-1px);
+  }
+  .handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: #fff;
+    border: 2px solid var(--color-teal);
+    display: grid;
+    place-items: center;
+    color: var(--color-teal-deep);
+    box-shadow: var(--shadow-lift);
+  }
+  .handle svg { width: 22px; height: 22px; }
+
+  .control { position: absolute; inset: 0; display: block; }
+  .control input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+  }
+  .control input::-webkit-slider-thumb { -webkit-appearance: none; width: 44px; height: 44px; }
+  .control input::-moz-range-thumb { width: 44px; height: 44px; border: 0; }
+  .control input:focus-visible ~ * { outline: none; }
+  .ba:has(input:focus-visible) .handle {
+    outline: 2px solid var(--color-teal-light);
+    outline-offset: 3px;
+  }
+</style>
+
+<script>
+  const wire = () => {
+    document.querySelectorAll<HTMLElement>('[data-ba]').forEach((root) => {
+      const input = root.querySelector<HTMLInputElement>('[data-ba-input]');
+      if (!input) return;
+      const set = () => root.style.setProperty('--pos', `${input.value}%`);
+      input.addEventListener('input', set);
+      set();
+    });
+  };
+  wire();
+  document.addEventListener('astro:page-load', wire);
+</script>

@@ -1,0 +1,46 @@
+---
+// Wordmark: "idea" at 700, "collab" at 400, one word, lowercase, -0.02em.
+// On light: idea Navy, collab Deep Teal. On dark: idea White, collab Teal Light.
+//
+// "collab" is set at 400, not 300. The guide allows "weight 300 or 400", and 300
+// goes thin and pale at nav size, which is where the wordmark is smallest and
+// has to work hardest. Everything else about the wordmark is unchanged: one
+// continuous word, no space, no separation, lowercase, -0.02em.
+export interface Props {
+  dark?: boolean;
+  /** Also render the full legal name beneath, per guide section 2. */
+  full?: boolean;
+  class?: string;
+}
+const { dark = false, full = false, class: cls = '' } = Astro.props;
+---
+
+<span class:list={['wordmark', full && 'has-full', cls]}>
+  <span class="mark-line"
+    ><b style={`color:${dark ? '#fff' : 'var(--color-navy)'}`}>idea</b><span
+      class="tail"
+      style={`color:${dark ? 'var(--color-teal-light)' : 'var(--color-teal-deep)'}`}
+      >collab</span
+    ></span
+  >
+  {full && (
+    <span class="full" style={`color:${dark ? 'var(--color-teal-pale)' : 'var(--color-slate)'}`}>
+      Idea Collaborative
+    </span>
+  )}
+</span>
+
+<style>
+  .wordmark { display: inline-flex; flex-direction: column; }
+  .mark-line { display: block; }
+  .full {
+    display: block;
+    font-size: 0.44em;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-top: 0.28em;
+    white-space: nowrap;
+  }
+</style>

@@ -1,0 +1,160 @@
+---
+import Section from './Section.astro';
+import Search from 'lucide-astro/Search';
+import PenTool from 'lucide-astro/PenTool';
+import Play from 'lucide-astro/Play';
+import RefreshCw from 'lucide-astro/RefreshCw';
+
+// Signature moment 5, the flow line. The curve is the loop from the mark,
+// unwound. It draws itself as the visitor scrolls and retracts on the way back.
+// Scroll-linked with a CSS scroll-driven animation, so this costs no JS at all.
+export interface Props {
+  chapter?: string;
+  surface?: 'white' | 'cloud' | 'mist' | 'navy' | 'ink';
+  heading?: string;
+}
+const {
+  chapter = '02',
+  surface = 'white',
+  heading = 'How we <em>work</em>.',
+} = Astro.props;
+
+const steps = [
+  {
+    name: 'Discover',
+    Icon: Search,
+    line: 'We sit with your team and watch the actual work. Where the hours go, which steps repeat, and which ones only look repetitive.',
+  },
+  {
+    name: 'Design',
+    Icon: PenTool,
+    line: 'We pick the one or two workflows worth doing first and design them around your process, including the review step that keeps them honest.',
+  },
+  {
+    name: 'Deploy',
+    Icon: Play,
+    line: 'Your team builds it with us and runs it on real work before we leave. Nothing ships that nobody in the room can operate.',
+  },
+  {
+    name: 'Optimize',
+    Icon: RefreshCw,
+    line: 'We check back. What held up, what drifted, what the team stopped using and why. Then we adjust it.',
+  },
+];
+---
+
+<Section chapter={chapter} label="How we work" surface={surface} class="process" id="how-we-work">
+  <h2 class="display-lg" set:html={heading} />
+  <p class="lede">
+    Most training vendors deliver a deck and leave. The difference is the fourth step, and the
+    fact that we are 20 minutes away when it needs adjusting.
+  </p>
+
+  <div class="flow">
+    <svg class="line" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path
+        class="track"
+        d="M 40 92 C 180 92 180 28 320 28 C 460 28 460 92 600 92 C 740 92 740 28 880 28 L 960 28"
+      />
+      <path
+        class="draw"
+        pathLength="1"
+        d="M 40 92 C 180 92 180 28 320 28 C 460 28 460 92 600 92 C 740 92 740 28 880 28 L 960 28"
+      />
+    </svg>
+
+    <ol class="steps">
+      {steps.map((s, i) => (
+        <li style={`--i:${i}`}>
+          <span class="icon-well"><s.Icon size={22} stroke-width={1.75} aria-hidden="true" /></span>
+          <h3 class="display-md">{s.name}</h3>
+          <p>{s.line}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Section>
+
+<style>
+  h2 { margin: 0; }
+  .lede { font-size: 1.125rem; color: var(--color-slate); margin: 1rem 0 clamp(2rem, 1.5rem + 2vw, 3rem); }
+  :global(.on-dark) .lede { color: color-mix(in oklab, var(--color-cloud) 80%, var(--color-teal-pale)); }
+
+  .flow { position: relative; }
+  .line {
+    display: none;
+    width: 100%;
+    height: 120px;
+    margin-bottom: -0.5rem;
+    overflow: visible;
+  }
+  @media (min-width: 1024px) { .line { display: block; } }
+  .line path {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .track { stroke: var(--rule); }
+  :global(.on-dark) .track { stroke: var(--rule-dark); }
+  .draw { stroke: var(--color-teal); stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .draw {
+        animation: draw-line linear both;
+        animation-timeline: view();
+        animation-range: entry 15% cover 55%;
+      }
+    }
+  }
+  /* Without scroll-driven animations, or under reduced motion, the line is
+     simply drawn. The final state is the fallback. */
+  @keyframes draw-line {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+  @supports not (animation-timeline: view()) {
+    .draw { stroke-dashoffset: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .draw { stroke-dashoffset: 0; }
+  }
+
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2rem;
+    counter-reset: step;
+  }
+  @media (min-width: 640px) { .steps { grid-template-columns: repeat(2, 1fr); gap: 2.5rem; } }
+  @media (min-width: 1024px) { .steps { grid-template-columns: repeat(4, 1fr); gap: 2rem; } }
+
+  .steps > li { position: relative; }
+  @media (min-width: 1024px) {
+    /* Each card sits under the point where the line reaches it. */
+    .steps > li:nth-child(odd) { padding-top: 0; }
+    .steps > li:nth-child(even) { padding-top: 0; }
+  }
+  .steps h3 { margin: 0.9rem 0 0.5rem; color: var(--color-navy); }
+  :global(.on-dark) .steps h3 { color: #fff; }
+  .steps p { margin: 0; font-size: 0.9375rem; color: var(--color-slate); }
+  :global(.on-dark) .steps p { color: color-mix(in oklab, var(--color-cloud) 78%, var(--color-teal-pale)); }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .steps > li {
+        animation: step-in linear both;
+        animation-timeline: view();
+        animation-range: entry 5% entry 45%;
+        animation-delay: calc(var(--i) * 90ms);
+      }
+    }
+  }
+  @keyframes step-in {
+    0% { opacity: 0; transform: translateY(14px); }
+    20% { opacity: 1; }
+    100% { opacity: 1; transform: none; }
+  }
+</style>

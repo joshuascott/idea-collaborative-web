@@ -1,0 +1,54 @@
+---
+// A number that counts up when it scrolls into view, with no JavaScript.
+// The range finishes while the element is still entering the viewport, so the
+// figure is never left sitting at 0 once it is properly on screen. That matters
+// here: "$0 per agent" reads as a claim rather than an unfinished animation.
+// A registered custom property is animated on a view timeline and read back
+// through counter(). The plain number is in the DOM and is what a screen
+// reader, a crawler, or any browser without support reads.
+export interface Props {
+  to: number;
+  prefix?: string;
+  suffix?: string;
+  class?: string;
+}
+const { to, prefix = '', suffix = '', class: cls = '' } = Astro.props;
+---
+
+<span class:list={['count', cls]} style={`--to:${to}`}>
+  {prefix}<span class="plain">{to}</span><span class="anim" aria-hidden="true"></span>{suffix}
+</span>
+
+<style>
+  @property --n {
+    syntax: '<integer>';
+    inherits: false;
+    initial-value: 0;
+  }
+  .count { font-variant-numeric: tabular-nums; }
+  .anim { display: none; }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .plain { display: none; }
+      .anim {
+        /* A view timeline needs a real box. On an inline span the timeline
+           never resolves, the animation holds its "from" value, and the figure
+           sits at zero. inline-block is the whole fix. */
+        display: inline-block;
+        --n: var(--to);
+        animation: count-up linear both;
+        animation-timeline: view();
+        animation-range: entry 25% entry 95%;
+      }
+      .anim::after {
+        counter-reset: n var(--n);
+        content: counter(n);
+      }
+    }
+  }
+  @keyframes count-up {
+    from { --n: 0; }
+    to { --n: var(--to); }
+  }
+</style>

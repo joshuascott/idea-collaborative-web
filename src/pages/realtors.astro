@@ -1,0 +1,313 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ListingDemo from '../components/motion/ListingDemo.astro';
+import Counter from '../components/motion/Counter.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import BookingEmbed from '../components/BookingEmbed.astro';
+import ContactForm from '../components/ContactForm.astro';
+import StickyCta from '../components/StickyCta.astro';
+import CtaBand from '../components/CtaBand.astro';
+import ArrowRight from 'lucide-astro/ArrowRight';
+import { breadcrumbs, service } from '../data/schema';
+
+const officeTiers = [
+  {
+    name: 'Sales meeting session',
+    length: '90 minutes',
+    price: '$2,200',
+    perAgent: 'about $110 an agent in a 20-agent office',
+    line: 'Your regular sales meeting, used properly. The review workflow, three tools worth their subscription, and every agent leaves with the checklist.',
+  },
+  {
+    name: 'Half-day office workshop',
+    length: '4 hours',
+    price: '$5,850',
+    perAgent: 'about $293 an agent in a 20-agent office',
+    line: 'Agents build on their own listings and their own follow-up. You leave with the office prompt library and named owners for it.',
+    recommended: true,
+  },
+  {
+    name: 'Full-day leadership session',
+    length: 'Full day',
+    price: '$11,250',
+    perAgent: 'for the leadership team, not the whole office',
+    line: 'For brokerages deciding policy. What agents may use, what has to be reviewed, what gets documented, and how you will know it is being followed.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Is this a compliance course?',
+    a: 'No, and we are careful about that word. The session teaches a review habit and gives your office a shared checklist for AI-written copy. It is not legal advice, it does not certify anyone, and it does not make your brokerage compliant with anything. Your broker and your attorney still decide what goes out.',
+  },
+  {
+    q: 'Our agents are already using these tools. Is this too late?',
+    a: 'That is the reason to do it. The risk is not agents adopting AI, it is agents adopting it privately with nobody looking at the output. A brokerage where 30 agents each have their own unreviewed process has 30 different exposures.',
+  },
+  {
+    q: 'Do we have to buy software?',
+    a: 'No. The workflow runs on tools your office already has, and the free tiers are enough for most of it. If we think a paid tool earns its subscription for your office we will say which one and what it costs, and we take no commission from any vendor.',
+  },
+  {
+    q: 'How long does the sales meeting session take?',
+    a: '90 minutes, in your regular meeting slot, at your office. We arrive early and set up so the meeting starts on time.',
+  },
+  {
+    q: 'What do agents actually walk out with?',
+    a: 'A one-page review checklist for AI-written copy, three prompts that work on listing descriptions, follow-up, and market updates, and a short list of what not to put into these tools. Practical enough that they use it that week.',
+  },
+  {
+    q: 'Can a title company or lender sponsor the session?',
+    a: 'Yes, and that is a common arrangement. The sponsor is named at the start and end, the content does not change, and there is no product pitch inside the session. Details are on this page.',
+  },
+];
+---
+
+<Base
+  title="AI for real estate brokerages in Northern Colorado"
+  description="A 90-minute sales meeting session for Northern Colorado brokerages: the review workflow for AI-written listing copy. Book a free 20-minute preview."
+  path="/realtors"
+  ogImage="/og-realtors.jpg"
+  darkHero
+  schemas={[
+    breadcrumbs([{ name: 'For brokerages', path: '/realtors' }]),
+    service({
+      name: 'AI review workflow session for real estate brokerages',
+      description:
+        'A 90-minute sales meeting session teaching brokerages a shared review workflow for AI-written listing copy and client communication.',
+      path: '/realtors',
+      audience: 'Real estate brokerages',
+      price: '2200',
+    }),
+  ]}
+>
+  <Hero
+    chapter="01"
+    label="For brokerages"
+    headline="Your agents already use AI. Nobody is <em>checking</em> the output."
+    sub="A 90-minute session in your sales meeting that gives the whole office one review workflow. Start with a free 20-minute preview for you, not the agents."
+    photo
+    variant={2}
+  >
+    <a href="#book" class="btn btn-primary" slot="actions">
+      Book the free preview
+      <ArrowRight size={18} class="arrow" aria-hidden="true" />
+    </a>
+    <a href="#pricing" class="btn btn-ghost-dark" slot="actions">See what it costs</a>
+  </Hero>
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs trail={[{ name: 'For brokerages', path: '/realtors' }]} />
+  </Section>
+
+  <Section chapter="02" label="What we mean" surface="white">
+    <div class="head">
+      <h2 class="display-lg">This listing took <em>11</em> seconds to write.</h2>
+      <p class="lede">
+        It is well written, it is on brand, and four phrases in it describe the buyer rather than
+        the house. Every one of them is the kind of language a fair housing complaint quotes back.
+      </p>
+    </div>
+    <ListingDemo />
+  </Section>
+
+  <Section chapter="03" label="The numbers" surface="ink">
+    <h2 class="display-lg">Three numbers worth <em>knowing</em>.</h2>
+    <dl class="numbers reveal-stagger">
+      <div style="--i:0">
+        <dt><span class="numeral">$<Counter to={110} /></span></dt>
+        <dd>
+          <strong>Per agent for the sales meeting session</strong>
+          <span>$2,200 for the office, which is about $110 an agent in a 20-agent brokerage. Published, so you can put it in a budget without calling.</span>
+        </dd>
+      </div>
+      <div style="--i:1">
+        <dt><span class="numeral"><Counter to={1} /></span></dt>
+        <dd>
+          <strong>Shared review workflow</strong>
+          <span>One checklist the whole office runs, instead of every agent inventing their own and nobody knowing which is in use.</span>
+        </dd>
+      </div>
+      <div style="--i:2">
+        <dt><span class="numeral"><Counter to={0} /></span></dt>
+        <dd>
+          <strong>New subscriptions your office has to buy</strong>
+          <span>The workflow runs on the tools your agents already have. We take no commission from any vendor, so there is nothing to sell you afterwards.</span>
+        </dd>
+      </div>
+    </dl>
+
+    <div class="hud">
+      <h3 class="display-md">Why this landed on brokers' desks</h3>
+      <p>
+        In May 2024 HUD published guidance on how the Fair Housing Act applies to the use of
+        artificial intelligence and automated systems in housing, covering tenant screening and the
+        targeting and delivery of housing advertising. It interprets existing law rather than
+        creating a new rule, and it is explicit that using a third party's system does not move
+        responsibility onto that third party.
+      </p>
+      <p>
+        Listing copy itself sits under the older and simpler prohibition: a housing advertisement
+        may not state a preference, limitation, or discrimination based on a protected class. A tool
+        that writes a beautiful sentence has no idea it just did that. Somebody in your office has
+        to.
+      </p>
+      <p class="fine">
+        This is background, not legal advice. Talk to your broker and your attorney about what your
+        brokerage's policy should be.
+      </p>
+    </div>
+  </Section>
+
+  <Section chapter="04" label="Pricing" surface="cloud" id="pricing">
+    <h2 class="display-lg">Three ways to run it, with the <em>prices</em> on the page.</h2>
+    <p class="lede">
+      Most offices start with the sales meeting session. It takes the least out of your week and it tells you
+      quickly whether your agents want more.
+    </p>
+
+    <ul class="office reveal-stagger">
+      {officeTiers.map((t, i) => (
+        <li class:list={['card', t.recommended && 'is-rec']} style={`--i:${i}`}>
+          <div class="pad">
+            {t.recommended && <p class="flag">Most offices go here next</p>}
+            <h3 class="display-md">{t.name}</h3>
+            <p class="len">{t.length}</p>
+            <p class="price">{t.price}</p>
+            <p class="per">{t.perAgent}</p>
+            <p class="line">{t.line}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <div class="terms">
+      <h3 class="display-md">Our terms, so you are not taking the risk</h3>
+      <ul class="checks">
+        <li>The 20-minute preview is free, and it is for you rather than a room of agents</li>
+        <li>If your agents leave the session without a workflow they will use, tell us before the invoice and we will not send it</li>
+        <li>No software to buy, no vendor commissions, and nothing to sell your agents afterwards</li>
+        <li>We do not contact your agents directly, before or after</li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section chapter="05" label="Book the preview" surface="white" id="book">
+    <div class="book-grid">
+      <div>
+        <h2 class="display-lg">Twenty minutes, and no <em>agents</em> in the room.</h2>
+        <p class="lede">
+          The preview is a conversation with you. We show you the review workflow, you decide
+          whether it is worth 90 minutes of a sales meeting, and that is the whole agenda.
+        </p>
+        <ul class="checks">
+          <li>You see the exact checklist your agents would get</li>
+          <li>You hear what we would and would not say in front of your office</li>
+          <li>No pricing pressure and no follow-up sequence</li>
+        </ul>
+      </div>
+      <BookingEmbed
+        id="booking"
+        heading="Book the free 20-minute preview"
+        blurb="Pick a time that suits you. If nothing fits, call and we will find one."
+      />
+    </div>
+  </Section>
+
+  <Section chapter="06" label="Questions" surface="cloud">
+    <FaqAccordion faqs={faqs} heading="What brokers ask first" />
+  </Section>
+
+  <Section chapter="07" label="Sponsors" surface="white">
+    <div class="sponsor">
+      <div>
+        <h2 class="display-lg">Title companies and lenders can <em>sponsor</em> a session.</h2>
+        <p class="lede">
+          You cover the office session for a brokerage you work with. You are named at the start and
+          the end, and the content does not change. There is no pitch inside the session, because a
+          session with a pitch in it is worth less to the office and therefore to you.
+        </p>
+        <ul class="checks">
+          <li>Named at the open and close, and on the handout</li>
+          <li>Two minutes at the start if you want them, which most sponsors decline</li>
+          <li>Same price as the office would pay, no sponsor markup</li>
+        </ul>
+      </div>
+      <div class="sponsor-form">
+        <h3 class="display-md">Sponsor a session</h3>
+        <ContactForm
+          name="sponsor"
+          compact
+          submitLabel="Ask about sponsoring"
+          fields={[
+            { name: 'company_type', label: 'You are a', required: true, options: ['Title company', 'Lender', 'Other'] },
+            { name: 'brokerage', label: 'Brokerage you have in mind', placeholder: 'Optional' },
+          ]}
+        />
+      </div>
+    </div>
+  </Section>
+
+  <CtaBand
+    chapter="08"
+    headline="Bring it to your next sales <em>meeting</em>."
+    sub="Tell us the size of your office and when your sales meeting runs. We will come back with a date."
+    formName="brokerage"
+  />
+
+  <StickyCta label="Book the free preview" href="#book" watch="#book" />
+</Base>
+
+<style>
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .head { max-width: 46rem; margin-bottom: clamp(2rem, 1.5rem + 2vw, 3rem); }
+  .head h2 { margin: 0; }
+  .head em { color: var(--color-teal-deep); }
+  .lede { font-size: 1.125rem; color: var(--color-slate); margin: 1rem 0 0; }
+  :global(.on-dark) .lede { color: color-mix(in oklab, var(--color-cloud) 82%, var(--color-teal-pale)); }
+
+  .numbers { display: grid; gap: 2.5rem; margin: 0; }
+  @media (min-width: 860px) { .numbers { grid-template-columns: repeat(3, 1fr); gap: 3rem; } }
+  .numbers dt { margin: 0; }
+  .numbers .numeral { color: #fff; }
+  .numbers dd { margin: 0.75rem 0 0; display: grid; gap: 0.4rem; }
+  .numbers strong { color: var(--color-teal-light); font-size: 0.9375rem; font-weight: 600; }
+  .numbers span { font-size: 0.9375rem; color: color-mix(in oklab, var(--color-cloud) 78%, var(--color-teal-pale)); }
+
+  .hud { margin-top: clamp(3rem, 2.5rem + 3vw, 4.5rem); padding-top: clamp(2rem, 1.5rem + 2vw, 3rem); border-top: 1px solid var(--rule-dark); max-width: 46rem; }
+  .hud h3 { margin: 0 0 1rem; color: #fff; }
+  .hud .fine { font-size: 0.8125rem; opacity: 0.86; }
+
+  .office { list-style: none; margin: 2.5rem 0 0; padding: 0; display: grid; gap: 1.25rem; }
+  @media (min-width: 860px) { .office { grid-template-columns: repeat(3, 1fr); } }
+  .pad { padding: 1.5rem; height: 100%; display: flex; flex-direction: column; }
+  .is-rec { border-color: var(--color-teal); }
+  .flag {
+    align-self: flex-start; margin: 0 0 0.75rem; padding: 0.25rem 0.6rem; border-radius: 999px;
+    background: var(--color-mist); color: var(--color-teal-deep);
+    font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .office h3 { margin: 0 0 0.25rem; color: var(--color-navy); }
+  .len { margin: 0; font-size: 0.875rem; color: var(--color-slate); }
+  .price { margin: 0.75rem 0 0.15rem; font-family: var(--font-display); font-size: 2rem; font-weight: 500; color: var(--color-navy); font-variant-numeric: tabular-nums; }
+  .per { margin: 0 0 1rem; font-size: 0.8125rem; color: var(--color-teal-deep); }
+  .line { margin: 0; font-size: 0.9375rem; color: var(--color-slate); }
+
+  .terms { margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem); padding: clamp(1.35rem, 1.1rem + 1vw, 1.85rem); background: #fff; border: 1px solid var(--rule); border-radius: 8px; }
+  .terms h3 { margin: 0 0 0.75rem; color: var(--color-navy); }
+  .terms .checks li { font-size: 0.9375rem; color: var(--color-navy); }
+
+  .book-grid, .sponsor { display: grid; gap: clamp(2rem, 1.5rem + 3vw, 3.5rem); align-items: start; }
+  @media (min-width: 940px) {
+    .book-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); }
+    .sponsor { grid-template-columns: minmax(0, 1fr) minmax(0, 24rem); }
+  }
+  .book-grid h2, .sponsor h2 { margin: 0 0 1rem; }
+  .book-grid .checks { margin-top: 1.5rem; }
+  .book-grid .checks li, .sponsor .checks li { font-size: 0.9375rem; color: var(--color-navy); }
+  .sponsor-form { border: 1px solid var(--rule); border-radius: 8px; padding: clamp(1.25rem, 1rem + 1vw, 1.75rem); background: var(--color-cloud); }
+  .sponsor-form h3 { margin: 0 0 1rem; color: var(--color-navy); }
+</style>

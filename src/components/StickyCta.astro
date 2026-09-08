@@ -1,0 +1,73 @@
+---
+import ArrowRight from 'lucide-astro/ArrowRight';
+
+// A bottom bar carrying the single primary action. Appears once the hero has
+// scrolled out and hides again when the booking panel is on screen, so it never
+// competes with the thing it is pointing at. Phone and small tablet only.
+export interface Props {
+  label: string;
+  href: string;
+  /** Selector for the destination. The bar hides while this is in view. */
+  watch?: string;
+}
+const { label, href, watch } = Astro.props;
+---
+
+<div class="sticky-cta" data-sticky-cta data-watch={watch} hidden>
+  <a href={href} class="btn btn-primary">
+    {label}
+    <ArrowRight size={18} class="arrow" aria-hidden="true" />
+  </a>
+</div>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 40;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    background: color-mix(in oklab, #fff 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--rule);
+    transform: translateY(100%);
+    transition: transform var(--dur-slow) var(--ease-out-quart);
+  }
+  .sticky-cta[data-shown] { transform: none; }
+  .sticky-cta .btn { width: 100%; }
+  @media (min-width: 860px) { .sticky-cta { display: none; } }
+</style>
+
+<script>
+  const wire = () => {
+    const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+    if (!bar) return;
+    const target = bar.dataset.watch ? document.querySelector(bar.dataset.watch) : null;
+    let past = false;
+    let atTarget = false;
+
+    const apply = () => {
+      const show = past && !atTarget;
+      bar.hidden = !show;
+      // Let the element paint before transitioning in.
+      if (show) requestAnimationFrame(() => bar.setAttribute('data-shown', ''));
+      else bar.removeAttribute('data-shown');
+    };
+
+    const hero = document.querySelector('header.hero') ?? document.querySelector('main > *');
+    if (hero) {
+      new IntersectionObserver(
+        ([e]) => { past = !e.isIntersecting; apply(); },
+        { threshold: 0 }
+      ).observe(hero);
+    }
+    if (target) {
+      new IntersectionObserver(
+        ([e]) => { atTarget = e.isIntersecting; apply(); },
+        { threshold: 0.15 }
+      ).observe(target);
+    }
+  };
+  wire();
+  document.addEventListener('astro:page-load', wire);
+</script>

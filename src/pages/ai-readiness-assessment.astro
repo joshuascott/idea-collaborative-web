@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactForm from '../components/ContactForm.astro';
+import HoursCalculator from '../components/motion/HoursCalculator.astro';
+import { breadcrumbs, service } from '../data/schema';
+---
+
+<Base
+  title="Free AI readiness assessment for Northern Colorado firms"
+  description="A short form and a written assessment back within two business days. Where your hours are going, what is worth automating first, and what to leave alone."
+  path="/ai-readiness-assessment"
+  darkHero
+  schemas={[
+    breadcrumbs([{ name: 'AI readiness assessment', path: '/ai-readiness-assessment' }]),
+    service({
+      name: 'Free AI readiness assessment',
+      description:
+        'A written assessment of where a small business should start with AI, returned within two business days at no cost.',
+      path: '/ai-readiness-assessment',
+      price: '0',
+    }),
+  ]}
+>
+  <Hero
+    chapter="01"
+    label="Readiness assessment"
+    headline="Tell us the week. We will tell you where it is <em>going</em>."
+    sub="Six questions, about four minutes. You get a written assessment back within two business days. No call, no pitch, and nothing to buy at the end of it."
+    compact
+  >
+    <a href="#form" class="btn btn-primary" slot="actions">Start the assessment</a>
+  </Hero>
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs trail={[{ name: 'AI readiness assessment', path: '/ai-readiness-assessment' }]} />
+  </Section>
+
+  <Section chapter="02" label="What you get" surface="white">
+    <div class="two">
+      <div>
+        <h2 class="display-lg">What comes <em>back</em>.</h2>
+        <ul class="checks">
+          <li>The two or three places your hours are most likely going, based on what you describe</li>
+          <li>One workflow worth doing first, and why that one rather than the obvious one</li>
+          <li>A rough range for what it would cost to get it running, whether or not you use us</li>
+          <li>The parts of your business we would leave alone this year</li>
+        </ul>
+        <p class="note">
+          It is written by a person, not generated. That is why it takes two days rather than two
+          minutes, and it is why it is worth reading.
+        </p>
+        <h3 class="display-md">Why this is free</h3>
+        <p>
+          Because it is the fastest way for you to find out whether we are worth paying, and the
+          fastest way for us to find out whether we can help. Some assessments come back saying the
+          honest answer is a process change and no AI at all. Those still get written.
+        </p>
+      </div>
+
+      <div class="form-panel" id="form">
+        <h2 class="display-md">The assessment</h2>
+        <ContactForm
+          name="assessment"
+          submitLabel="Get Your Free AI Readiness Assessment"
+          intro="The more specific the last two answers, the more useful the reply."
+          fields={[
+            { name: 'size', label: 'How many people work there', required: true, options: ['Just me', '2 to 9', '10 to 24', '25 to 49', '50 to 100', 'More than 100'] },
+            { name: 'industry', label: 'What the business does', type: 'text', required: true, placeholder: 'Plain words are fine' },
+            { name: 'tried', label: 'What have you tried already', type: 'textarea', rows: 3, placeholder: 'Including "nothing yet", which is a normal answer' },
+          ]}
+        />
+      </div>
+    </div>
+  </Section>
+
+  <Section chapter="03" label="The arithmetic" surface="cloud">
+    <HoursCalculator />
+  </Section>
+</Base>
+
+<style>
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .two { display: grid; gap: clamp(2.5rem, 2rem + 3vw, 4rem); align-items: start; }
+  @media (min-width: 940px) { .two { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); } }
+  .two h2 { margin: 0 0 1.25rem; }
+  .two h3 { margin: 2rem 0 0.5rem; color: var(--color-navy); }
+  .two p { color: var(--color-slate); }
+  .checks li { color: var(--color-navy); }
+  .note { font-size: 0.9375rem; margin-top: 1.25rem; }
+  .form-panel { border: 1px solid var(--rule); border-radius: 8px; padding: clamp(1.25rem, 1rem + 1vw, 1.75rem); background: var(--color-cloud); }
+  .form-panel h2 { margin: 0 0 1rem; color: var(--color-navy); }
+</style>

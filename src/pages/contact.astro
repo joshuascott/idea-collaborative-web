@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactBlock from '../components/ContactBlock.astro';
+import ContactForm from '../components/ContactForm.astro';
+import BookingEmbed from '../components/BookingEmbed.astro';
+import { breadcrumbs } from '../data/schema';
+import { areaServed } from '../data/contact';
+---
+
+<Base
+  title="Contact Idea Collaborative in Loveland, Colorado"
+  description="Talk to Josh Scott about an AI workshop, consulting, or the free readiness assessment. Based in Loveland, working across Northern Colorado."
+  path="/contact"
+  darkHero
+  schemas={[breadcrumbs([{ name: 'Contact', path: '/contact' }])]}
+>
+  <Hero
+    chapter="01"
+    label="Contact"
+    headline="Start a <em>conversation</em>."
+    sub="One person reads these. You will get a real answer, usually the same day, and no sequence of follow-up emails afterwards."
+    compact
+  />
+
+  <Section surface="white" class="crumb-row">
+    <Breadcrumbs trail={[{ name: 'Contact', path: '/contact' }]} />
+  </Section>
+
+  <Section chapter="02" label="Get in touch" surface="white">
+    <div class="grid">
+      <div class="form-col">
+        <h2 class="display-lg">Tell us what your week looks <em>like</em>.</h2>
+        <p class="lede">
+          The more specific you are about what is eating the time, the more useful the reply will
+          be. If AI is the wrong answer for it, that is what we will say.
+        </p>
+        <ContactForm
+          name="contact"
+          submitLabel="Send this"
+          fields={[
+            {
+              name: 'interest',
+              label: 'What are you asking about',
+              required: true,
+              options: [
+                'A workshop for my team',
+                'Consulting or implementation',
+                'The free readiness assessment',
+                'A session for our brokerage',
+                'The AI Briefing Breakfast',
+                'Something else',
+              ],
+            },
+            { name: 'size', label: 'How many people work there', type: 'text', placeholder: 'A number is fine' },
+          ]}
+        />
+      </div>
+
+      <aside class="side">
+        <div class="panel">
+          <h2 class="display-md">Direct</h2>
+          <ContactBlock class="cb" />
+          <p class="fine">
+            Calls are answered or returned the same working day. Email is usually faster.
+          </p>
+        </div>
+
+        <BookingEmbed
+          heading="Or book 20 minutes"
+          blurb="No deck and no pitch. We ask what your week looks like and tell you whether this helps."
+        />
+
+        <div class="panel">
+          <h2 class="display-md">Where we work</h2>
+          <p class="fine">
+            In person across {areaServed.slice(0, -1).join(', ')}, and {areaServed.at(-1)}. Further
+            along the Front Range we will quote travel before you commit. Remote sessions run for
+            follow-up work, though the first one is better in the room.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .grid { display: grid; gap: clamp(2.5rem, 2rem + 3vw, 4rem); align-items: start; }
+  @media (min-width: 940px) { .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 24rem); } }
+  .form-col h2 { margin: 0 0 1rem; }
+  .lede { font-size: 1.0625rem; color: var(--color-slate); margin: 0 0 2rem; }
+
+  .side { display: grid; gap: 1.25rem; }
+  .panel { border: 1px solid var(--rule); border-radius: 8px; padding: 1.5rem; background: #fff; }
+  .panel h2 { margin: 0 0 1rem; color: var(--color-navy); }
+  .cb { margin-bottom: 1rem; }
+  .fine { margin: 0; font-size: 0.875rem; color: var(--color-slate); }
+</style>

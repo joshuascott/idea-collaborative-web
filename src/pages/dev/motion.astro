@@ -1,0 +1,123 @@
+---
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import MarkScene from '../../components/motion/MarkScene.astro';
+import LivingGradient from '../../components/motion/LivingGradient.astro';
+import BeforeAfter from '../../components/motion/BeforeAfter.astro';
+import ListingDemo from '../../components/motion/ListingDemo.astro';
+import HoursCalculator from '../../components/motion/HoursCalculator.astro';
+import Counter from '../../components/motion/Counter.astro';
+import Process from '../../components/Process.astro';
+import TierCards from '../../components/TierCards.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+
+// Review page. noindex, excluded from the sitemap, and linked from nowhere.
+// Every effect in isolation so each one can be judged on a phone and a laptop
+// before it goes near a real page.
+const moments = [
+  ['1', 'The mark scene', 'Home, section 02', 'Scroll-linked draw of both loops, three lines, resolve to the lockup. Pinned on desktop, stacked on mobile. Zero JS.'],
+  ['2', 'Living gradient', 'Hero surfaces and CTA bands', 'Three radial blobs drifting on a 52s cycle, leaning toward the pointer with heavy damping. Answers scroll on touch.'],
+  ['3', 'Before and after', 'Home, /consulting', 'A real Monday list, wiped between states by a range input, so it is keyboard operable and screen reader safe.'],
+  ['4', 'The listing demo', '/realtors', 'Types in, flags four phrases in sequence, badges the count, then morphs each phrase into its rewrite.'],
+  ['5', 'The flow line', 'Home, workshop pages', 'The loop from the mark, unwound. Draws with a scroll-driven animation and retracts on the way back. Zero JS.'],
+  ['6', 'Hours back calculator', '/ai-readiness-assessment, Home', 'Two sliders and an editable rate. Fluid count-up, color shift from Slate to Deep Teal, live tier recommendation.'],
+];
+---
+
+<Base
+  title="Motion review"
+  description="Internal review page for every motion effect on the site, in isolation."
+  path="/dev/motion"
+  noindex
+>
+  <Section surface="ink">
+    <h1 class="display-lg">Motion <em>review</em>.</h1>
+    <p class="lede">
+      Every effect in isolation. Turn on <code>prefers-reduced-motion</code> in your OS settings and
+      reload: every one of these must fall back to its finished, static state with nothing missing.
+      This page is noindex and is excluded from the sitemap.
+    </p>
+    <ol class="index">
+      {moments.map(([n, name, where, what]) => (
+        <li>
+          <span class="n">{n}</span>
+          <div>
+            <h2>{name}</h2>
+            <p class="where">{where}</p>
+            <p>{what}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <Section surface="cloud"><h2 class="display-md">Moment 1. The mark scene</h2></Section>
+  <MarkScene />
+
+  <Section surface="cloud"><h2 class="display-md">Moment 2. Living gradient</h2></Section>
+  <div class="swatch on-dark">
+    <LivingGradient strength={0.5} />
+    <div class="shell"><p>Move the pointer across this panel. On touch, scroll.</p></div>
+  </div>
+
+  <Section surface="cloud"><h2 class="display-md">Moment 3. Before and after</h2></Section>
+  <BeforeAfter chapter="" surface="white" />
+
+  <Section surface="cloud"><h2 class="display-md">Moment 4. The listing demo</h2></Section>
+  <Section surface="white"><ListingDemo /></Section>
+
+  <Section surface="cloud"><h2 class="display-md">Moment 5. The flow line</h2></Section>
+  <Process chapter="" surface="white" />
+
+  <Section surface="cloud"><h2 class="display-md">Moment 6. Hours back calculator</h2></Section>
+  <Section surface="white"><HoursCalculator /></Section>
+
+  <Section surface="cloud"><h2 class="display-md">Layer 1. Ambient polish</h2></Section>
+  <Section surface="white">
+    <h3 class="display-md">Counters</h3>
+    <p class="numeral"><Counter to={110} prefix="$" /> &nbsp; <Counter to={25} suffix="+" /> &nbsp; <Counter to={30} /></p>
+
+    <h3 class="display-md">Card hover, tilt, and the specular highlight</h3>
+    <TierCards />
+
+    <h3 class="display-md">Accordion</h3>
+    <FaqAccordion
+      schema={false}
+      heading="Native details, animated height"
+      faqs={[
+        { q: 'Does this work without JavaScript?', a: 'Yes. It is a native details element. The height transition is progressive enhancement.' },
+        { q: 'What happens under reduced motion?', a: 'It opens and closes instantly, with no height animation.' },
+      ]}
+    />
+
+    <h3 class="display-md">Buttons and focus rings</h3>
+    <div class="row">
+      <button class="btn btn-primary" type="button">Primary</button>
+      <button class="btn btn-ghost-light" type="button">Ghost on light</button>
+    </div>
+
+    <h3 class="display-md">Scroll reveal, staggered</h3>
+    <ul class="reveal-stagger tiles">
+      {[0, 1, 2, 3, 4, 5].map((i) => <li class="card" style={`--i:${i}`}><span>{i + 1}</span></li>)}
+    </ul>
+  </Section>
+</Base>
+
+<style>
+  .lede { font-size: 1.0625rem; margin: 1rem 0 2.5rem; max-width: 46rem; }
+  code { background: color-mix(in oklab, #fff 12%, transparent); padding: 0.1em 0.35em; border-radius: 4px; }
+  .index { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+  @media (min-width: 768px) { .index { grid-template-columns: repeat(2, 1fr); gap: 2rem; } }
+  .index li { display: flex; gap: 1rem; }
+  .n { font-family: var(--font-display); font-size: 1.5rem; color: var(--color-teal-light); }
+  .index h2 { margin: 0; font-size: 1.0625rem; color: #fff; }
+  .where { margin: 0.15rem 0 0.4rem; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-teal-light); }
+  .index p { margin: 0; font-size: 0.9375rem; }
+
+  .swatch { position: relative; background: var(--color-ink); padding-block: 6rem; overflow: hidden; }
+  .swatch .shell { position: relative; z-index: 1; }
+  .row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: 1rem; }
+  .tiles li { display: grid; place-items: center; aspect-ratio: 3 / 2; font-family: var(--font-display); font-size: 2rem; color: var(--color-teal-deep); }
+  h3 { margin-top: 2.5rem; }
+</style>

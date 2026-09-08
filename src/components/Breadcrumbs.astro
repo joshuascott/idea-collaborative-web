@@ -1,0 +1,47 @@
+---
+import ChevronRight from 'lucide-astro/ChevronRight';
+
+export interface Props {
+  trail: { name: string; path: string }[];
+  dark?: boolean;
+}
+const { trail, dark = false } = Astro.props;
+const items = [{ name: 'Home', path: '/' }, ...trail];
+---
+
+<nav class="crumbs" aria-label="Breadcrumb" data-dark={dark ? 'true' : 'false'}>
+  <ol>
+    {items.map((item, i) => (
+      <li>
+        {i > 0 && <ChevronRight size={14} aria-hidden="true" />}
+        {i === items.length - 1 ? (
+          <span aria-current="page">{item.name}</span>
+        ) : (
+          <a href={item.path}>{item.name}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.8125rem;
+  }
+  .crumbs li { display: flex; align-items: center; gap: 0.4rem; }
+  .crumbs a { color: var(--color-slate); text-decoration: none; }
+  .crumbs a:hover { color: var(--color-teal-deep); text-decoration: underline; text-underline-offset: 3px; }
+  .crumbs span { color: var(--color-navy); font-weight: 500; }
+  .crumbs :global(svg) { color: color-mix(in oklab, var(--color-slate) 55%, transparent); }
+  .crumbs[data-dark='true'] a { color: var(--color-teal-pale); }
+  .crumbs[data-dark='true'] a:hover { color: #fff; }
+  .crumbs[data-dark='true'] span { color: #fff; }
+  .crumbs[data-dark='true'] :global(svg) { color: var(--color-teal-light); }
+</style>

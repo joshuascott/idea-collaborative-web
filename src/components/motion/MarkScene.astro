@@ -1,0 +1,194 @@
+---
+import Wordmark from '../Wordmark.astro';
+import { mark } from '../../data/mark';
+import { brand } from '../../data/contact';
+
+// Signature moment 1, the mark scene. Scroll-linked: the first loop draws, the
+// second follows and interlocks, the bubble tail closes last, three lines appear
+// beside it, and the whole thing resolves into the lockup. Scroll back and it
+// unwinds.
+//
+// The mark is drawn in flat white, not navy and teal. The scene sits on Ink, and
+// the guide allows the two-colour mark only on white, Cloud, or Mist (section 3,
+// logo don'ts). The two loops stay readable as two separate gestures through the
+// draw order and a slight difference in opacity rather than through colour.
+//
+// Driven entirely by CSS scroll-driven animations against a view-timeline on the
+// tall outer element, so the one long moment on the site costs zero JavaScript.
+// Pinned on desktop, stacked and unpinned on mobile. The text is in the DOM at
+// load; only opacity and stroke-dashoffset move.
+const lines = [
+  'Most AI advice is a lecture.',
+  'Ours is a loop: you show us the work, we build the tool, you run it, we adjust.',
+  'That loop is the mark.',
+];
+---
+
+<section class="scene on-dark" aria-labelledby="mark-scene-heading">
+  <div class="pin">
+    <div class="shell inner">
+      <div class="art">
+        <svg viewBox={mark.viewBox} aria-hidden="true" focusable="false">
+          <defs>
+            <mask id="ms-a" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024">
+              <rect width="1024" height="1024" fill="#fff" />
+              <path d={mark.tealBar} stroke="#000" stroke-width={mark.knockout} stroke-linecap="round" />
+            </mask>
+            <mask id="ms-b" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1024">
+              <rect width="1024" height="1024" fill="#fff" />
+              <path d={mark.navyBar} stroke="#000" stroke-width={mark.knockout} stroke-linecap="round" />
+            </mask>
+          </defs>
+
+          <g mask="url(#ms-b)">
+            <path class="tail" d={mark.tail} fill="#FFFFFF" />
+            <path
+              class="loop teal"
+              d={mark.teal}
+              pathLength="1"
+              stroke="#FFFFFF"
+              stroke-width={mark.strokeWidth}
+              stroke-linecap="round"
+              fill="none"
+            />
+          </g>
+          <path
+            class="loop navy"
+            d={mark.navy}
+            pathLength="1"
+            mask="url(#ms-a)"
+            stroke="#FFFFFF"
+            stroke-width={mark.strokeWidth}
+            stroke-linecap="round"
+            fill="none"
+          />
+        </svg>
+      </div>
+
+      <div class="text">
+        <p class="chapter is-dark"><span>02</span><span aria-hidden="true">/</span><span>The mark</span></p>
+        <h2 id="mark-scene-heading" class="sr-only">The mark</h2>
+        <ol class="lines">
+          {lines.map((l, i) => <li style={`--i:${i}`}>{l}</li>)}
+        </ol>
+        <div class="lockup">
+          <Wordmark dark full class="word" />
+          <p class="tagline">{brand.tagline}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .scene {
+    background: var(--color-ink);
+    position: relative;
+  }
+  .pin { display: block; }
+  .inner {
+    display: grid;
+    gap: clamp(2rem, 1rem + 5vw, 4rem);
+    align-items: center;
+    padding-block: clamp(3.5rem, 2.5rem + 5vw, 6rem);
+  }
+  .art { justify-self: center; width: min(100%, 30rem); }
+  .art svg { width: 100%; height: auto; overflow: visible; }
+  /* The second loop sits back a little so the two gestures read apart. */
+  .teal, .tail { opacity: 0.74; }
+  .text { max-width: 34rem; }
+  .lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+  .lines li {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    font-size: clamp(1.25rem, 1.1rem + 0.9vw, 1.75rem);
+    color: var(--color-cloud);
+  }
+  .lockup {
+    margin-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule-dark);
+  }
+  .word { font-size: clamp(1.75rem, 1.5rem + 1.4vw, 2.5rem); display: block; }
+  .tagline {
+    margin: 0.5rem 0 0;
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    color: var(--color-teal-pale);
+  }
+
+  /* ---- The static end state is the default. Motion is added on top. ------ */
+  @media (min-width: 1024px) {
+    .inner { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+      .scene {
+        height: 320vh;
+        view-timeline-name: --mark-scene;
+        view-timeline-axis: block;
+      }
+      .pin {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: grid;
+        align-items: center;
+        overflow: hidden;
+      }
+      .inner { padding-block: 0; }
+
+      .loop {
+        stroke-dasharray: 1;
+        animation: draw-loop linear both;
+        animation-timeline: --mark-scene;
+      }
+      .navy { animation-range: contain 2% contain 34%; }
+      .teal { animation-range: contain 26% contain 58%; }
+      .tail {
+        transform-box: fill-box;
+        transform-origin: 20% 20%;
+        animation: pop-tail linear both;
+        animation-timeline: --mark-scene;
+        animation-range: contain 54% contain 66%;
+      }
+      .lines li {
+        animation: line-in linear both;
+        animation-timeline: --mark-scene;
+      }
+      .lines li:nth-child(1) { animation-range: contain 8% contain 22%; }
+      .lines li:nth-child(2) { animation-range: contain 30% contain 46%; }
+      .lines li:nth-child(3) { animation-range: contain 54% contain 68%; }
+      .lockup {
+        animation: line-in linear both;
+        animation-timeline: --mark-scene;
+        animation-range: contain 70% contain 86%;
+      }
+      .art {
+        animation: settle linear both;
+        animation-timeline: --mark-scene;
+        animation-range: contain 66% contain 88%;
+      }
+    }
+  }
+
+  @keyframes draw-loop {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes pop-tail {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 0.74; transform: none; }
+  }
+  @keyframes line-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes settle {
+    from { transform: none; }
+    to { transform: scale(0.88); }
+  }
+</style>

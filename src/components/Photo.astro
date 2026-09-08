@@ -1,0 +1,111 @@
+---
+// Front Range photography, blue hour and overcast, cool grade, tinted toward
+// navy, always fading into Ink where type sits. PLAN.md section 4c.
+//
+// TODO for Josh: the licensed photographs are not in the repo yet. Drop a
+// 2400px-wide graded JPEG into src/assets/photos/ and pass it as `src`. Until
+// then this renders a generated Front Range ridgeline in the palette, which is
+// deliberate placeholder art rather than free stock, per PLAN.md section 7.
+export interface Props {
+  /** Imported image asset. Omit to render the placeholder ridgeline. */
+  src?: ImageMetadata;
+  alt?: string;
+  /** 0 to 1. How strongly the image reads behind type. */
+  opacity?: number;
+  /** Where the Ink fade starts, as a percentage of height. */
+  fadeFrom?: number;
+  variant?: 1 | 2 | 3;
+  class?: string;
+}
+const {
+  src,
+  alt = '',
+  opacity = 1,
+  fadeFrom = 38,
+  variant = 1,
+  class: cls = '',
+} = Astro.props;
+
+// Three ridge profiles so repeated use across a page does not read as one image.
+const ridges: Record<number, string[]> = {
+  1: [
+    'M0 300 L90 236 L150 262 L232 196 L300 240 L372 188 L440 232 L520 176 L604 226 L680 190 L760 232 L840 200 L920 244 L1000 214 L1080 250 L1160 222 L1200 240 L1200 400 L0 400 Z',
+    'M0 330 L80 296 L170 320 L260 274 L340 308 L430 268 L520 306 L610 262 L700 302 L790 270 L880 308 L980 276 L1080 312 L1200 284 L1200 400 L0 400 Z',
+    'M0 358 L120 340 L240 356 L360 336 L480 354 L600 332 L720 352 L840 334 L960 354 L1080 338 L1200 356 L1200 400 L0 400 Z',
+  ],
+  2: [
+    'M0 268 L100 214 L180 250 L270 178 L350 226 L444 170 L530 220 L620 168 L700 214 L790 176 L880 224 L970 186 L1070 232 L1200 200 L1200 400 L0 400 Z',
+    'M0 312 L110 280 L200 306 L300 262 L400 300 L500 258 L600 298 L700 256 L800 296 L900 262 L1010 300 L1120 270 L1200 292 L1200 400 L0 400 Z',
+    'M0 350 L140 332 L280 350 L420 330 L560 348 L700 328 L840 348 L980 330 L1120 350 L1200 340 L1200 400 L0 400 Z',
+  ],
+  3: [
+    'M0 288 L96 244 L176 274 L262 206 L344 250 L430 200 L512 246 L598 196 L684 242 L770 204 L860 250 L950 212 L1044 254 L1140 220 L1200 244 L1200 400 L0 400 Z',
+    'M0 324 L96 292 L192 318 L292 272 L392 310 L492 268 L592 308 L692 266 L792 306 L892 274 L992 312 L1096 282 L1200 306 L1200 400 L0 400 Z',
+    'M0 356 L130 338 L260 356 L390 334 L520 352 L650 332 L780 352 L910 334 L1040 354 L1170 338 L1200 344 L1200 400 L0 400 Z',
+  ],
+};
+const rows = ridges[variant];
+const uid = `ph${variant}`;
+---
+
+<div class:list={['photo', cls]} style={`--fade-from:${fadeFrom}%;--photo-opacity:${opacity}`}>
+  {src ? (
+    <img src={src.src} alt={alt} width={src.width} height={src.height} loading="lazy" decoding="async" />
+  ) : (
+    <svg
+      class="ridge"
+      viewBox="0 0 1200 400"
+      preserveAspectRatio="xMidYMax slice"
+      aria-hidden="true"
+      role="presentation"
+    >
+      <defs>
+        <linearGradient id={`${uid}-sky`} x1="0" y1="0" x2="0.35" y2="1">
+          <stop offset="0%" stop-color="#0F2836" />
+          <stop offset="45%" stop-color="#1C3E54" />
+          <stop offset="100%" stop-color="#2C6671" />
+        </linearGradient>
+      </defs>
+      <rect width="1200" height="400" fill={`url(#${uid}-sky)`} />
+      <path d={rows[0]} fill="#0F2836" opacity="0.42" />
+      <path d={rows[1]} fill="#0F2836" opacity="0.62" />
+      <path d={rows[2]} fill="#0F2836" opacity="0.85" />
+    </svg>
+  )}
+  <div class="fade" aria-hidden="true"></div>
+</div>
+
+<style>
+  .photo {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--color-ink);
+  }
+  .photo > img,
+  .photo > .ridge {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: var(--photo-opacity);
+    /* Cool, desaturated, tinted toward navy so every image sits in the palette. */
+    filter: saturate(0.62) contrast(1.04) brightness(0.86);
+  }
+  .fade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--color-ink) 35%, transparent) 0%,
+        color-mix(in oklab, var(--color-ink) 20%, transparent) var(--fade-from),
+        var(--color-ink) 100%
+      ),
+      linear-gradient(
+        to right,
+        color-mix(in oklab, var(--color-ink) 78%, transparent) 0%,
+        color-mix(in oklab, var(--color-ink) 30%, transparent) 58%,
+        transparent 100%
+      );
+  }
+</style>

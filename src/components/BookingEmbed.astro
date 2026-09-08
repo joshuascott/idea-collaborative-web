@@ -1,0 +1,95 @@
+---
+import CalendarClock from 'lucide-astro/CalendarClock';
+import { contact } from '../data/contact';
+
+// Cal.com, loaded lazily on intersection so it never costs anything above the
+// fold on a phone. Until Josh connects the account, the panel shows the same
+// two contact paths, so the page is never a dead end.
+// TODO for Josh: create the Cal.com event types, then set `link` per page.
+export interface Props {
+  /** Cal.com booking link, e.g. "ideacollab/preview". */
+  link?: string;
+  heading?: string;
+  blurb?: string;
+  id?: string;
+}
+const {
+  link,
+  heading = 'Book a time',
+  blurb = 'Twenty minutes, no deck. We ask about your week and tell you whether this helps.',
+  id = 'book',
+} = Astro.props;
+---
+
+<div class="booking" id={id}>
+  <div class="head">
+    <span class="icon-well"><CalendarClock size={22} stroke-width={1.75} aria-hidden="true" /></span>
+    <div>
+      <h2 class="display-md">{heading}</h2>
+      <p>{blurb}</p>
+    </div>
+  </div>
+
+  {link ? (
+    <div class="embed" data-cal-embed data-cal-link={link}>
+      <noscript>
+        <p>
+          <a class="btn btn-primary" href={`https://cal.com/${link}`}>Open the booking page</a>
+        </p>
+      </noscript>
+    </div>
+  ) : (
+    <div class="fallback">
+      <p class="note">
+        Online booking is being set up. Until it is live, either of these reaches Josh directly and
+        gets you the same 20 minutes.
+      </p>
+      <div class="paths">
+        <a class="btn btn-primary" href={contact.phoneHref}>Call {contact.phone}</a>
+        <a class="btn btn-ghost-light" href={`mailto:${contact.email}?subject=Booking%20a%20preview`}>
+          Email {contact.email}
+        </a>
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .booking { border: 1px solid var(--rule); border-radius: 8px; padding: clamp(1.25rem, 1rem + 1vw, 1.75rem); background: #fff; }
+  :global(.on-dark) .booking { background: color-mix(in oklab, #fff 6%, transparent); border-color: var(--rule-dark); }
+  .head { display: flex; gap: 1rem; align-items: flex-start; }
+  .head h2 { margin: 0; color: var(--color-navy); }
+  :global(.on-dark) .head h2 { color: #fff; }
+  .head p { margin: 0.4rem 0 0; font-size: 0.9375rem; color: var(--color-slate); }
+  :global(.on-dark) .head p { color: color-mix(in oklab, var(--color-cloud) 80%, var(--color-teal-pale)); }
+  .embed { min-height: 32rem; margin-top: 1.25rem; }
+  .fallback { margin-top: 1.25rem; }
+  .note { font-size: 0.9375rem; color: var(--color-slate); }
+  :global(.on-dark) .note { color: color-mix(in oklab, var(--color-cloud) 80%, var(--color-teal-pale)); }
+  .paths { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+  :global(.on-dark) .paths .btn-ghost-light { border-color: var(--color-teal-light); color: #fff; }
+</style>
+
+<script>
+  const wire = () => {
+    const node = document.querySelector<HTMLElement>('[data-cal-embed]');
+    if (!node) return;
+    const io = new IntersectionObserver((entries) => {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      const s = document.createElement('script');
+      s.src = 'https://app.cal.com/embed/embed.js';
+      s.async = true;
+      s.onload = () => {
+        // @ts-expect-error injected global
+        window.Cal?.('init', { origin: 'https://cal.com' });
+        // @ts-expect-error injected global
+        window.Cal?.('inline', { elementOrSelector: node, calLink: node.dataset.calLink });
+      };
+      document.head.appendChild(s);
+    }, { rootMargin: '200px' });
+    io.observe(node);
+  };
+  wire();
+  document.addEventListener('astro:page-load', wire);
+</script>
