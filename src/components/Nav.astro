@@ -20,12 +20,13 @@ const links = [
     label: 'Workshops',
     children: [
       ...tiers.map((t) => ({ href: `/workshops/${t.slug}`, label: t.title })),
-      { href: '/realtors', label: 'For brokerages' },
+      { href: '/realtors', label: 'AI for Real Estate' },
     ],
   },
   { href: '/consulting', label: 'Consulting' },
   { href: '/about', label: 'About' },
-  { href: '/blog', label: 'Blog' },
+  // TEMP: hide Blog from nav; /blog stays reachable by direct URL
+  // { href: '/blog', label: 'Blog' },
 ];
 const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
 ---
@@ -42,7 +43,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
     <a href="/" class="brand" aria-label="ideacollab, Idea Collaborative home">
       <img src="/logo.svg" alt="" width="44" height="29" class="mark light-mark" />
       <img src="/logo-white.svg" alt="" width="44" height="29" class="mark dark-mark" />
-      <span transition:name="wordmark"><Wordmark full class="brand-word" /></span>
+      <span transition:name="wordmark"><Wordmark class="brand-word" /></span>
     </a>
 
     <nav class="desktop-nav" aria-label="Primary">
@@ -164,12 +165,12 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    min-height: 4.25rem;
+    min-height: 4.5rem;
   }
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.65rem;
     text-decoration: none;
     flex: none;
   }
@@ -177,17 +178,17 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
   .dark-mark { display: none; }
   .over-dark:not(.is-stuck) .light-mark { display: none; }
   .over-dark:not(.is-stuck) .dark-mark { display: block; }
-  .brand-word { font-size: 1.5rem; line-height: 1.05; }
-  /* The full name is the introduction; the wordmark is the signature. They
-     coexist (guide section 2). Below 1024px the nav is too tight for both. */
-  .brand-word :global(.full) { display: none; }
-  @media (min-width: 1024px) { .brand-word :global(.full) { display: block; } }
+  /* brand-word lives on Wordmark's root, so it needs :global to pierce scope. */
+  .brand :global(.brand-word) {
+    font-size: 1.375rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
   /* The wordmark's colours are set inline by its own component, and the class
      hook lives in that component's output, so the whole child selector has to
      be global for the over-dark override to reach it. */
   .site-nav.over-dark:not(.is-stuck) :global(.brand-word b) { color: #fff !important; }
   .site-nav.over-dark:not(.is-stuck) :global(.brand-word .tail) { color: var(--color-teal-light) !important; }
-  .site-nav.over-dark:not(.is-stuck) :global(.brand-word .full) { color: var(--color-teal-pale) !important; }
 
   .desktop-nav { display: none; align-items: center; gap: 1.75rem; }
   .desktop-nav ul {
@@ -306,7 +307,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 1.25rem;
+    font-size: 1.375rem;
   }
   .mobile-nav ul { list-style: none; margin: 0; padding: 0; flex: 1; }
   .mobile-nav li + li { border-top: 1px solid var(--rule); }

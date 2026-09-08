@@ -14,7 +14,7 @@ const cols = [
         href: `/workshops/${t.slug}`,
         label: t.shortTitle,
       })),
-      { href: '/realtors', label: 'For real estate brokerages' },
+      { href: '/realtors', label: 'AI for Real Estate' },
     ],
   },
   {
@@ -29,7 +29,8 @@ const cols = [
     heading: 'Company',
     links: [
       { href: '/about', label: 'About' },
-      { href: '/blog', label: 'Blog' },
+      // TEMP: hide Blog from footer; /blog stays reachable by direct URL
+      // { href: '/blog', label: 'Blog' },
       { href: '/contact', label: 'Contact' },
       { href: '/privacy', label: 'Privacy' },
     ],
