@@ -20,12 +20,6 @@ export const areaServed = [
   'Longmont',
 ] as const;
 
-export const founder = {
-  name: 'Joshua Scott',
-  jobTitle: 'Founder',
-  linkedin: 'https://www.linkedin.com/in/joshuaacersscott',
-} as const;
-
 export const brand = {
   name: 'Idea Collaborative',
   tagline: 'Practical AI that pays for itself.',

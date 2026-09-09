@@ -99,11 +99,10 @@ const faqs = [
     <a href="#pricing" class="btn btn-ghost-dark" slot="actions">See what it costs</a>
   </Hero>
 
-  <Section surface="white" class="crumb-row">
-    <Breadcrumbs trail={[{ name: 'AI for Real Estate', path: '/realtors' }]} />
-  </Section>
-
-  <Section chapter="02" label="What we mean" surface="white">
+  <Section chapter="02" label="What we mean" surface="white" class="what-we-mean">
+    <div slot="before" class="crumb-above">
+      <Breadcrumbs trail={[{ name: 'AI for Real Estate', path: '/realtors' }]} />
+    </div>
     <div class="head">
       <h2 class="display-lg">This listing took <em>11</em> seconds to write.</h2>
       <p class="lede">
@@ -262,7 +261,16 @@ const faqs = [
 </Base>
 
 <style>
-  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  /* Page-scoped .crumb-row never reached Section's .surface (different
+     data-astro-cid). One section + before slot; pad via :global.
+     Must beat .surface[data-astro-cid] (0,2,0) so padding-top wins over padding-block. */
+  :global(section.surface.what-we-mean) {
+    padding-top: 1.25rem;
+  }
+  /* Lives in this page's markup, so scoped styles apply. ~1rem to chapter. */
+  .crumb-above {
+    margin: 0 0 1rem;
+  }
   .head { max-width: 46rem; margin-bottom: clamp(2rem, 1.5rem + 2vw, 3rem); }
   .head h2 { margin: 0; }
   .head em { color: var(--color-teal-deep); }

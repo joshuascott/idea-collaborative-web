@@ -1,4 +1,4 @@
-import { contact, areaServed, founder, brand } from './contact';
+import { contact, areaServed, brand } from './contact';
 
 const SITE = 'https://ideacollaborative.com';
 
@@ -27,13 +27,6 @@ export const localBusiness = {
     '@type': 'City',
     name: `${name}, Colorado`,
   })),
-  founder: {
-    '@type': 'Person',
-    name: founder.name,
-    jobTitle: founder.jobTitle,
-    sameAs: [founder.linkedin],
-  },
-  sameAs: [founder.linkedin],
   knowsAbout: [
     'Artificial intelligence adoption for small business',
     'AI workshops and training',
@@ -114,10 +107,6 @@ export const article = (opts: {
   datePublished: opts.date.toISOString(),
   dateModified: (opts.updated ?? opts.date).toISOString(),
   image: `${SITE}${opts.image ?? '/og-default.jpg'}`,
-  author: {
-    '@type': 'Person',
-    name: founder.name,
-    url: founder.linkedin,
-  },
+  author: { '@id': organizationId },
   publisher: { '@id': organizationId },
 });

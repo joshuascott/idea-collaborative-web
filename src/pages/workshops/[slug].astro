@@ -80,16 +80,15 @@ const publicDate: string | null = null;
     <a href="/workshops" class="btn btn-ghost-dark" slot="actions">Compare all three</a>
   </Hero>
 
-  <Section surface="white" class="crumb-row">
-    <Breadcrumbs
-      trail={[
-        { name: 'Workshops', path: '/workshops' },
-        { name: tier.shortTitle, path },
-      ]}
-    />
-  </Section>
-
-  <Section surface="white" chapter="02" label="The shape of it">
+  <Section surface="white" chapter="02" label="The shape of it" class="workshop-shape">
+    <div slot="before" class="crumb-above">
+      <Breadcrumbs
+        trail={[
+          { name: 'Workshops', path: '/workshops' },
+          { name: tier.shortTitle, path },
+        ]}
+      />
+    </div>
     <div class="split">
       <div>
         <h2 class="display-lg">Who it is <em>for</em>, and what you leave with.</h2>
@@ -203,7 +202,16 @@ const publicDate: string | null = null;
 </Base>
 
 <style>
-  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  /* Page-scoped .crumb-row never reached Section's .surface (different
+     data-astro-cid). One section + before slot; pad via :global.
+     Must beat .surface[data-astro-cid] (0,2,0) so padding-top wins over padding-block. */
+  :global(section.surface.workshop-shape) {
+    padding-top: 1.25rem;
+  }
+  /* Lives in this page's markup, so scoped styles apply. ~1rem to chapter. */
+  .crumb-above {
+    margin: 0 0 1rem;
+  }
   .split { display: grid; gap: clamp(2rem, 1.5rem + 3vw, 3.5rem); align-items: start; }
   @media (min-width: 900px) { .split { grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); } }
   .split h2 { margin: 0 0 1.25rem; }

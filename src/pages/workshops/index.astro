@@ -80,11 +80,10 @@ const faqs = [
     <a href="/contact" class="btn btn-ghost-dark" slot="actions">Ask which one fits</a>
   </Hero>
 
-  <Section surface="white" class="crumb-row">
-    <Breadcrumbs trail={[{ name: 'Workshops', path: '/workshops' }]} />
-  </Section>
-
-  <Section chapter="02" label="The three levels" surface="white" id="levels">
+  <Section chapter="02" label="The three levels" surface="white" id="levels" class="workshop-levels">
+    <div slot="before" class="crumb-above">
+      <Breadcrumbs trail={[{ name: 'Workshops', path: '/workshops' }]} />
+    </div>
     <h2 class="display-lg">Level 1 is a <em>meeting</em>. Level 3 is a decision.</h2>
     <p class="lede">
       The difference is not how much AI you get. It is how much of the building your team does in
@@ -168,7 +167,16 @@ const faqs = [
 </Base>
 
 <style>
-  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  /* Page-scoped .crumb-row never reached Section's .surface (different
+     data-astro-cid). One section + before slot; pad via :global.
+     Must beat .surface[data-astro-cid] (0,2,0) so padding-top wins over padding-block. */
+  :global(section.surface.workshop-levels) {
+    padding-top: 1.25rem;
+  }
+  /* Lives in this page's markup, so scoped styles apply. ~1rem to chapter. */
+  .crumb-above {
+    margin: 0 0 1rem;
+  }
   .lede { font-size: 1.125rem; color: var(--color-slate); margin: 1rem 0 2.5rem; }
 
   .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; background: #fff; }

@@ -6,7 +6,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ProofPoints from '../components/ProofPoints.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { breadcrumbs } from '../data/schema';
-import { founder, brand } from '../data/contact';
+import { brand } from '../data/contact';
 
 const pillars = [
   {
@@ -17,7 +17,7 @@ const pillars = [
   {
     n: '02',
     name: 'Local',
-    line: 'A neighbor, not a vendor. The examples come from businesses on this side of the Front Range, the delivery is in person, and when something breaks in March we are 20 minutes away.',
+    line: 'We are a neighbor, not a vendor. The examples come from businesses on this side of the Front Range, the delivery is in person, and when something breaks in March we are 20 minutes away.',
   },
   {
     n: '03',
@@ -34,7 +34,7 @@ const pillars = [
 
 <Base
   title="About Idea Collaborative: a neighbor, not a vendor"
-  description="Idea Collaborative is a Loveland-based AI consultancy run by Josh Scott, with 25+ years building digital products across more than 25 industries."
+  description="Idea Collaborative is a Loveland-based AI consultancy with 25+ years building digital products across more than 25 industries."
   path="/about"
   darkHero
   schemas={[breadcrumbs([{ name: 'About', path: '/about' }])]}
@@ -43,44 +43,30 @@ const pillars = [
     chapter="01"
     label="About"
     headline="A <em>neighbor</em>, not a vendor."
-    sub="Idea Collaborative is one experienced person and a short list of things worth doing well, based in Loveland and working across Northern Colorado."
+    sub="We sit with Northern Colorado business owners and stay after the workshop, the way a neighbor does, not a remote vendor."
     photo
     variant={3}
     compact
   />
 
-  <Section surface="white" class="crumb-row">
-    <Breadcrumbs trail={[{ name: 'About', path: '/about' }]} />
-  </Section>
-
-  <Section chapter="02" label="Who runs it" surface="white">
-    <div class="bio">
-      <div class="portrait">
-        <!-- TODO for Josh: environmental photo, in Loveland, not a headshot on grey.
-             Drop it at src/assets/josh.jpg and swap this block for an <Image />. -->
-        <div class="portrait-slot" role="img" aria-label="Photograph of Josh Scott, to be added">
-          <span>Photograph<br />to come</span>
-        </div>
-      </div>
-      <div>
-        <h2 class="display-lg">Josh <em>Scott</em>.</h2>
-        <p class="lede">
-          Josh Scott has spent 25+ years building digital products across more than 25 industries,
-          most recently leading solutions consulting for enterprise clients. He founded Idea
-          Collaborative to bring that same discipline to the businesses in his own community. He
-          lives in Loveland with his family and believes the best technology decision is usually the
-          one that solves an actual problem.
-        </p>
-        <p>
-          The short version of why this exists: the methods large companies use to decide what to
-          build, what to skip, and how to tell whether it worked are not complicated. They are just
-          expensive to buy. A 20-person business deserves the same discipline, at a price that makes
-          sense for a 20-person business.
-        </p>
-        <p>
-          <a href={founder.linkedin} class="prose-link" rel="me">Josh on LinkedIn</a>
-        </p>
-      </div>
+  <Section chapter="02" label="Who we are" surface="white" class="who-we-are">
+    <div slot="before" class="crumb-above">
+      <Breadcrumbs trail={[{ name: 'About', path: '/about' }]} />
+    </div>
+    <div class="about-body">
+      <h2 class="display-lg">Enterprise methods. <em>Local</em> delivery.</h2>
+      <p class="lede">
+        Our team has spent 25+ years building digital products across more than 25 industries,
+        most recently leading solutions consulting for enterprise clients. Idea Collaborative
+        brings that same discipline to the businesses in our own community, at the moment when
+        what is worth building can finally be built without years of wait or a long handoff.
+      </p>
+      <p>
+        The short version of why this exists: the methods large companies use to decide what to
+        build, what to skip, and how to tell whether it worked are not complicated. They are just
+        expensive to buy. A 20-person business deserves the same discipline, at a price that makes
+        sense for a 20-person business.
+      </p>
     </div>
   </Section>
 
@@ -134,26 +120,22 @@ const pillars = [
 </Base>
 
 <style>
-  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  /* Page-scoped .crumb-row / .after-crumb never reached Section's .surface
+     (different data-astro-cid). One section + before slot; pad via :global.
+     Must beat .surface[data-astro-cid] (0,2,0) so padding-top wins over padding-block. */
+  :global(section.surface.who-we-are) {
+    padding-top: 1.25rem;
+  }
+  /* Lives in this page's markup, so scoped styles apply. ~1rem to chapter. */
+  .crumb-above {
+    margin: 0 0 1rem;
+  }
   .lede { font-size: 1.125rem; color: var(--color-slate); }
   :global(.on-dark) .lede { color: color-mix(in oklab, var(--color-cloud) 82%, var(--color-teal-pale)); }
 
-  .bio { display: grid; gap: clamp(2rem, 1.5rem + 3vw, 3.5rem); align-items: start; }
-  @media (min-width: 860px) { .bio { grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); } }
-  .bio h2 { margin: 0 0 1.25rem; }
-  .bio p { color: var(--color-slate); }
-  .portrait-slot {
-    aspect-ratio: 4 / 5;
-    border-radius: 8px;
-    display: grid;
-    place-items: center;
-    text-align: center;
-    background: linear-gradient(135deg, #1c3e54 0%, #2c6671 55%, #3c8e8e 100%);
-    color: color-mix(in oklab, #fff 78%, transparent);
-    font-size: 0.8125rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+  .about-body { max-width: 46rem; }
+  .about-body h2 { margin: 0 0 1.25rem; }
+  .about-body p { color: var(--color-slate); }
 
   .pillars { list-style: none; margin: 0; padding: 0; display: grid; gap: 2rem; }
   @media (min-width: 768px) { .pillars { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 3rem; } }

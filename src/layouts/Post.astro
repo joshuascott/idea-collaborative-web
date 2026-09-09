@@ -5,7 +5,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { mark } from '../data/mark';
 import { article, breadcrumbs } from '../data/schema';
-import { founder } from '../data/contact';
+import { brand } from '../data/contact';
 import { cta } from '../data/offers';
 
 export interface Props {
@@ -111,7 +111,7 @@ const close =
       </p>
       <h1 class="display-lg">{data.title}</h1>
       <p class="meta">
-        <span>{founder.name}</span>
+        <span>{brand.name}</span>
         <span aria-hidden="true">·</span>
         <time datetime={data.date.toISOString()}>{fmt(data.date)}</time>
         <span aria-hidden="true">·</span>

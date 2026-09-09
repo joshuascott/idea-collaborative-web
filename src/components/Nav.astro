@@ -19,7 +19,7 @@ const links = [
     href: '/workshops',
     label: 'Workshops',
     children: [
-      ...tiers.map((t) => ({ href: `/workshops/${t.slug}`, label: t.title })),
+      ...tiers.map((t) => ({ href: `/workshops/${t.slug}`, label: t.shortTitle })),
       { href: '/realtors', label: 'AI for Real Estate' },
     ],
   },
@@ -234,6 +234,8 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
 
   .panel {
     position: absolute;
+    /* Keep a visual gap from the trigger, but bridge it with ::before so the
+       pointer never leaves [data-menu] while moving onto the panel. */
     top: calc(100% + 0.5rem);
     left: -0.75rem;
     min-width: 17rem;
@@ -242,6 +244,13 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
     border-radius: 8px;
     background: #fff;
     box-shadow: var(--shadow-lift);
+  }
+  .panel::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 100%;
+    height: 0.5rem;
   }
   .panel[hidden] { display: none; }
   @media (prefers-reduced-motion: no-preference) {
@@ -342,7 +351,10 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
       const btn = group.querySelector<HTMLButtonElement>('[data-menu-toggle]');
       const panel = group.querySelector<HTMLElement>('[data-menu-panel]');
       if (!btn || !panel) return;
+      let closeTimer: number | undefined;
       const set = (open: boolean) => {
+        window.clearTimeout(closeTimer);
+        closeTimer = undefined;
         panel.hidden = !open;
         btn.setAttribute('aria-expanded', String(open));
         group.toggleAttribute('data-open', open);
@@ -350,7 +362,12 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
       btn.addEventListener('click', () => set(panel.hidden));
       if (window.matchMedia('(hover: hover)').matches) {
         group.addEventListener('pointerenter', () => set(true));
-        group.addEventListener('pointerleave', () => set(false));
+        // Short delay so a brief trip through any remaining gap does not close
+        // the menu; cancelled if the pointer re-enters.
+        group.addEventListener('pointerleave', () => {
+          window.clearTimeout(closeTimer);
+          closeTimer = window.setTimeout(() => set(false), 180);
+        });
       }
       group.addEventListener('focusout', (e) => {
         if (!group.contains(e.relatedTarget as Node)) set(false);
