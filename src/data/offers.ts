@@ -21,7 +21,7 @@ export const tiers: Tier[] = [
   {
     level: 1,
     slug: 'ai-essentials',
-    title: 'AI Essentials: Three Tools You Keep',
+    title: 'AI Essentials: Three Capabilities You Keep',
     shortTitle: 'AI Essentials',
     duration: '90 minutes',
     publicPrice: '$129/person',
@@ -29,9 +29,9 @@ export const tiers: Tier[] = [
     capacity: 'Up to 25 people in a private session',
     forWhom:
       'The owner who has heard about AI and wants to know what is real.',
-    leaveWith: 'Three tools you can use this week.',
+    leaveWith: 'Three capabilities you can use this week.',
     blurb:
-      'Ninety minutes, no slideware marathon. We show you what the tools actually do on your own work, and you leave able to run three of them on Monday.',
+      'Ninety minutes, no slideware marathon. We show you what these capabilities actually do on your own work, and you leave able to run three of them on Monday.',
     agenda: [
       {
         time: '0:00',
@@ -41,7 +41,7 @@ export const tiers: Tier[] = [
       },
       {
         time: '0:20',
-        heading: 'Three tools, run live on your work',
+        heading: 'Three capabilities, run live on your work',
         detail:
           'We take a real task from someone in the room and do it in front of everyone. Drafting, summarizing, and cleaning up messy information.',
       },

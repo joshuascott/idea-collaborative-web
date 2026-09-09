@@ -312,7 +312,7 @@ Use these names consistently everywhere. Never paraphrase a workshop title.
 
 | Tier | Name | Duration | Public | Private |
 |---|---|---|---|---|
-| Level 1 | AI Essentials: Three Tools You Keep | 90 minutes | $129/person | $2,200 |
+| Level 1 | AI Essentials: Three Capabilities You Keep | 90 minutes | $129/person | $2,200 |
 | Level 2 | AI Implementation Bootcamp | 4 hours | $349/person | $5,850 |
 | Level 3 | AI Leadership Intensive | Full day | $749/person | $11,250 |
 
@@ -320,7 +320,7 @@ Consulting: $175 to $225/hour standard, $250 to $300/hour executive advisory, $1
 
 **Describe each tier by outcome, not agenda:**
 
-- **Level 1** is for the owner who has heard about AI and wants to know what is real. They leave with three tools they can use this week.
+- **Level 1** is for the owner who has heard about AI and wants to know what is real. They leave with three capabilities they can use this week.
 - **Level 2** is for the team that is ready to build. They leave with working workflows and a 90-day plan.
 - **Level 3** is for leadership deciding where AI fits in the business. They leave with a roadmap and a way to measure it.
 

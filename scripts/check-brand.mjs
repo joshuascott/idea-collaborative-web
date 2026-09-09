@@ -146,7 +146,7 @@ for (const file of files) {
 
 // Workshop titles must appear verbatim wherever they appear at all.
 const TITLES = [
-  'AI Essentials: Three Tools You Keep',
+  'AI Essentials: Three Capabilities You Keep',
   'AI Implementation Bootcamp',
   'AI Leadership Intensive',
 ];
