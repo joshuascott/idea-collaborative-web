@@ -1,9 +1,8 @@
 ---
 import ArrowRight from 'lucide-astro/ArrowRight';
 
-// Netlify Forms. Static markup with data-netlify, so there is no backend and no
-// client JS required for it to work. Delivery goes to hello@ideacollaborative.com,
-// configured in the Netlify dashboard (see LAUNCH.md).
+// Posts to public/contact.php on Bluehost (PHP mail). Anti-spam: honeypot +
+// time-trap field checked server-side. See LAUNCH.md.
 export interface Props {
   name?: string;
   compact?: boolean;
@@ -21,18 +20,27 @@ const {
   intro,
   class: cls = '',
 } = Astro.props;
+
+const showError = Astro.url.searchParams.get('error') === '1';
 ---
 
 <form
   class:list={['form', compact && 'compact', cls]}
   name={name}
   method="POST"
-  action="/thanks"
-  data-netlify="true"
-  netlify-honeypot="company-website"
+  action="/contact.php"
   data-form
 >
   <input type="hidden" name="form-name" value={name} />
+  <input type="hidden" name="form_ts" value="" data-form-ts />
+
+  {showError && (
+    <p class="err" role="alert">
+      Something went wrong sending that. Check the required fields and try again, or email
+      hello@ideacollaborative.com.
+    </p>
+  )}
+
   {intro && <p class="intro">{intro}</p>}
 
   <p class="hp" aria-hidden="true">
@@ -101,6 +109,20 @@ const {
 <style>
   .form { display: grid; gap: 1rem; }
   .intro { margin: 0 0 0.25rem; font-size: 0.9375rem; }
+  .err {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid color-mix(in oklab, var(--color-navy) 25%, transparent);
+    background: color-mix(in oklab, var(--color-navy) 6%, #fff);
+    color: var(--color-navy);
+    font-size: 0.9375rem;
+  }
+  :global(.on-dark) .err {
+    border-color: var(--rule-dark);
+    background: color-mix(in oklab, #fff 10%, transparent);
+    color: #fff;
+  }
   .hp { position: absolute; left: -9999px; }
 
   .row.two { display: grid; gap: 1rem; }
@@ -154,7 +176,10 @@ const {
 
 <script>
   const wire = () => {
+    const now = String(Math.floor(Date.now() / 1000));
     document.querySelectorAll<HTMLFormElement>('[data-form]').forEach((f) => {
+      const ts = f.querySelector<HTMLInputElement>('[data-form-ts]');
+      if (ts && !ts.value) ts.value = now;
       f.addEventListener('submit', () => f.setAttribute('data-sending', ''));
     });
   };

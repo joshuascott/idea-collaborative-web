@@ -57,9 +57,12 @@ and confirm you like the lockup.
 
 ### Open decision 4: forms and booking
 
-The build assumes **Netlify Forms** and **Cal.com**, per the plan's first
-choices. Both are wired and both are free. Say the word if you would rather have
-Formspree or Calendly and it is a small change in two components.
+**Forms (decided for Bluehost):** site forms POST to `public/contact.php`
+(copied into `dist/` on build), which sends mail via PHP `mail()` to
+`hello@ideacollaborative.com`. This is not Netlify Forms. Anti-spam is a
+honeypot (`company-website`) plus a client timestamp (`form_ts`) checked
+server-side. Booking remains **Cal.com**; say the word if you would rather
+have Calendly.
 
 ---
 
@@ -104,28 +107,34 @@ If the true vector master turns up, swap it in and rerun `npm run build`.
    Node 22, so accept the defaults.
 3. Add the custom domain `ideacollaborative.com`, let Netlify provision the
    certificate, and set the apex plus `www` redirect.
-4. **Forms.** They work with no configuration because the markup carries
-   `data-netlify="true"`. In **Site configuration → Forms → Form notifications**,
-   add an email notification to `hello@ideacollaborative.com` for each of:
-   `contact`, `assessment`, `breakfast`, `sponsor`, `brokerage`. Turn on the
-   built-in spam filtering; the honeypot field is already in place.
+4. **Forms (Bluehost).** All `ContactForm` instances (contact page, CtaBand,
+   assessment, breakfast, realtor sponsor/brokerage) POST to `/contact.php`.
+   That file ships from `public/contact.php` into the build output. It is not
+   Netlify Forms. In cPanel, create or confirm the mailbox
+   `hello@ideacollaborative.com` on this domain; Bluehost usually only accepts
+   `mail()` when **From** is a local domain address (the script uses that
+   address). After upload, submit each form once and confirm delivery, then
+   confirm a too-fast or honeypot fill does not land in the inbox.
 5. **Analytics.** Set `PUBLIC_PLAUSIBLE_DOMAIN=ideacollaborative.com` in the
-   Netlify environment variables to switch it on. Nothing loads until you do,
-   which keeps preview deploys clean. No cookie banner is needed either way.
+   host environment (or Netlify env vars if you ever use that host) to switch
+   it on. Nothing loads until you do. No cookie banner is needed either way.
 6. **Booking.** Create the Cal.com event types, then pass the link to
    `BookingEmbed` on `/realtors`, `/contact`, and each workshop page. Until you
    do, the panel shows your phone and email rather than an empty box, so no page
    is a dead end.
-7. **Bluehost (if not Netlify).** Upload `dist/.htaccess` into `public_html`
-   with Show Hidden Files on; it must replace the cPanel-only file. Our copy
-   keeps the cPanel PHP handler block at the end so PHP config is not wiped.
+7. **Bluehost deploy.** Upload the contents of `dist/` into `public_html`,
+   including `contact.php` and `.htaccess` (Show Hidden Files on). The
+   `.htaccess` must replace the cPanel-only file; our copy keeps the cPanel PHP
+   handler block at the end so PHP config is not wiped.
 
 ---
 
 ## 5. Verify after the first deploy
 
-- [ ] Submit each of the five forms from a phone and confirm the email arrives
-- [ ] Confirm `/thanks` fires and is `noindex`
+- [ ] Submit each of the five forms from a phone; confirm mail arrives at hello@
+      and `/thanks` loads (via `contact.php`, not Netlify)
+- [ ] Confirm `/thanks` is `noindex`
+- [ ] Confirm `/contact?error=1` shows the form error alert after a forced fail
 - [ ] Google Search Console: verify the domain, submit
       `https://ideacollaborative.com/sitemap-index.xml`
 - [ ] Confirm `/dev/motion` and `/thanks` are absent from the sitemap

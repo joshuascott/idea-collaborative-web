@@ -25,11 +25,10 @@ import { areaServed } from '../data/contact';
     compact
   />
 
-  <Section surface="white" class="crumb-row">
-    <Breadcrumbs trail={[{ name: 'Contact', path: '/contact' }]} />
-  </Section>
-
-  <Section chapter="02" label="Get in touch" surface="white">
+  <Section chapter="02" label="Get in touch" surface="white" class="get-in-touch">
+    <div slot="before" class="crumb-above">
+      <Breadcrumbs trail={[{ name: 'Contact', path: '/contact' }]} />
+    </div>
     <div class="grid">
       <div class="form-col">
         <h2 class="display-lg">Tell us what your week looks <em>like</em>.</h2>
@@ -87,7 +86,12 @@ import { areaServed } from '../data/contact';
 </Base>
 
 <style>
-  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  :global(section.surface.get-in-touch) {
+    padding-top: 1.25rem;
+  }
+  .crumb-above {
+    margin: 0 0 1rem;
+  }
   .grid { display: grid; gap: clamp(2.5rem, 2rem + 3vw, 4rem); align-items: start; }
   @media (min-width: 940px) { .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 24rem); } }
   .form-col h2 { margin: 0 0 1rem; }

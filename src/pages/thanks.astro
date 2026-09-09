@@ -40,13 +40,17 @@ import { tiers } from '../data/offers';
 </Base>
 
 <style>
-  .hero { background: var(--color-ink); padding-block: clamp(7rem, 5rem + 10vw, 10rem) clamp(3rem, 2.5rem + 3vw, 4.5rem); }
-  .tick { width: 56px; height: 56px; color: var(--color-teal-light); margin-bottom: 1.5rem; }
+  /* Compact confirmation hero: clear the fixed nav, then sit close under it. */
+  .hero {
+    background: var(--color-ink);
+    padding-block: clamp(5.5rem, 5rem + 2vw, 6.5rem) clamp(2rem, 1.5rem + 2vw, 3rem);
+  }
+  .tick { width: 48px; height: 48px; color: var(--color-teal-light); margin-bottom: 1rem; }
   .stroke { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 420ms var(--ease-out-quart) 120ms forwards; }
   @keyframes draw { to { stroke-dashoffset: 0; } }
   @media (prefers-reduced-motion: reduce) { .stroke { stroke-dashoffset: 0; animation: none; } }
   h1 { margin: 0; color: #fff; }
-  .sub { margin: 1.25rem 0 2rem; font-size: 1.0625rem; max-width: 38rem; }
-  .cb { margin-top: 1.5rem; }
+  .sub { margin: 1rem 0 1.25rem; font-size: 1.0625rem; max-width: 38rem; }
+  .cb { margin-top: 0.25rem; }
   .links { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
 </style>
