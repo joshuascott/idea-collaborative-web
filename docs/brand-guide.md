@@ -312,7 +312,7 @@ Use these names consistently everywhere. Never paraphrase a workshop title.
 
 | Tier | Name | Duration | Public | Private |
 |---|---|---|---|---|
-| Level 1 | AI Advantage: Your Business, Amplified | 90 minutes | $129/person | $2,200 |
+| Level 1 | AI Essentials: Three Tools You Keep | 90 minutes | $129/person | $2,200 |
 | Level 2 | AI Implementation Bootcamp | 4 hours | $349/person | $5,850 |
 | Level 3 | AI Leadership Intensive | Full day | $749/person | $11,250 |
 

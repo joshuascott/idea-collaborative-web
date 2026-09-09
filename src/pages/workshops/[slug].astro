@@ -26,12 +26,12 @@ const ogImage = `/images/og-${tier.slug}.jpg`;
 // Titles are capped at 60 characters, so each page uses its short title plus a
 // distinguishing phrase rather than the full workshop name.
 const seoTitles: Record<string, string> = {
-  'ai-advantage': 'AI Advantage workshop: 90 minutes, three tools you keep',
+  'ai-essentials': 'AI Essentials workshop: 90 minutes, three tools you keep',
   'implementation-bootcamp': 'AI Implementation Bootcamp: build your first workflows',
   'leadership-intensive': 'AI Leadership Intensive: a roadmap and how to measure it',
 };
 const seoDescriptions: Record<string, string> = {
-  'ai-advantage':
+  'ai-essentials':
     'A 90-minute AI workshop for Northern Colorado owners. $129 a seat, $2,200 private. Three tools you can use this week and a written 30-day plan.',
   'implementation-bootcamp':
     'A 4-hour hands-on AI workshop for teams ready to build. $349 a seat, $5,850 private. Working workflows on your own processes and a 90-day plan.',
@@ -67,7 +67,7 @@ const publicDate: string | null = null;
     chapter={`0${tier.level}`}
     label={`Level ${tier.level}`}
     headline={tier.title.replace(
-      /^(AI )(Advantage|Implementation|Leadership)/,
+      /^(AI )(Essentials|Implementation|Leadership)/,
       '$1<em>$2</em>'
     )}
     sub={tier.blurb}

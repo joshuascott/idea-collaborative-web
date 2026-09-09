@@ -27,7 +27,7 @@ Forms, Cal.com embed, static output. No React, no client framework, no builder.
   disrupt, unlock, empower, journey, solutioning, best-in-class, paradigm,
   "in today's fast-paced world", cutting-edge, next-generation, revolutionary,
   AI-powered / AI-driven as filler, transform as the hero verb.
-- Workshop titles exactly: "AI Advantage: Your Business, Amplified",
+- Workshop titles exactly: "AI Essentials: Three Tools You Keep",
   "AI Implementation Bootcamp", "AI Leadership Intensive". They live in
   `src/data/offers.ts` and that is the only place they are written down.
 - Contact block order: web, email, phone, city. Never reorder. It lives in

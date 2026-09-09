@@ -19,7 +19,7 @@ The existing page is a reasonable v1. The rebuild is justified by three things i
 | Retired words: "AI revolution," "Start Your AI Journey," "Transform" as the hero verb, "AI-Powered" as filler | Hero, About, CTA | Rewrite per guide Section 7 |
 | Emoji icons (🚀 💰 ⚙️ 🤝 📧 📱 📍) | Feature cards, contact | Replace with a single-weight line icon set (Lucide) in Deep Teal. The guide says "not cute" |
 | Title Case headlines ("Practical AI That Pays for Itself") | Everywhere | Sentence case per guide Section 5 |
-| Level 1 named "AI Advantage" without the full title | Workshops | Use exact titles from guide Section 8: "AI Advantage: Your Business, Amplified," "AI Implementation Bootcamp," "AI Leadership Intensive" |
+| Level 1 named without the full title | Workshops | Use exact titles from `src/data/offers.ts`: "AI Essentials: Three Tools You Keep," "AI Implementation Bootcamp," "AI Leadership Intensive" |
 | Public pricing only ($129 / $349 / $749). Private pricing absent | Workshops | Show both columns. Private pricing ($2,200 / $5,850 / $11,250) is the actual sales motion |
 | Level 3 promises "18-month transformation plan," "Enterprise architecture," "Competitive analysis" | Workshops | Replace with the guide's outcome language: a roadmap and a way to measure it |
 | Anchor-only navigation (`/#workshops`) | Nav | Real routes. Anchor links cannot rank independently |
@@ -106,7 +106,7 @@ idea-collaborative-site/
 │   └── pages/
 │       ├── index.astro
 │       ├── workshops/index.astro
-│       ├── workshops/ai-advantage.astro
+│       ├── workshops/ai-essentials.astro
 │       ├── workshops/implementation-bootcamp.astro
 │       ├── workshops/leadership-intensive.astro
 │       ├── consulting.astro
@@ -337,7 +337,7 @@ Schema: `LocalBusiness` (or `ProfessionalService`) with name, URL, telephone, em
 **H1:** Three workshops. Pick where your business actually is.
 Full tier comparison, public vs private, who each level is for, what they leave with. FAQ accordion (emits `FAQPage` schema): "Do you come to us?", "What tools do we need?", "Is this a software pitch?", "Do you offer CE credit?" (answer honestly: not yet).
 
-### 5.3 `/workshops/ai-advantage`, `/workshops/implementation-bootcamp`, `/workshops/leadership-intensive`
+### 5.3 `/workshops/ai-essentials`, `/workshops/implementation-bootcamp`, `/workshops/leadership-intensive`
 
 One page per level so each can rank on its own long-tail terms. Each page:
 - H1 is the exact workshop title
@@ -552,7 +552,7 @@ Astro 5, Tailwind 4, self-hosted Inter and Newsreader, Lucide icons, Motion (laz
 - Dark-first: Ink and Deep Navy surfaces, Cloud text. Display headlines in Newsreader 500 with exactly one italic word. Chapter labels on long pages. Photography only from the approved set, always with an Ink fade under type.
 - Sentence case headlines. Left-aligned body. No emoji. No em dashes.
 - Retired words (never use): leverage (verb), robust, seamless, game-changer, disrupt, unlock, empower, journey, solutioning, best-in-class, paradigm, "in today's fast-paced world", cutting-edge, next-generation, revolutionary, AI-powered/AI-driven as filler.
-- Workshop titles exactly: "AI Advantage: Your Business, Amplified", "AI Implementation Bootcamp", "AI Leadership Intensive".
+- Workshop titles exactly: "AI Essentials: Three Tools You Keep", "AI Implementation Bootcamp", "AI Leadership Intensive".
 - Contact block order: web, email, phone, city. Never reorder.
 - No invented statistics, client counts, or testimonials. Only the five proof points in brand-guide Section 8.
 

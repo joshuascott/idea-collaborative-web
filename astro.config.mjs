@@ -9,7 +9,7 @@ export default defineConfig({
   site: SITE,
   output: 'static',
   // Clean URLs on Bluehost (Apache): public/.htaccess maps /about → about.html.
-  // Keep format: 'file'. Nested routes like /workshops/ai-advantage.html sit
+  // Keep format: 'file'. Nested routes like /workshops/ai-essentials.html sit
   // under a workshops/ folder; .htaccess prefers workshops.html over that dir.
   trailingSlash: 'never',
   build: { format: 'file', inlineStylesheets: 'auto' },

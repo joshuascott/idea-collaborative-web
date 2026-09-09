@@ -1,7 +1,7 @@
 # UPLOAD THIS FILE to public_html (show hidden files). Must replace the cPanel-only .htaccess.
 #
 # Bluehost (Apache shared hosting)
-# Astro emits format: 'file' (about.html, workshops/ai-advantage.html). Clean
+# Astro emits format: 'file' (about.html, workshops/ai-essentials.html). Clean
 # URLs need rewrites. Prefer sibling .html over a same-named directory so
 # /workshops serves workshops.html instead of 403 on the workshops/ folder.
 # Keep the cPanel PHP handler block at the end so replacing this file does not
@@ -25,6 +25,8 @@ ErrorDocument 404 /404.html
   RewriteRule ^real-estate/?$ /realtors [R=301,L]
   RewriteRule ^assessment/?$ /ai-readiness-assessment [R=301,L]
   RewriteRule ^breakfast/?$ /ai-briefing-breakfast [R=301,L]
+  RewriteRule ^workshops/ai-advantage\.html$ /workshops/ai-essentials [R=301,L]
+  RewriteRule ^workshops/ai-advantage/?$ /workshops/ai-essentials [R=301,L]
 
   # /index.html → /
   RewriteRule ^index\.html$ / [R=301,L]
@@ -45,7 +47,7 @@ ErrorDocument 404 /404.html
   RewriteCond %{DOCUMENT_ROOT}/%1.html -f
   RewriteRule ^ /%1.html [L]
 
-  # /about, /consulting, /workshops/ai-advantage → matching .html
+  # /about, /consulting, /workshops/ai-essentials → matching .html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_URI} ^/(.+?)/?$
   RewriteCond %{DOCUMENT_ROOT}/%1.html -f

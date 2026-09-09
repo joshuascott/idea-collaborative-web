@@ -55,6 +55,16 @@
   to = "/ai-briefing-breakfast"
   status = 301
 
+[[redirects]]
+  from = "/workshops/ai-advantage"
+  to = "/workshops/ai-essentials"
+  status = 301
+
+[[redirects]]
+  from = "/workshops/ai-advantage.html"
+  to = "/workshops/ai-essentials"
+  status = 301
+
 # ---- Headers ---------------------------------------------------------------
 [[headers]]
   for = "/*"

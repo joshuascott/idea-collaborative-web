@@ -18,7 +18,7 @@ const OUT = process.argv[2] || 'preview.html';
 const ROUTES = [
   ['/', 'index.html', 'Home'],
   ['/workshops', 'workshops.html', 'Workshops'],
-  ['/workshops/ai-advantage', 'workshops/ai-advantage.html', 'AI Advantage'],
+  ['/workshops/ai-essentials', 'workshops/ai-essentials.html', 'AI Essentials'],
   ['/workshops/implementation-bootcamp', 'workshops/implementation-bootcamp.html', 'Implementation Bootcamp'],
   ['/workshops/leadership-intensive', 'workshops/leadership-intensive.html', 'Leadership Intensive'],
   ['/consulting', 'consulting.html', 'Consulting'],

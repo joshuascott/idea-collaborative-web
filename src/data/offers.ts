@@ -20,9 +20,9 @@ export type Tier = {
 export const tiers: Tier[] = [
   {
     level: 1,
-    slug: 'ai-advantage',
-    title: 'AI Advantage: Your Business, Amplified',
-    shortTitle: 'AI Advantage',
+    slug: 'ai-essentials',
+    title: 'AI Essentials: Three Tools You Keep',
+    shortTitle: 'AI Essentials',
     duration: '90 minutes',
     publicPrice: '$129/person',
     privatePrice: '$2,200',
