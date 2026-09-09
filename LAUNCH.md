@@ -116,6 +116,9 @@ If the true vector master turns up, swap it in and rerun `npm run build`.
    `BookingEmbed` on `/realtors`, `/contact`, and each workshop page. Until you
    do, the panel shows your phone and email rather than an empty box, so no page
    is a dead end.
+7. **Bluehost (if not Netlify).** Upload `dist/.htaccess` into `public_html`
+   with Show Hidden Files on; it must replace the cPanel-only file. Our copy
+   keeps the cPanel PHP handler block at the end so PHP config is not wiped.
 
 ---
 

@@ -1,7 +1,11 @@
+# UPLOAD THIS FILE to public_html (show hidden files). Must replace the cPanel-only .htaccess.
+#
 # Bluehost (Apache shared hosting)
-# Astro uses build.format: 'file' (about.html). These rules map /about → about.html
-# and 301 about.html → /about so clean URLs match the site's canonicals.
-# Requires AllowOverride FileInfo (or All) — enabled by default on Bluehost public_html.
+# Astro emits format: 'file' (about.html, workshops/ai-advantage.html). Clean
+# URLs need rewrites. Prefer sibling .html over a same-named directory so
+# /workshops serves workshops.html instead of 403 on the workshops/ folder.
+# Keep the cPanel PHP handler block at the end so replacing this file does not
+# wipe Bluehost PHP config.
 
 DirectoryIndex index.html
 
@@ -11,8 +15,12 @@ ErrorDocument 404 /404.html
   RewriteEngine On
   RewriteBase /
 
+  # ErrorDocument / internal redirect: do not rewrite again (avoids 500 cascades)
+  RewriteCond %{ENV:REDIRECT_STATUS} !^$
+  RewriteRule ^ - [L]
+
   # Legacy path redirects (mirror netlify.toml)
-  RewriteRule ^process/?$ /#how-we-work [R=301,NE,L]
+  RewriteRule ^process/?$ / [R=301,L]
   RewriteRule ^realtor/?$ /realtors [R=301,L]
   RewriteRule ^real-estate/?$ /realtors [R=301,L]
   RewriteRule ^assessment/?$ /ai-readiness-assessment [R=301,L]
@@ -21,14 +29,32 @@ ErrorDocument 404 /404.html
   # /index.html → /
   RewriteRule ^index\.html$ / [R=301,L]
 
-  # /about.html → /about (keep 404.html so ErrorDocument stays a real file path)
-  RewriteCond %{THE_REQUEST} \s/+([^?\s]*?)\.html[\s?] [NC]
+  # External request for /path.html → 301 /path (skip 404.html)
+  RewriteCond %{THE_REQUEST} \s/+([^?\s]*?)\.html(\?[^\s]*)?\s [NC]
   RewriteCond %1 !^404$ [NC]
-  RewriteRule ^ /%1 [R=301,L]
+  RewriteRule ^ /%1 [R=301,L,NE]
 
-  # /about → about.html when that file exists
-  RewriteCond %{REQUEST_FILENAME} !-f
+  # Strip trailing slash on non-directories (canonicals use trailingSlash: never)
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^(.+?)/?$ $1.html [L]
+  RewriteCond %{REQUEST_URI} ^(.+)/$
+  RewriteRule ^ %1 [R=301,L]
+
+  # Prefer path.html when path is also a directory (fixes /workshops 403)
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} ^/(.+?)/?$
+  RewriteCond %{DOCUMENT_ROOT}/%1.html -f
+  RewriteRule ^ /%1.html [L]
+
+  # /about, /consulting, /workshops/ai-advantage → matching .html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_URI} ^/(.+?)/?$
+  RewriteCond %{DOCUMENT_ROOT}/%1.html -f
+  RewriteRule ^ /%1.html [L]
 </IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “alt-php74” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-alt-php74___lsphp .php .php7 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
