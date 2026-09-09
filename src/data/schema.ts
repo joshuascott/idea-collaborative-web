@@ -14,7 +14,7 @@ export const localBusiness = {
   slogan: brand.tagline,
   telephone: contact.phone,
   email: contact.email,
-  image: `${SITE}/og-default.jpg`,
+  image: `${SITE}/images/og-default.jpg`,
   logo: `${SITE}/logo.svg`,
   priceRange: '$$',
   address: {
@@ -106,7 +106,7 @@ export const article = (opts: {
   mainEntityOfPage: `${SITE}${opts.path}`,
   datePublished: opts.date.toISOString(),
   dateModified: (opts.updated ?? opts.date).toISOString(),
-  image: `${SITE}${opts.image ?? '/og-default.jpg'}`,
+  image: `${SITE}${opts.image ?? '/images/og-default.jpg'}`,
   author: { '@id': organizationId },
   publisher: { '@id': organizationId },
 });

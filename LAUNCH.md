@@ -81,12 +81,12 @@ meantime.
 
 | Asset | Status | What is there now |
 |---|---|---|
-| 6 to 8 Front Range photographs, blue hour or overcast, cool grade, no people | **Needed** | `Photo.astro` renders a generated ridgeline in the palette, at the right dimensions and with the Ink fade. Deliberate placeholder art, not free stock. Drop 2400px graded JPEGs in `src/assets/photos/` and pass them as the `src` prop |
+| 6 to 8 Front Range photographs, blue hour or overcast, cool grade, no people | **Needed** | `Photo.astro` renders a generated ridgeline in the palette, at the right dimensions and with the Ink fade. Deliberate placeholder art, not free stock. Drop 2400px graded JPEGs in `src/assets/images/` and pass them as the `src` prop |
 | Founder photo, environmental, in Loveland | **Needed** | A gradient panel on `/about` reading "Photograph to come" |
 | Horizontal lockup (mark plus wordmark) | Composed in CSS | Nav and footer compose the mark and wordmark side by side. A real lockup file would be better for print |
 | Reversed white logo | **Done** | `logo-mono-white.svg` from your zip, at `public/logo-white.svg` |
 | Favicon set | **Done** | `favicon.svg`, reframed square, plus a 180px `apple-touch-icon.png` |
-| Default OG image | **Done** | `og-default.jpg`, generated on brand |
+| Default OG image | **Done** | `public/images/og-default.jpg`, generated on brand |
 | Per-page OG images | **Done** | Three workshops plus `/realtors` |
 
 A note on the logo files: the README in your zip says they were traced from

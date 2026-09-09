@@ -1,0 +1,34 @@
+# Bluehost (Apache shared hosting)
+# Astro uses build.format: 'file' (about.html). These rules map /about → about.html
+# and 301 about.html → /about so clean URLs match the site's canonicals.
+# Requires AllowOverride FileInfo (or All) — enabled by default on Bluehost public_html.
+
+DirectoryIndex index.html
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Legacy path redirects (mirror netlify.toml)
+  RewriteRule ^process/?$ /#how-we-work [R=301,NE,L]
+  RewriteRule ^realtor/?$ /realtors [R=301,L]
+  RewriteRule ^real-estate/?$ /realtors [R=301,L]
+  RewriteRule ^assessment/?$ /ai-readiness-assessment [R=301,L]
+  RewriteRule ^breakfast/?$ /ai-briefing-breakfast [R=301,L]
+
+  # /index.html → /
+  RewriteRule ^index\.html$ / [R=301,L]
+
+  # /about.html → /about (keep 404.html so ErrorDocument stays a real file path)
+  RewriteCond %{THE_REQUEST} \s/+([^?\s]*?)\.html[\s?] [NC]
+  RewriteCond %1 !^404$ [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  # /about → about.html when that file exists
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+</IfModule>

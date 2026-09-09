@@ -21,7 +21,7 @@ export function getStaticPaths() {
 const { tier } = Astro.props;
 const others = tiers.filter((t) => t.slug !== tier.slug);
 const path = `/workshops/${tier.slug}`;
-const ogImage = `/og-${tier.slug}.jpg`;
+const ogImage = `/images/og-${tier.slug}.jpg`;
 
 // Titles are capped at 60 characters, so each page uses its short title plus a
 // distinguishing phrase rather than the full workshop name.
