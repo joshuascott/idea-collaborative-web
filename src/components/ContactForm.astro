@@ -22,6 +22,8 @@ const {
 } = Astro.props;
 
 const showError = Astro.url.searchParams.get('error') === '1';
+
+const phonePattern = String.raw`[\d\s+\-().]{7,22}`;
 ---
 
 <form
@@ -30,6 +32,7 @@ const showError = Astro.url.searchParams.get('error') === '1';
   method="POST"
   action="/contact.php"
   data-form
+  novalidate
 >
   <input type="hidden" name="form-name" value={name} />
   <input type="hidden" name="form_ts" value="" data-form-ts />
@@ -50,22 +53,35 @@ const showError = Astro.url.searchParams.get('error') === '1';
   <div class="row two">
     <div class="field">
       <label for={`${name}-name`}>Your name</label>
-      <input id={`${name}-name`} name="name" type="text" autocomplete="name" required />
+      <input id={`${name}-name`} name="name" type="text" autocomplete="name" required minlength="2" maxlength="200" />
+      <p class="field-error" id={`${name}-name-error`} hidden></p>
     </div>
     <div class="field">
       <label for={`${name}-business`}>Business</label>
-      <input id={`${name}-business`} name="business" type="text" autocomplete="organization" required />
+      <input id={`${name}-business`} name="business" type="text" autocomplete="organization" required minlength="2" maxlength="200" />
+      <p class="field-error" id={`${name}-business-error`} hidden></p>
     </div>
   </div>
 
   <div class="row two">
     <div class="field">
       <label for={`${name}-email`}>Email</label>
-      <input id={`${name}-email`} name="email" type="email" autocomplete="email" required />
+      <input id={`${name}-email`} name="email" type="email" autocomplete="email" required maxlength="200" />
+      <p class="field-error" id={`${name}-email-error`} hidden></p>
     </div>
     <div class="field">
       <label for={`${name}-phone`}>Phone <span class="opt">optional</span></label>
-      <input id={`${name}-phone`} name="phone" type="tel" autocomplete="tel" />
+      <input
+        id={`${name}-phone`}
+        name="phone"
+        type="tel"
+        autocomplete="tel"
+        inputmode="tel"
+        maxlength="80"
+        pattern={phonePattern}
+        data-validate="phone"
+      />
+      <p class="field-error" id={`${name}-phone-error`} hidden></p>
     </div>
   </div>
 
@@ -81,10 +97,11 @@ const showError = Astro.url.searchParams.get('error') === '1';
           {f.options.map((o) => <option value={o}>{o}</option>)}
         </select>
       ) : f.type === 'textarea' ? (
-        <textarea id={`${name}-${f.name}`} name={f.name} rows={f.rows ?? 3} required={f.required} placeholder={f.placeholder}></textarea>
+        <textarea id={`${name}-${f.name}`} name={f.name} rows={f.rows ?? 3} required={f.required} placeholder={f.placeholder} maxlength="2000"></textarea>
       ) : (
-        <input id={`${name}-${f.name}`} name={f.name} type={f.type ?? 'text'} required={f.required} placeholder={f.placeholder} />
+        <input id={`${name}-${f.name}`} name={f.name} type={f.type ?? 'text'} required={f.required} placeholder={f.placeholder} maxlength="500" />
       )}
+      <p class="field-error" id={`${name}-${f.name}-error`} hidden></p>
     </div>
   ))}
 
@@ -95,7 +112,10 @@ const showError = Astro.url.searchParams.get('error') === '1';
       name="message"
       rows={compact ? 3 : 5}
       required
+      minlength="5"
+      maxlength="5000"
       placeholder="A sentence or two is plenty."></textarea>
+    <p class="field-error" id={`${name}-message-error`} hidden></p>
   </div>
 
   <button type="submit" class="btn btn-primary">
@@ -114,14 +134,14 @@ const showError = Astro.url.searchParams.get('error') === '1';
     padding: 0.75rem 1rem;
     border-radius: 8px;
     border: 1px solid color-mix(in oklab, var(--color-navy) 25%, transparent);
-    background: color-mix(in oklab, var(--color-navy) 6%, #fff);
+    background: color-mix(in oklab, var(--color-navy) 6%, var(--color-cloud));
     color: var(--color-navy);
     font-size: 0.9375rem;
   }
   :global(.on-dark) .err {
     border-color: var(--rule-dark);
-    background: color-mix(in oklab, #fff 10%, transparent);
-    color: #fff;
+    background: color-mix(in oklab, var(--color-cloud) 10%, transparent);
+    color: var(--color-cloud);
   }
   .hp { position: absolute; left: -9999px; }
 
@@ -155,17 +175,35 @@ const showError = Astro.url.searchParams.get('error') === '1';
   }
   textarea { min-height: 5rem; resize: vertical; }
   input:focus, select:focus, textarea:focus { border-color: var(--color-teal); }
+  input[aria-invalid='true'],
+  select[aria-invalid='true'],
+  textarea[aria-invalid='true'] {
+    border-color: var(--color-navy);
+  }
   :global(.on-dark) input,
   :global(.on-dark) select,
   :global(.on-dark) textarea {
-    background: color-mix(in oklab, #fff 10%, transparent);
+    background: color-mix(in oklab, var(--color-cloud) 10%, transparent);
     border-color: var(--rule-dark);
-    color: #fff;
+    color: var(--color-cloud);
+  }
+  :global(.on-dark) input[aria-invalid='true'],
+  :global(.on-dark) select[aria-invalid='true'],
+  :global(.on-dark) textarea[aria-invalid='true'] {
+    border-color: var(--color-teal-pale);
   }
   :global(.on-dark) ::placeholder { color: color-mix(in oklab, var(--color-teal-pale) 70%, transparent); }
 
+  .field-error {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--color-navy);
+  }
+  .field-error[hidden] { display: none; }
+  :global(.on-dark) .field-error { color: var(--color-teal-pale); }
+
   button { justify-self: start; margin-top: 0.25rem; position: relative; }
-  .spinner { display: none; width: 16px; height: 16px; border-radius: 999px; border: 2px solid color-mix(in oklab, #fff 45%, transparent); border-top-color: #fff; }
+  .spinner { display: none; width: 16px; height: 16px; border-radius: 999px; border: 2px solid color-mix(in oklab, var(--color-cloud) 45%, transparent); border-top-color: var(--color-cloud); }
   .form[data-sending] .spinner { display: block; animation: spin 700ms linear infinite; }
   .form[data-sending] .arrow { display: none; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -175,14 +213,150 @@ const showError = Astro.url.searchParams.get('error') === '1';
 </style>
 
 <script>
-  const wire = () => {
-    const now = String(Math.floor(Date.now() / 1000));
-    document.querySelectorAll<HTMLFormElement>('[data-form]').forEach((f) => {
-      const ts = f.querySelector<HTMLInputElement>('[data-form-ts]');
-      if (ts && !ts.value) ts.value = now;
-      f.addEventListener('submit', () => f.setAttribute('data-sending', ''));
+  const wired = new WeakSet<HTMLFormElement>();
+
+  const isControl = (el: Element): el is HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement =>
+    el instanceof HTMLInputElement || el instanceof HTMLSelectElement || el instanceof HTMLTextAreaElement;
+
+  const isHoneypot = (el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) =>
+    el.name === 'company-website' || Boolean(el.closest('.hp'));
+
+  const controlsOf = (form: HTMLFormElement) =>
+    [...form.elements].filter(
+      (el): el is HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement =>
+        isControl(el) && el.type !== 'hidden' && el.type !== 'submit' && !isHoneypot(el),
+    );
+
+  const phoneDigitsOk = (value: string) => {
+    const digits = value.replace(/\D/g, '');
+    return digits.length >= 10 && digits.length <= 15;
+  };
+
+  const errorMessage = (el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+    const value = el.value.trim();
+
+    if (el.dataset.validate === 'phone') {
+      if (value === '') return '';
+      if (!phoneDigitsOk(value) || (el instanceof HTMLInputElement && el.validity.patternMismatch)) {
+        return 'Enter a phone number with at least 10 digits.';
+      }
+      return '';
+    }
+
+    if (el.validity.valueMissing) {
+      return el instanceof HTMLSelectElement ? 'Choose an option.' : 'This field is required.';
+    }
+    if (el.validity.typeMismatch && el.type === 'email') {
+      return 'Enter a valid email address.';
+    }
+    if (el.validity.tooShort) {
+      const min = el.getAttribute('minlength');
+      return min ? `Enter at least ${min} characters.` : 'This answer is too short.';
+    }
+    if (el.validity.patternMismatch) {
+      return 'Check the format of this field.';
+    }
+    if (el.type === 'email' && value !== '' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      return 'Enter a valid email address.';
+    }
+    return '';
+  };
+
+  const errorElFor = (el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+    const id = el.id ? `${el.id}-error` : '';
+    return id ? document.getElementById(id) : null;
+  };
+
+  const clearError = (el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+    el.removeAttribute('aria-invalid');
+    el.removeAttribute('aria-describedby');
+    const err = errorElFor(el);
+    if (err) {
+      err.textContent = '';
+      err.hidden = true;
+    }
+  };
+
+  const showError = (el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, message: string) => {
+    const err = errorElFor(el);
+    el.setAttribute('aria-invalid', 'true');
+    if (err) {
+      err.id = err.id || `${el.id}-error`;
+      err.textContent = message;
+      err.hidden = false;
+      el.setAttribute('aria-describedby', err.id);
+    }
+  };
+
+  const validateControl = (el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+    // Trim so whitespace-only values fail required checks.
+    if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+      if (el.type !== 'checkbox' && el.type !== 'radio' && el.type !== 'file') {
+        const trimmed = el.value.trim();
+        if (trimmed !== el.value) el.value = trimmed;
+      }
+    }
+
+    const message = errorMessage(el);
+    if (message) {
+      // Force invalid state when our phone check fails but the browser pattern passed.
+      if (el.dataset.validate === 'phone' && el instanceof HTMLInputElement && el.value !== '') {
+        el.setCustomValidity(message);
+      } else {
+        el.setCustomValidity('');
+      }
+      showError(el, message);
+      return false;
+    }
+    el.setCustomValidity('');
+    clearError(el);
+    return true;
+  };
+
+  const validateForm = (form: HTMLFormElement) => {
+    let firstInvalid: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null = null;
+    for (const el of controlsOf(form)) {
+      const ok = validateControl(el);
+      if (!ok && !firstInvalid) firstInvalid = el;
+    }
+    return firstInvalid;
+  };
+
+  const wireForm = (form: HTMLFormElement) => {
+    if (wired.has(form)) return;
+    wired.add(form);
+
+    const ts = form.querySelector<HTMLInputElement>('[data-form-ts]');
+    if (ts && !ts.value) ts.value = String(Math.floor(Date.now() / 1000));
+
+    for (const el of controlsOf(form)) {
+      const revalidate = () => {
+        if (el.getAttribute('aria-invalid') === 'true' || el.value.trim() !== '') {
+          validateControl(el);
+        }
+      };
+      el.addEventListener('blur', () => validateControl(el));
+      el.addEventListener('input', revalidate);
+      el.addEventListener('change', revalidate);
+    }
+
+    form.addEventListener('submit', (event) => {
+      const firstInvalid = validateForm(form);
+      if (firstInvalid) {
+        event.preventDefault();
+        form.removeAttribute('data-sending');
+        firstInvalid.focus();
+        return;
+      }
+      // Leave honeypot alone; PHP time-trap + honeypot still apply server-side.
+      form.setAttribute('data-sending', '');
     });
   };
+
+  const wire = () => {
+    document.querySelectorAll<HTMLFormElement>('[data-form]').forEach(wireForm);
+  };
+
   wire();
   document.addEventListener('astro:page-load', wire);
 </script>
