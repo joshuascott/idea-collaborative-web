@@ -1,5 +1,6 @@
 ---
 title: "The three ways AI has already cost real estate agents money"
+seoTitle: "How AI has already cost real estate agents money"
 description: "Invented features, fair housing language, and client data in a public chatbot. Three ways agents lose money, and the review habits that stop them."
 date: 2026-05-12
 tags: ["real estate", "risk"]

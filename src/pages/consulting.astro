@@ -8,6 +8,7 @@ import CtaBand from '../components/CtaBand.astro';
 import Workflow from 'lucide-astro/Workflow';
 import Timer from 'lucide-astro/Timer';
 import TrendingUp from 'lucide-astro/TrendingUp';
+import FaqAccordion from '../components/FaqAccordion.astro';
 import { consultingRates, consultingNote } from '../data/offers';
 import { breadcrumbs, service } from '../data/schema';
 
@@ -31,6 +32,25 @@ const shapes = [
     typical: 'Monthly, cancel with 30 days notice',
   },
 ];
+
+const faqs = [
+  {
+    q: 'When is consulting the wrong next step?',
+    a: 'When the information a workflow needs lives in one person\'s head or a filing cabinet, when the process still changes every month, when nobody on the team will own it, or when the savings do not cover the build. In those cases we will say so and point you at the cheaper fix first.',
+  },
+  {
+    q: 'Do you sell locked retainers?',
+    a: 'No. Work is quoted in hours with assumptions written down. Fractional advisory is a standing half-day a month that you can cancel with 30 days notice. If a piece of work should take 12 hours, it is quoted at 12 hours.',
+  },
+  {
+    q: 'What does post-workshop implementation usually cost?',
+    a: 'Usually 8 to 20 hours across a month at the standard implementation rate of $175 to $225 per hour. A full process automation build is usually 20 to 60 hours across six to ten weeks. You get a written estimate before any work starts.',
+  },
+  {
+    q: 'Should we do a workshop first?',
+    a: 'Often yes. Consulting fits when the workshop plan exists and the quarter got in the way, or when the problem does not fit in a room and a day. If you are still deciding what is real, start with AI Essentials or the free readiness assessment.',
+  },
+];
 ---
 
 <Base
@@ -45,6 +65,7 @@ const shapes = [
       description:
         'Hands-on AI implementation, process automation, and fractional advisory for small and mid-sized Northern Colorado businesses.',
       path: '/consulting',
+      serviceType: 'AI consulting and implementation',
     }),
   ]}
 >
@@ -66,7 +87,11 @@ const shapes = [
     <h2 class="display-lg">Three shapes this usually <em>takes</em>.</h2>
     <p class="lede">
       We do not sell retainers you cannot get out of, and we do not staff a bench that needs
-      feeding. If a piece of work should take 12 hours, it is quoted at 12 hours.
+      feeding. If a piece of work should take 12 hours, it is quoted at 12 hours. If you are
+      earlier than that, start with
+      <a href="/workshops" class="prose-link">an AI workshop</a>
+      or the
+      <a href="/ai-readiness-assessment" class="prose-link">free readiness assessment</a>.
     </p>
     <ul class="shapes reveal-stagger">
       {shapes.map((s, i) => (
@@ -150,8 +175,12 @@ const shapes = [
     </div>
   </Section>
 
+  <Section chapter="06" label="Questions" surface="white">
+    <FaqAccordion faqs={faqs} heading="Questions before you book consulting" />
+  </Section>
+
   <CtaBand
-    chapter="06"
+    chapter="07"
     headline="Describe the process that keeps <em>breaking</em>."
     sub="Tell us what it is and roughly how often it costs you. We will tell you whether this is worth doing and what it would take."
   />

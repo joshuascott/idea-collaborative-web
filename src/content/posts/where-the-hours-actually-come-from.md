@@ -1,5 +1,6 @@
 ---
 title: "Five to ten hours a week: where the time actually comes from"
+seoTitle: "Where five to ten hours a week actually go"
 description: "The hours AI gives back are not spread evenly. They come from four specific places, and knowing which one is yours decides where to start."
 date: 2026-08-18
 tags: ["time", "getting started"]

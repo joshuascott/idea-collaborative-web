@@ -59,7 +59,20 @@ const publicDate: string | null = null;
       name: tier.title,
       description: `${tier.forWhom} ${tier.leaveWith}`,
       path,
-      price: tier.privatePrice.replace(/[$,]/g, ''),
+      serviceType: 'AI workshop',
+      available: Boolean(publicDate),
+      offers: [
+        {
+          name: 'Public seat',
+          price: tier.publicPrice.replace(/[^0-9.]/g, ''),
+          description: `${tier.duration}, public seat`,
+        },
+        {
+          name: 'Private session',
+          price: tier.privatePrice.replace(/[^0-9.]/g, ''),
+          description: `${tier.duration}. ${tier.capacity}`,
+        },
+      ],
     }),
   ]}
 >

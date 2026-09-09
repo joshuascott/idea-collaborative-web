@@ -80,7 +80,13 @@ const faqs = [
         'A 90-minute sales meeting session teaching brokerages a shared review workflow for AI-written listing copy and client communication.',
       path: '/realtors',
       audience: 'Real estate brokerages',
-      price: '2200',
+      serviceType: 'AI review workshop for real estate',
+      available: true,
+      offers: [
+        { name: 'Sales meeting session', price: '2200', description: '90 minutes at your office' },
+        { name: 'Half-day office workshop', price: '5850', description: '4 hours' },
+        { name: 'Full-day leadership session', price: '11250', description: 'Full day for leadership' },
+      ],
     }),
   ]}
 >
@@ -156,7 +162,10 @@ const faqs = [
       </p>
       <p class="fine">
         This is background, not legal advice. Talk to your broker and your attorney about what your
-        brokerage's policy should be.
+        brokerage's policy should be. For a plain-language read, see
+        <a href="/blog/hud-may-2024-guidance-ai-listing-copy" class="prose-link">what HUD's May 2024 guidance means for AI-written listing copy</a>.
+        For workshops aimed at the wider business, not only the brokerage floor, see
+        <a href="/workshops" class="prose-link">all three AI workshops</a>.
       </p>
     </div>
   </Section>

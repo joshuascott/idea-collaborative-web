@@ -1,5 +1,5 @@
 ---
-import { localBusiness } from '../data/schema';
+import { localBusiness, organizationNode, webSite } from '../data/schema';
 
 export interface Props {
   title: string;
@@ -7,9 +7,14 @@ export interface Props {
   /** Route path, no trailing slash, e.g. "/workshops". */
   path: string;
   ogImage?: string;
+  /** Accessible description of the OG image. Defaults to the page title. */
+  ogImageAlt?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
-  /** Extra JSON-LD blocks for this page. LocalBusiness is emitted once, on Home. */
+  /**
+   * Extra JSON-LD for this page. Home also gets ProfessionalService + WebSite.
+   * Other pages get a compact Organization node so provider/author `@id` refs resolve.
+   */
   schemas?: unknown[];
   publishedTime?: string;
   modifiedTime?: string;
@@ -20,6 +25,7 @@ const {
   description,
   path,
   ogImage = '/images/og-default.jpg',
+  ogImageAlt,
   type = 'website',
   noindex = false,
   schemas = [],
@@ -30,6 +36,7 @@ const {
 const site = Astro.site?.origin ?? 'https://ideacollaborative.com';
 const canonical = `${site}${path === '/' ? '' : path}`;
 const image = ogImage.startsWith('http') ? ogImage : `${site}${ogImage}`;
+const imageAlt = ogImageAlt ?? title;
 
 // Guide-adjacent SEO rule from PLAN.md section 6: title under 60 characters,
 // description under 155. Fail the build rather than ship a truncated result.
@@ -38,7 +45,9 @@ if (import.meta.env.PROD) {
   if (description.length > 155) throw new Error(`SEO description too long (${description.length}) on ${path}`);
 }
 
-const blocks = [path === '/' ? localBusiness : null, ...schemas].filter(Boolean);
+const entityBlocks =
+  path === '/' ? [localBusiness, webSite] : [organizationNode];
+const blocks = [...entityBlocks, ...schemas];
 ---
 
 <title>{title}</title>
@@ -54,6 +63,7 @@ const blocks = [path === '/' ? localBusiness : null, ...schemas].filter(Boolean)
 <meta property="og:image" content={image} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
 <meta property="og:locale" content="en_US" />
 {publishedTime && <meta property="article:published_time" content={publishedTime} />}
 {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
@@ -62,6 +72,7 @@ const blocks = [path === '/' ? localBusiness : null, ...schemas].filter(Boolean)
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={image} />
+<meta name="twitter:image:alt" content={imageAlt} />
 
 <meta name="geo.region" content="US-CO" />
 <meta name="geo.placename" content="Loveland, Colorado" />
