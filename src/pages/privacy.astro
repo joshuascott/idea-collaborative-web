@@ -27,11 +27,10 @@ const updated = new Date('2026-09-08');
     </div>
   </header>
 
-  <Section surface="white" class="crumb-row">
-    <Breadcrumbs trail={[{ name: 'Privacy', path: '/privacy' }]} />
-  </Section>
-
-  <Section surface="white">
+  <Section surface="white" class="privacy-copy">
+    <div slot="before" class="crumb-above">
+      <Breadcrumbs trail={[{ name: 'Privacy', path: '/privacy' }]} />
+    </div>
     <div class="doc">
       <h2 class="display-md">Forms</h2>
       <p>
@@ -92,7 +91,12 @@ const updated = new Date('2026-09-08');
   h1 { margin: 0; color: #fff; }
   .sub { margin: 1.25rem 0 0; font-size: 1.0625rem; max-width: 38rem; }
   .chapter { margin-bottom: 1.5rem; }
-  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  :global(section.surface.privacy-copy) {
+    padding-top: 1.25rem;
+  }
+  .crumb-above {
+    margin: 0 0 1rem;
+  }
   .doc { max-width: 42rem; }
   .doc h2 { margin: 2.25rem 0 0.6rem; color: var(--color-navy); }
   .doc h2:first-child { margin-top: 0; }

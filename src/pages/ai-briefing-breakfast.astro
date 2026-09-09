@@ -47,11 +47,10 @@ const covered = [
     <a href="#list" class="btn btn-primary" slot="actions">Join the list</a>
   </Hero>
 
-  <Section surface="white" class="crumb-row">
-    <Breadcrumbs trail={[{ name: 'AI Briefing Breakfast', path: '/ai-briefing-breakfast' }]} />
-  </Section>
-
-  <Section chapter="02" label="The next one" surface="white">
+  <Section chapter="02" label="The next one" surface="white" class="breakfast-next">
+    <div slot="before" class="crumb-above">
+      <Breadcrumbs trail={[{ name: 'AI Briefing Breakfast', path: '/ai-briefing-breakfast' }]} />
+    </div>
     <div class="two">
       <div>
         {nextEvent ? (
@@ -102,7 +101,12 @@ const covered = [
 </Base>
 
 <style>
-  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  :global(section.surface.breakfast-next) {
+    padding-top: 1.25rem;
+  }
+  .crumb-above {
+    margin: 0 0 1rem;
+  }
   .two { display: grid; gap: clamp(2.5rem, 2rem + 3vw, 4rem); align-items: start; }
   @media (min-width: 940px) { .two { grid-template-columns: minmax(0, 1fr) minmax(0, 24rem); } }
   .two h2 { margin: 0 0 1rem; }

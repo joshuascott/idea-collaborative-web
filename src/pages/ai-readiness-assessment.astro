@@ -36,11 +36,10 @@ import { breadcrumbs, service } from '../data/schema';
     <a href="#form" class="btn btn-primary" slot="actions">Start the assessment</a>
   </Hero>
 
-  <Section surface="white" class="crumb-row">
-    <Breadcrumbs trail={[{ name: 'AI readiness assessment', path: '/ai-readiness-assessment' }]} />
-  </Section>
-
-  <Section chapter="02" label="What you get" surface="white">
+  <Section chapter="02" label="What you get" surface="white" class="assessment-copy">
+    <div slot="before" class="crumb-above">
+      <Breadcrumbs trail={[{ name: 'AI readiness assessment', path: '/ai-readiness-assessment' }]} />
+    </div>
     <div class="two">
       <div>
         <h2 class="display-lg">What comes <em>back</em>.</h2>
@@ -87,7 +86,12 @@ import { breadcrumbs, service } from '../data/schema';
 </Base>
 
 <style>
-  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  :global(section.surface.assessment-copy) {
+    padding-top: 1.25rem;
+  }
+  .crumb-above {
+    margin: 0 0 1rem;
+  }
   .two { display: grid; gap: clamp(2.5rem, 2rem + 3vw, 4rem); align-items: start; }
   @media (min-width: 940px) { .two { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); } }
   .two h2 { margin: 0 0 1.25rem; }
