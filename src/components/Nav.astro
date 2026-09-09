@@ -302,12 +302,17 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
     border: 0;
     padding: 1.25rem;
     background: #fff;
-    display: flex;
     flex-direction: column;
     gap: 1rem;
   }
+  /* Author display must not override the UA closed state, or the drawer
+     paints as a permanent side panel on every page. */
+  .mobile-nav:not([open]) { display: none; }
+  .mobile-nav[open] {
+    display: flex;
+    animation: slide-in 250ms var(--ease-out-expo);
+  }
   .mobile-nav::backdrop { background: rgb(15 40 54 / 0.5); }
-  .mobile-nav[open] { animation: slide-in 250ms var(--ease-out-expo); }
   @keyframes slide-in {
     from { transform: translateX(100%); }
     to { transform: none; }
