@@ -59,11 +59,10 @@ const shapes = [
     <a href="#rates" class="btn btn-ghost-dark" slot="actions">See the rates</a>
   </Hero>
 
-  <Section surface="white" class="crumb-row">
-    <Breadcrumbs trail={[{ name: 'Consulting', path: '/consulting' }]} />
-  </Section>
-
-  <Section chapter="02" label="Engagement shapes" surface="white">
+  <Section chapter="02" label="Engagement shapes" surface="white" class="engagement-shapes">
+    <div slot="before" class="crumb-above">
+      <Breadcrumbs trail={[{ name: 'Consulting', path: '/consulting' }]} />
+    </div>
     <h2 class="display-lg">Three shapes this usually <em>takes</em>.</h2>
     <p class="lede">
       We do not sell retainers you cannot get out of, and we do not staff a bench that needs
@@ -159,7 +158,16 @@ const shapes = [
 </Base>
 
 <style>
-  .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  /* Page-scoped .crumb-row / .after-crumb never reached Section's .surface
+     (different data-astro-cid). One section + before slot; pad via :global.
+     Must beat .surface[data-astro-cid] (0,2,0) so padding-top wins over padding-block. */
+  :global(section.surface.engagement-shapes) {
+    padding-top: 1.25rem;
+  }
+  /* Lives in this page's markup, so scoped styles apply. ~1rem to chapter. */
+  .crumb-above {
+    margin: 0 0 1rem;
+  }
   .lede { font-size: 1.125rem; color: var(--color-slate); margin: 1rem 0 2.5rem; max-width: 44rem; }
 
   .shapes { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
