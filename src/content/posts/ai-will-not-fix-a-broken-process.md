@@ -7,11 +7,11 @@ tags: ["process", "getting started"]
 cta: assessment
 ---
 
-A contractor in Loveland asked us to help him automate his quote follow-ups. He was sending 40 of them a week and it was eating his Thursday.
+Picture a contractor who wants to automate quote follow-ups. They send 40 a week and it eats their Thursday.
 
-We watched the process before touching it. The quotes went out as PDFs. The follow-up was a separate email, written from scratch, referencing a number the customer could no longer find. About a third of the replies were customers asking him to resend the original quote.
+Now watch the process before touching it. The quotes go out as PDFs. The follow-up is a separate email, written from scratch, referencing a number the customer can no longer find. A good share of the replies are customers asking for the original quote again.
 
-If we had automated what he asked for, he would have sent 40 faster emails and generated the same 13 confused replies. The follow-up was not the problem. The quote was.
+Automate what was asked for and the result is 40 faster emails and the same confused replies. The follow-up is not the problem. The quote is.
 
 ## The question that comes before the tool
 
@@ -19,13 +19,13 @@ Every workflow has two kinds of steps. There are steps that produce something, a
 
 Before any tool goes in, ask this about the step you want to automate: if the step upstream were done properly, would this step still exist?
 
-For the contractor, the answer was no. We changed the quote so the price, the scope, and the expiry date were in the body of the email rather than an attachment. The confused replies stopped. The follow-up dropped from 40 a week to 40 a week, but now they took four minutes instead of Thursday.
+For the contractor, the answer is no. Put the price, the scope, and the expiry date in the body of the email rather than an attachment, and the confused replies have nothing to ask about. There are still 40 follow-ups a week, but each one becomes a short, clear note instead of a repair job.
 
-Then we automated the follow-up. That part took an afternoon and it was worth doing, because by then it was a real step.
+Then automate the follow-up. At that point it is worth doing, because it is a real step.
 
 ## Where this shows up most
 
-Three patterns turn up over and over in businesses between 5 and 100 people.
+Three patterns are worth checking for in any business between 5 and 100 people.
 
 **Reformatting.** Somebody exports data from one system and reshapes it so it fits another. This is almost always a sign that the two systems were never connected, and it is worth ten minutes of checking whether they can be before you spend a day teaching a tool to do it.
 

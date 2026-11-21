@@ -25,12 +25,22 @@ const { to, prefix = '', suffix = '', class: cls = '' } = Astro.props;
     inherits: false;
     initial-value: 0;
   }
-  .count { font-variant-numeric: tabular-nums; }
+  .count { position: relative; font-variant-numeric: tabular-nums; }
   .anim { display: none; }
 
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-      .plain { display: none; }
+      /* Visually hidden, never display: none. The plain number has to stay in
+         the accessibility tree and in the page text, or a screen reader and any
+         tool that reads the rendered page get "$" and nothing after it. */
+      .plain {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
       .anim {
         /* A view timeline needs a real box. On an inline span the timeline
            never resolves, the animation holds its "from" value, and the figure

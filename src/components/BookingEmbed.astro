@@ -11,12 +11,18 @@ export interface Props {
   link?: string;
   heading?: string;
   blurb?: string;
+  /** Shown while booking is not live. Say what a call or email gets them here. */
+  fallback?: string;
+  /** Subject line for the fallback email link. */
+  subject?: string;
   id?: string;
 }
 const {
   link,
   heading = 'Book a time',
   blurb = 'Twenty minutes, no deck. We ask about your week and tell you whether this helps.',
+  fallback = 'Online booking is being set up. Until it is live, either of these reaches us directly and gets you the same 20 minutes.',
+  subject = 'Booking a preview',
   id = 'book',
 } = Astro.props;
 ---
@@ -40,13 +46,10 @@ const {
     </div>
   ) : (
     <div class="fallback">
-      <p class="note">
-        Online booking is being set up. Until it is live, either of these reaches us directly and
-        gets you the same 20 minutes.
-      </p>
+      <p class="note">{fallback}</p>
       <div class="paths">
         <a class="btn btn-primary" href={contact.phoneHref}>Call {contact.phone}</a>
-        <a class="btn btn-ghost-light" href={`mailto:${contact.email}?subject=Booking%20a%20preview`}>
+        <a class="btn btn-ghost-light" href={`mailto:${contact.email}?subject=${encodeURIComponent(subject)}`}>
           Email {contact.email}
         </a>
       </div>

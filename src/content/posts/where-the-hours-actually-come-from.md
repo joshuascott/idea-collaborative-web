@@ -9,13 +9,13 @@ cta: breakfast
 
 "Save 5 to 10 hours a week" is the kind of claim that deserves a follow-up question. Whose hours, doing what, and how do you know.
 
-We have run the exercise enough times now to answer it specifically. In a business of 5 to 100 people, the recovered time comes from four places, and it is rarely spread evenly across a team. One or two people are usually carrying most of it.
+Here is the honest version. In a business of 5 to 100 people, the time worth recovering tends to sit in four places, and it is rarely spread evenly across a team. Often one or two people are carrying most of it. The ranges below are working estimates to check against your own week, not measured results.
 
 ## 1. Writing the same thing again
 
 Quotes, proposals, listing copy, job posts, weekly updates, handover notes, the email that explains your policy for the fourth time this month.
 
-This is the largest single bucket and it is usually 3 to 6 hours a week for whoever owns it. It is also the easiest to work on, because the raw material already exists. Most businesses have twenty good examples of the thing sitting in a sent folder.
+This is likely the largest single bucket, roughly 3 to 6 hours a week for whoever owns it. It is also the easiest to work on, because the raw material already exists. Most businesses have twenty good examples of the thing sitting in a sent folder.
 
 The trick is not asking a tool to write it from nothing. It is giving it your best three examples and your actual inputs, then editing what comes back. First drafts, not final ones.
 
@@ -23,19 +23,19 @@ The trick is not asking a tool to write it from nothing. It is giving it your be
 
 Voicemail, long email threads, meeting recordings, supplier terms, the 40-page report the association sent.
 
-Call it 1 to 3 hours. The gain here is less about speed and more about the reading that was not happening at all. A summary of the thread you were going to skip is worth more than a faster version of the thread you were going to read anyway.
+Estimate 1 to 3 hours. The gain here is less about speed and more about the reading that was not happening at all. A summary of the thread you were going to skip is worth more than a faster version of the thread you were going to read anyway.
 
 ## 3. Getting information out of the wrong shape
 
 Receipts into a spreadsheet. A PDF export into your accounting categories. Fourteen inspection notes into one summary. Handwritten job cards into anything at all.
 
-This is 1 to 4 hours, and it is concentrated on one person, usually in admin, usually on a Friday. It is also the bucket where the review step matters most, because a confident wrong number is worse than a slow right one.
+Estimate 1 to 4 hours, often concentrated on one person in admin, often on a Friday. It is also the bucket where the review step matters most, because a confident wrong number is worse than a slow right one.
 
 ## 4. Screening
 
 Applications, quote requests, inbound leads, warranty claims. Anything where 30 things arrive and 6 of them need a person.
 
-Half an hour to two hours, and the value is not really the time. It is that the six get looked at properly instead of on a Thursday at 5pm.
+Estimate half an hour to two hours, and the value is not really the time. It is that the six get looked at properly instead of on a Thursday at 5pm.
 
 ## What this means for where you start
 

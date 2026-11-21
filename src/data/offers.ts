@@ -49,7 +49,7 @@ export const tiers: Tier[] = [
         time: '0:55',
         heading: 'Where your hours are going',
         detail:
-          'A short exercise that finds the repetitive work in your week. Most rooms surface 5 to 10 hours per person.',
+          'A short exercise that finds the repetitive work in your week and puts an hour count next to each item, so you can see where the time goes.',
       },
       {
         time: '1:15',
