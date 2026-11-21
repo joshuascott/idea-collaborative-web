@@ -182,6 +182,8 @@ const publicDate: string | null = null;
       <BookingEmbed
         heading="Book this workshop"
         blurb={`${tier.duration}, private at your office or a public seat when the next date is set.`}
+        fallback="Online booking is being set up. Until it is live, call or email and we will find a date that works for your team."
+        subject={`Booking ${tier.title}`}
       />
     </div>
   </Section>

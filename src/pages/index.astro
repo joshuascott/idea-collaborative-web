@@ -106,9 +106,9 @@ const decisions = [
     </ul>
   </Section>
 
-  <BeforeAfter />
+  <BeforeAfter chapter="04" />
 
-  <Section chapter="04" label="What we decided on purpose" surface="ink">
+  <Section chapter="05" label="What we decided on purpose" surface="ink">
     <h2 class="display-lg">Four things we <em>decided</em> on purpose.</h2>
     <ol class="decisions reveal-stagger">
       {decisions.map((d, i) => (
@@ -122,7 +122,7 @@ const decisions = [
     <ProofPoints />
   </Section>
 
-  <Process />
+  <Process chapter="06" />
 
   <Section surface="white">
     <blockquote class="pull">
@@ -132,7 +132,7 @@ const decisions = [
     </blockquote>
   </Section>
 
-  <Section chapter="05" label="Pricing" surface="cloud" id="pricing">
+  <Section chapter="07" label="Pricing" surface="cloud" id="pricing">
     <h2 class="display-lg">We <em>publish</em> our prices. Most AI consultants won't.</h2>
     <p class="lede">
       Three levels, public seats and private sessions, with the numbers on the page. If one of them
@@ -148,7 +148,7 @@ const decisions = [
   </Section>
 
   {posts.length > 0 && (
-    <Section chapter="06" label="Writing" surface="white">
+    <Section chapter="08" label="Writing" surface="white">
       <div class="head">
         <h2 class="display-lg">Recent <em>writing</em>.</h2>
         <a href="/blog" class="prose-link">All posts</a>
@@ -169,7 +169,7 @@ const decisions = [
     </Section>
   )}
 
-  <CtaBand chapter="07" label="Next step" headline="Let's find your <em>first</em> workflow." />
+  <CtaBand chapter={posts.length > 0 ? '09' : '08'} label="Next step" headline="Let's find your <em>first</em> workflow." />
   <!-- The old site navigated by anchor. A fragment never reaches the server, so
        a 301 cannot catch it. This sends the four old anchors to their routes. -->
   <script is:inline>
