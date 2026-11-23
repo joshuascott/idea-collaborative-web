@@ -8,9 +8,8 @@ export const SITE = 'https://ideacollaborative.com';
 export default defineConfig({
   site: SITE,
   output: 'static',
-  // Clean URLs on Bluehost (Apache): public/.htaccess maps /about → about.html.
-  // Keep format: 'file'. Nested routes like /workshops/ai-essentials.html sit
-  // under a workshops/ folder; .htaccess prefers workshops.html over that dir.
+  // Netlify serves about.html at /about, so format: 'file' gives clean URLs
+  // with no trailing slash and no rewrite rules.
   trailingSlash: 'never',
   build: { format: 'file', inlineStylesheets: 'auto' },
   prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
