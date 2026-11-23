@@ -57,12 +57,12 @@ and confirm you like the lockup.
 
 ### Open decision 4: forms and booking
 
-**Forms (decided for Bluehost):** site forms POST to `public/contact.php`
-(copied into `dist/` on build), which sends mail via PHP `mail()` to
-`hello@ideacollaborative.com`. This is not Netlify Forms. Anti-spam is a
-honeypot (`company-website`) plus a client timestamp (`form_ts`) checked
-server-side. Booking remains **Cal.com**; say the word if you would rather
-have Calendly.
+**Forms (Netlify):** every site form is a Netlify Form. Netlify detects them
+in the built HTML at deploy time, stores each submission in the Netlify
+dashboard, and emails a notification. Anti-spam is a honeypot
+(`company-website`) plus Netlify's Akismet filter. Nothing runs on a server we
+maintain. Booking remains **Cal.com**; say the word if you would rather have
+Calendly.
 
 ---
 
@@ -107,34 +107,32 @@ If the true vector master turns up, swap it in and rerun `npm run build`.
    Node 22, so accept the defaults.
 3. Add the custom domain `ideacollaborative.com`, let Netlify provision the
    certificate, and set the apex plus `www` redirect.
-4. **Forms (Bluehost).** All `ContactForm` instances (contact page, CtaBand,
-   assessment, breakfast, realtor sponsor/brokerage) POST to `/contact.php`.
-   That file ships from `public/contact.php` into the build output. It is not
-   Netlify Forms. In cPanel, create or confirm the mailbox
-   `hello@ideacollaborative.com` on this domain; Bluehost usually only accepts
-   `mail()` when **From** is a local domain address (the script uses that
-   address). After upload, submit each form once and confirm delivery, then
-   confirm a too-fast or honeypot fill does not land in the inbox.
+4. **Forms.** All `ContactForm` instances (contact page, CtaBand, assessment,
+   breakfast, realtor sponsor and brokerage) are Netlify Forms and land on
+   `/thanks`. In Netlify, open **Forms → Submission notifications** and add an
+   email notification. The recipient has to be a member of the Netlify team,
+   so use the address you log in to Netlify with, or add
+   `hello@ideacollaborative.com` as a team member first. Then submit each form
+   once and confirm it shows under Forms and the email arrives.
 5. **Analytics.** Set `PUBLIC_PLAUSIBLE_DOMAIN=ideacollaborative.com` in the
-   host environment (or Netlify env vars if you ever use that host) to switch
-   it on. Nothing loads until you do. No cookie banner is needed either way.
+   Netlify environment variables to switch it on. Nothing loads until you do. No cookie banner is needed either way.
 6. **Booking.** Create the Cal.com event types, then pass the link to
    `BookingEmbed` on `/realtors`, `/contact`, and each workshop page. Until you
    do, the panel shows your phone and email rather than an empty box, so no page
    is a dead end.
-7. **Bluehost deploy.** Upload the contents of `dist/` into `public_html`,
-   including `contact.php` and `.htaccess` (Show Hidden Files on). The
-   `.htaccess` must replace the cPanel-only file; our copy keeps the cPanel PHP
-   handler block at the end so PHP config is not wiped.
+7. **Retire Bluehost.** Once the domain points at Netlify and the forms are
+   confirmed, the old `public_html` copy can be removed. Keep the Bluehost
+   mailbox for `hello@` unless email moves too; pointing the website at
+   Netlify must not change the MX records.
 
 ---
 
 ## 5. Verify after the first deploy
 
-- [ ] Submit each of the five forms from a phone; confirm mail arrives at hello@
-      and `/thanks` loads (via `contact.php`, not Netlify)
+- [ ] Submit each of the five forms from a phone; confirm each shows under
+      Netlify Forms, the notification email arrives, and `/thanks` loads
 - [ ] Confirm `/thanks` is `noindex`
-- [ ] Confirm `/contact?error=1` shows the form error alert after a forced fail
+- [ ] Fill the hidden honeypot field once and confirm nothing reaches Forms
 - [ ] Google Search Console: verify the domain, submit
       `https://ideacollaborative.com/sitemap-index.xml`
 - [ ] Confirm `/dev/motion` and `/thanks` are absent from the sitemap
