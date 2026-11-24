@@ -43,7 +43,7 @@ const cols = [
     <div class="grid">
       <div class="brand-col">
         <img src="/logo-white.svg" alt="" width="136" height="88" class="mark" />
-        <Wordmark dark full class="word" />
+        <Wordmark dark class="word" />
         <p class="tagline">{brand.tagline}</p>
         <ContactBlock dark class="contact" />
       </div>
@@ -84,7 +84,8 @@ const cols = [
   @media (min-width: 1024px) { .grid { grid-template-columns: 1.4fr repeat(3, 1fr); gap: 3rem; } }
 
   .mark { height: 2.5rem; width: auto; }
-  .word { font-size: 1.75rem; margin-top: 1rem; display: block; }
+  /* .word is on Wordmark's root, so it needs :global to pierce scope. */
+  .brand-col :global(.word) { font-size: 1.75rem; margin-top: 1rem; display: block; }
   .tagline {
     font-family: var(--font-display);
     font-size: 1.125rem;

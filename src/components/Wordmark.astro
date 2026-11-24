@@ -1,48 +1,26 @@
 ---
-// Wordmark: "idea" at 700, the tail at 400, one word, lowercase, -0.02em.
-// On light: idea Navy, tail Deep Teal. On dark: idea White, tail Teal Light.
-//
-// The tail is "collab" in the footer. The header spells the whole name,
-// "ideacollaborative". The tail stays at 400, not 300: 300 goes thin and pale
-// at nav size, which is where the wordmark is smallest.
+// Wordmark: "idea" at 700, "collaborative" at 400, one word, lowercase, -0.02em.
+// On light: idea Navy, collaborative Deep Teal. On dark: idea White,
+// collaborative Teal Light. The tail stays at 400, not 300: 300 goes thin and
+// pale at nav size, which is where the wordmark is smallest.
 export interface Props {
   dark?: boolean;
-  /** Also render the full legal name beneath, per guide section 2. */
-  full?: boolean;
-  /** Header lockup: "collaborative" instead of "collab". */
-  expanded?: boolean;
   class?: string;
 }
-const { dark = false, full = false, expanded = false, class: cls = '' } = Astro.props;
-const tail = expanded ? 'collaborative' : 'collab';
+const { dark = false, class: cls = '' } = Astro.props;
 ---
 
-<span class:list={['wordmark', full && 'has-full', cls]}>
+<span class:list={['wordmark', cls]}>
   <span class="mark-line"
     ><b style={`color:${dark ? '#fff' : 'var(--color-navy)'}`}>idea</b><span
       class="tail"
       style={`color:${dark ? 'var(--color-teal-light)' : 'var(--color-teal-deep)'}`}
-      >{tail}</span
+      >collaborative</span
     ></span
   >
-  {full && (
-    <span class="full" style={`color:${dark ? 'var(--color-teal-pale)' : 'var(--color-slate)'}`}>
-      Idea Collaborative
-    </span>
-  )}
 </span>
 
 <style>
   .wordmark { display: inline-flex; flex-direction: column; }
   .mark-line { display: block; }
-  .full {
-    display: block;
-    font-size: 0.44em;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    line-height: 1.2;
-    margin-top: 0.28em;
-    white-space: nowrap;
-  }
 </style>
