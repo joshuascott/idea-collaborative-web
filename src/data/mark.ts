@@ -1,21 +1,17 @@
-// Geometric centreline reconstruction of the mark, derived by measuring the
-// master artwork: two loop centres 261 units apart, a 168-unit centreline
-// radius, a 77.5-unit stroke, and a crossing bar at 45.21 degrees.
-//
-// The traced outlines in /public/logo.svg are the canonical static mark. These
-// stroke paths exist because the mark scene (PLAN.md 4b, moment 1) draws the
-// loops with stroke-dashoffset, which a filled outline cannot do. They sit
-// within a pixel of the traced artwork, so the scene resolves cleanly into it.
+// Centreline of the vector mark in public/logo.svg, so the draw animation can
+// stroke the same loops the static files fill. Two centres 269 units apart on
+// y = 501, a 165.5 centreline radius, and a 77-unit stroke. The speech-bubble
+// tail is filled, not stroked, and pops in after the loops.
 export const mark = {
   viewBox: '0 0 1024 1024',
-  strokeWidth: 77.5,
-  knockout: 93.5,
-  navy: 'M 518.62 403.64 A 168 168 0 1 0 461.45 647.48 L 625.00 482.90',
-  teal: 'M 504.38 596.36 A 168 168 0 1 0 561.55 352.52 L 398.00 517.10',
-  navyBar: 'M 461.45 647.48 L 625.00 482.90',
-  tealBar: 'M 561.55 352.52 L 398.00 517.10',
-  tail: 'M 700 636 L 752 668 L 752 710 Q 752 733 729 733 L 668 704 Z',
-  // Measured with getTotalLength in the browser; used to seed dash offsets.
-  navyLength: 1120,
-  tealLength: 1120,
+  strokeWidth: 77,
+  knockout: 93,
+  navy: 'M 481.65 372.38 A 165.5 165.5 0 1 0 494.53 618.03 L 620.75 491.80',
+  teal: 'M 542.35 629.62 A 165.5 165.5 0 1 0 529.47 383.97 L 403.26 510.20',
+  navyBar: 'M 494.53 618.03 L 620.75 491.80',
+  tealBar: 'M 529.47 383.97 L 403.26 510.20',
+  tail: 'M 667.69 703.90 L 729.48 731.46 A 16 16 0 0 0 752 716.84 L 752 675.60 A 204 204 0 0 1 667.69 703.90 Z',
+  // Arc plus bar, in user units. The scenes set pathLength="1", so these are unused by the animation.
+  navyLength: 941,
+  tealLength: 941,
 } as const;

@@ -40,10 +40,10 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
   data-over-dark={overDark ? 'true' : 'false'}
 >
   <div class="shell nav-inner">
-    <a href="/" class="brand" aria-label="ideacollab, Idea Collaborative home">
-      <img src="/logo.svg" alt="" width="44" height="29" class="mark light-mark" />
-      <img src="/logo-white.svg" alt="" width="44" height="29" class="mark dark-mark" />
-      <span transition:name="wordmark"><Wordmark class="brand-word" /></span>
+    <a href="/" class="brand" aria-label="ideacollaborative, Idea Collaborative home">
+      <img src="/logo.svg" alt="" width="68" height="44" class="mark light-mark" />
+      <img src="/logo-white.svg" alt="" width="68" height="44" class="mark dark-mark" />
+      <span transition:name="wordmark"><Wordmark expanded class="brand-word" /></span>
     </a>
 
     <nav class="desktop-nav" aria-label="Primary">
@@ -106,7 +106,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href + '/')
 
 <dialog id="mobile-nav" class="mobile-nav" aria-label="Site menu">
   <div class="mobile-head">
-    <Wordmark />
+    <Wordmark expanded />
     <button type="button" class="menu-btn" data-menu-close>
       <X size={22} aria-hidden="true" />
       <span class="sr-only">Close menu</span>
