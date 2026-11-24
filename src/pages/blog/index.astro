@@ -17,8 +17,8 @@ const fmt = (d: Date) =>
 ---
 
 <Base
-  title="Writing on practical AI for Northern Colorado businesses"
-  description="Short, specific posts on where AI actually saves time in a small business, what it costs, and when it is the wrong answer. No hype, no hand-waving."
+  title="Practical AI articles for Northern Colorado businesses"
+  description="Articles on where AI saves time in a small business, what it costs, and when to leave it alone. Written in Loveland for Northern Colorado owners."
   path="/blog"
   darkHero
   schemas={[breadcrumbs([{ name: 'Blog', path: '/blog' }])]}
@@ -27,12 +27,18 @@ const fmt = (d: Date) =>
     chapter="01"
     label="Writing"
     headline="One lesson, one example, one <em>takeaway</em>."
-    sub="Notes from the work. Every post is something you can act on without hiring anyone, which is the point."
+    sub="Notes from the work in Northern Colorado. Every post is something you can act on without hiring anyone, which is the point."
     compact
   />
 
   <Section surface="white" class="crumb-row">
     <Breadcrumbs trail={[{ name: 'Blog', path: '/blog' }]} />
+    <p class="bridge">
+      These notes sit next to the
+      <a href="/workshops" class="prose-link">AI workshops</a>
+      and the
+      <a href="/ai-readiness-assessment" class="prose-link">free readiness assessment</a>.
+    </p>
   </Section>
 
   {lead && (
@@ -74,6 +80,7 @@ const fmt = (d: Date) =>
 
 <style>
   .crumb-row { padding-block: 1.25rem !important; border-bottom: 1px solid var(--rule); }
+  .bridge { margin: 1rem 0 0; max-width: 40rem; color: var(--color-slate); }
   .lead { display: block; text-decoration: none; border-left: 3px solid var(--color-teal); padding-left: clamp(1.25rem, 1rem + 2vw, 2.5rem); }
   .lead time, .grid time { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-teal-deep); }
   .lead h2 { margin: 0.75rem 0 1rem; color: var(--color-navy); max-width: 20ch; }

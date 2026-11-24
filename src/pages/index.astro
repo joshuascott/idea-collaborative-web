@@ -22,6 +22,8 @@ const audiences = [
   {
     who: 'Owners and operators of 5 to 100 person businesses',
     line: 'You run the place. You do not have a week to spend finding out which tools are real.',
+    href: '/workshops',
+    cue: 'Compare the three workshops',
   },
   {
     who: 'Managing brokers and real estate teams',
@@ -32,10 +34,14 @@ const audiences = [
   {
     who: 'Professional services firms',
     line: 'Billable hours go into drafting, summarizing, and chasing paperwork. Some of that comes back.',
+    href: '/consulting',
+    cue: 'See consulting and implementation',
   },
   {
     who: 'Nonprofits',
     line: 'Small teams, wide mandates, and a discounted rate because that math matters here.',
+    href: '/consulting',
+    cue: 'See the nonprofit rate',
   },
 ];
 
@@ -48,7 +54,7 @@ const decisions = [
   {
     n: '02',
     title: 'Local',
-    line: 'We are a neighbor, not a vendor. We work in the room, in Loveland, Fort Collins, and Windsor.',
+    line: 'We are a neighbor, not a vendor. We work in the room, in Loveland, Fort Collins, Windsor, Greeley, and Longmont.',
   },
   {
     n: '03',
@@ -64,8 +70,8 @@ const decisions = [
 ---
 
 <Base
-  title="Practical AI workshops and consulting in Northern Colorado"
-  description="Idea Collaborative helps Northern Colorado businesses put AI to work in weeks, not years. Workshops and implementation from Loveland. Prices published."
+  title="AI workshops and consulting in Northern Colorado"
+  description="In-person AI workshops and consulting for Loveland, Fort Collins, Windsor, Greeley, and Longmont. Public seats from $129. Prices on the page."
   path="/"
   darkHero
 >
@@ -95,6 +101,12 @@ const decisions = [
 
   <Section chapter="03" label="Who we work with" surface="cloud">
     <h2 class="display-lg">People <em>building</em> something real, with no time to become technical.</h2>
+    <p class="lede">
+      AI workshops and consulting for businesses in Loveland, Fort Collins, Windsor, Greeley, and
+      Longmont. A workshop when the team needs a shared starting point.
+      <a href="/consulting" class="prose-link">Consulting</a>
+      when a process needs someone in the work with you.
+    </p>
     <ul class="rows reveal-stagger">
       {audiences.map((a, i) => (
         <li style={`--i:${i}`}>

@@ -1,4 +1,5 @@
 import { contact, areaServed, brand } from './contact';
+import { tiers } from './offers';
 
 const SITE = 'https://ideacollaborative.com';
 
@@ -40,6 +41,28 @@ export const localBusiness = {
     'Prompt libraries for small businesses',
     'AI readiness assessment',
   ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'AI workshops and consulting',
+    itemListElement: [
+      ...tiers.map((tier) => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: tier.title,
+          url: `${SITE}/workshops/${tier.slug}`,
+        },
+      })),
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'AI consulting and implementation',
+          url: `${SITE}/consulting`,
+        },
+      },
+    ],
+  },
 };
 
 /**

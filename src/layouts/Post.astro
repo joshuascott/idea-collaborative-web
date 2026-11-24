@@ -31,6 +31,21 @@ const path = `/blog/${post.id}`;
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
+const related = data.tags.some((t) => t === 'real estate' || t === 'fair housing')
+  ? [
+      { href: '/realtors', label: 'AI for real estate brokerages' },
+      { href: '/workshops', label: 'Compare the three AI workshops' },
+    ]
+  : data.tags.includes('professional services')
+    ? [
+        { href: '/consulting', label: 'Consulting and implementation' },
+        { href: '/workshops/implementation-bootcamp', label: 'AI Implementation Bootcamp' },
+      ]
+    : [
+        { href: '/workshops', label: 'Compare the three AI workshops' },
+        { href: '/ai-readiness-assessment', label: 'Free AI readiness assessment' },
+      ];
+
 const close =
   data.cta === 'breakfast'
     ? {
@@ -142,6 +157,15 @@ const close =
       {data.tags.map((t) => <span class="tag">{t}</span>)}
     </div>
 
+    <nav class="related" aria-label="Related">
+      <p>Where this fits</p>
+      <ul>
+        {related.map((item) => (
+          <li><a href={item.href} class="prose-link">{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
     <p class="back"><a href="/blog" class="prose-link">All posts</a></p>
   </Section>
 
@@ -235,5 +259,8 @@ const close =
     font-size: 0.75rem;
     font-weight: 600;
   }
+  .related { margin-top: 2.5rem; }
+  .related p { margin: 0 0 0.6rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-teal-deep); }
+  .related ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
   .back { margin-top: 2rem; font-size: 0.9375rem; }
 </style>
